@@ -22,10 +22,29 @@ export class HttpError extends Error {
   }
 }
 
+/**
+ * True when the browser-supplied Origin matches the host the browser actually addressed.
+ * Next.js reports its configured hostname (e.g. localhost) in nextUrl, so the Host /
+ * X-Forwarded-Host header is used as well: opening the app via 127.0.0.1, a LAN IP or a
+ * proxy must not break same-site requests. A cross-site page cannot forge either header.
+ */
+export function isSameOrigin(origin: string, headers: Headers, configuredOrigin: string) {
+  let o: URL;
+  try {
+    o = new URL(origin);
+  } catch {
+    return false;
+  }
+  if (o.origin === configuredOrigin) return true;
+  const host = (headers.get("x-forwarded-host") ?? headers.get("host") ?? "").split(",")[0].trim().toLowerCase();
+  const proto = (headers.get("x-forwarded-proto") ?? new URL(configuredOrigin).protocol.replace(":", "")).split(",")[0].trim().toLowerCase();
+  return Boolean(host) && o.host.toLowerCase() === host && o.protocol === `${proto}:`;
+}
+
 /** Same-origin enforcement for state-changing requests (CSRF defence in depth with SameSite=strict cookies). */
 export function checkOrigin(req: NextRequest) {
   const origin = req.headers.get("origin");
-  if (origin && origin !== req.nextUrl.origin)
+  if (origin && !isSameOrigin(origin, req.headers, req.nextUrl.origin))
     throw new HttpError(403, "Cross-origin write rejected", "CSRF_REJECTED");
   const site = req.headers.get("sec-fetch-site");
   if (site && !["same-origin", "none"].includes(site))

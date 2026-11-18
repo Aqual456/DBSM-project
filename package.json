@@ -17,7 +17,8 @@
     "db:demo": "tsx scripts/demo-data.ts",
     "test:services": "tsx scripts/services-test.ts",
     "viva:diagrams": "tsx scripts/generate-viva-diagrams.ts",
-    "viva:guide": "tsx scripts/build-viva-guide.ts"
+    "viva:guide": "tsx scripts/build-viva-guide.ts",
+    "db:reset-password": "tsx scripts/reset-password.ts"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",

@@ -1,0 +1,12 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "ReliefFlow: debug (server-side)",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm.cmd run dev",
+      "serverReadyAction": { "pattern": "Local:\\s+(https?://\\S+)", "uriFormat": "%s/login", "action": "openExternally" }
+    }
+  ]
+}

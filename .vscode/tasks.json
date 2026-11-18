@@ -1,0 +1,31 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "ReliefFlow: start databases",
+      "type": "shell",
+      "command": "docker compose up -d; docker compose --profile optional up -d --no-deps redis neo4j vectordb",
+      "problemMatcher": [],
+      "presentation": { "reveal": "silent", "panel": "shared", "clear": true }
+    },
+    {
+      "label": "ReliefFlow: dev server",
+      "detail": "Starts the databases, then Next.js on http://localhost:3000",
+      "type": "shell",
+      "command": "npm.cmd run dev",
+      "dependsOn": "ReliefFlow: start databases",
+      "isBackground": true,
+      "runOptions": { "runOn": "folderOpen" },
+      "presentation": { "reveal": "always", "panel": "dedicated", "focus": false },
+      "problemMatcher": {
+        "owner": "nextjs",
+        "pattern": { "regexp": "^x^" },
+        "background": { "activesBegin": "^x^", "beginsPattern": "Next\\.js", "endsPattern": "Ready in" }
+      },
+      "group": { "kind": "build", "isDefault": true }
+    },
+    { "label": "ReliefFlow: unit tests", "type": "shell", "command": "npm.cmd test", "problemMatcher": [], "group": "test" },
+    { "label": "ReliefFlow: lint + type-check", "type": "shell", "command": "npm.cmd run lint; npx.cmd tsc --noEmit", "problemMatcher": ["$tsc"] },
+    { "label": "ReliefFlow: rebuild lab snapshot", "type": "shell", "command": "npm.cmd run lab:setup", "problemMatcher": [] }
+  ]
+}
