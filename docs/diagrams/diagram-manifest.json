@@ -1,0 +1,291 @@
+{
+  "tables": 22,
+  "columns": 130,
+  "foreignKeys": 33,
+  "pages": [
+    {
+      "file": "ReliefFlow-ER-Diagram.drawio",
+      "page": 1,
+      "stem": "ReliefFlow-ER-Diagram-01",
+      "name": "01 Identity & audit",
+      "full": [
+        "roles",
+        "app_users",
+        "sessions",
+        "audit_logs",
+        "login_attempts"
+      ],
+      "contexts": [],
+      "foreignKeys": [
+        "app_users_role_id_fkey",
+        "audit_logs_user_id_fkey",
+        "sessions_user_id_fkey"
+      ]
+    },
+    {
+      "file": "ReliefFlow-ER-Diagram.drawio",
+      "page": 2,
+      "stem": "ReliefFlow-ER-Diagram-02",
+      "name": "02 Disasters & facilities",
+      "full": [
+        "locations",
+        "disasters",
+        "warehouses",
+        "disaster_locations",
+        "relief_camps"
+      ],
+      "contexts": [
+        "app_users"
+      ],
+      "foreignKeys": [
+        "disaster_locations_disaster_id_fkey",
+        "disaster_locations_location_id_fkey",
+        "disasters_created_by_fkey",
+        "disasters_event_location_id_fkey",
+        "relief_camps_location_id_fkey",
+        "relief_camps_manager_id_fkey",
+        "warehouses_location_id_fkey",
+        "warehouses_manager_id_fkey"
+      ]
+    },
+    {
+      "file": "ReliefFlow-ER-Diagram.drawio",
+      "page": 3,
+      "stem": "ReliefFlow-ER-Diagram-03",
+      "name": "03 Resources & inventory",
+      "full": [
+        "resource_categories",
+        "resources",
+        "inventory_movements",
+        "inventory"
+      ],
+      "contexts": [
+        "warehouses"
+      ],
+      "foreignKeys": [
+        "inventory_resource_id_fkey",
+        "inventory_warehouse_id_fkey",
+        "inventory_movements_warehouse_id_resource_id_fkey",
+        "resources_category_id_fkey"
+      ]
+    },
+    {
+      "file": "ReliefFlow-ER-Diagram.drawio",
+      "page": 4,
+      "stem": "ReliefFlow-ER-Diagram-04",
+      "name": "04 Requests & allocations",
+      "full": [
+        "resource_requests",
+        "request_items",
+        "allocations",
+        "allocation_items"
+      ],
+      "contexts": [
+        "app_users",
+        "relief_camps",
+        "disasters",
+        "resources",
+        "inventory"
+      ],
+      "foreignKeys": [
+        "allocation_items_allocation_id_request_id_fkey",
+        "allocation_items_request_id_resource_id_fkey",
+        "allocation_items_warehouse_id_resource_id_fkey",
+        "allocations_allocated_by_fkey",
+        "allocations_request_id_fkey",
+        "request_items_request_id_fkey",
+        "request_items_resource_id_fkey",
+        "resource_requests_camp_id_fkey",
+        "resource_requests_disaster_id_fkey",
+        "resource_requests_requested_by_fkey"
+      ]
+    },
+    {
+      "file": "ReliefFlow-ER-Diagram.drawio",
+      "page": 5,
+      "stem": "ReliefFlow-ER-Diagram-05",
+      "name": "05 Transport & volunteers",
+      "full": [
+        "vehicles",
+        "deliveries",
+        "volunteers",
+        "delivery_volunteers"
+      ],
+      "contexts": [
+        "locations",
+        "app_users",
+        "allocations"
+      ],
+      "foreignKeys": [
+        "deliveries_allocation_id_fkey",
+        "deliveries_destination_location_id_fkey",
+        "deliveries_driver_id_fkey",
+        "deliveries_source_location_id_fkey",
+        "deliveries_vehicle_id_fkey",
+        "delivery_volunteers_delivery_id_fkey",
+        "fk_delivery_volunteer_volunteer",
+        "vehicles_current_location_id_fkey"
+      ]
+    },
+    {
+      "file": "ReliefFlow-ER-Diagram.drawio",
+      "page": 6,
+      "stem": "ReliefFlow-ER-Diagram-06",
+      "name": "06 Incident documents",
+      "full": [
+        "incident_reports"
+      ],
+      "contexts": [
+        "app_users",
+        "disasters"
+      ],
+      "foreignKeys": [],
+      "applicationReferences": [
+        "reportedBy",
+        "disasterId"
+      ]
+    },
+    {
+      "file": "ReliefFlow-Relational-Schema.drawio",
+      "page": 1,
+      "stem": "ReliefFlow-Relational-Schema-01",
+      "name": "01 Identity & audit",
+      "full": [
+        "roles",
+        "app_users",
+        "sessions",
+        "audit_logs",
+        "login_attempts"
+      ],
+      "contexts": [],
+      "foreignKeys": [
+        "app_users_role_id_fkey",
+        "audit_logs_user_id_fkey",
+        "sessions_user_id_fkey"
+      ]
+    },
+    {
+      "file": "ReliefFlow-Relational-Schema.drawio",
+      "page": 2,
+      "stem": "ReliefFlow-Relational-Schema-02",
+      "name": "02 Disasters & facilities",
+      "full": [
+        "locations",
+        "disasters",
+        "disaster_locations",
+        "relief_camps",
+        "warehouses"
+      ],
+      "contexts": [
+        "app_users"
+      ],
+      "foreignKeys": [
+        "disaster_locations_disaster_id_fkey",
+        "disaster_locations_location_id_fkey",
+        "disasters_created_by_fkey",
+        "disasters_event_location_id_fkey",
+        "relief_camps_location_id_fkey",
+        "relief_camps_manager_id_fkey",
+        "warehouses_location_id_fkey",
+        "warehouses_manager_id_fkey"
+      ]
+    },
+    {
+      "file": "ReliefFlow-Relational-Schema.drawio",
+      "page": 3,
+      "stem": "ReliefFlow-Relational-Schema-03",
+      "name": "03 Resources & inventory",
+      "full": [
+        "resource_categories",
+        "resources",
+        "inventory",
+        "inventory_movements"
+      ],
+      "contexts": [
+        "warehouses"
+      ],
+      "foreignKeys": [
+        "inventory_resource_id_fkey",
+        "inventory_warehouse_id_fkey",
+        "inventory_movements_warehouse_id_resource_id_fkey",
+        "resources_category_id_fkey"
+      ]
+    },
+    {
+      "file": "ReliefFlow-Relational-Schema.drawio",
+      "page": 4,
+      "stem": "ReliefFlow-Relational-Schema-04",
+      "name": "04 Requests & allocations",
+      "full": [
+        "resource_requests",
+        "request_items",
+        "allocations",
+        "allocation_items"
+      ],
+      "contexts": [
+        "app_users",
+        "disasters",
+        "inventory",
+        "relief_camps",
+        "resources"
+      ],
+      "foreignKeys": [
+        "allocation_items_allocation_id_request_id_fkey",
+        "allocation_items_request_id_resource_id_fkey",
+        "allocation_items_warehouse_id_resource_id_fkey",
+        "allocations_allocated_by_fkey",
+        "allocations_request_id_fkey",
+        "request_items_request_id_fkey",
+        "request_items_resource_id_fkey",
+        "resource_requests_camp_id_fkey",
+        "resource_requests_disaster_id_fkey",
+        "resource_requests_requested_by_fkey"
+      ]
+    },
+    {
+      "file": "ReliefFlow-Relational-Schema.drawio",
+      "page": 5,
+      "stem": "ReliefFlow-Relational-Schema-05",
+      "name": "05 Transport & volunteers",
+      "full": [
+        "vehicles",
+        "deliveries",
+        "volunteers",
+        "delivery_volunteers"
+      ],
+      "contexts": [
+        "allocations",
+        "app_users",
+        "locations"
+      ],
+      "foreignKeys": [
+        "deliveries_allocation_id_fkey",
+        "deliveries_destination_location_id_fkey",
+        "deliveries_driver_id_fkey",
+        "deliveries_source_location_id_fkey",
+        "deliveries_vehicle_id_fkey",
+        "delivery_volunteers_delivery_id_fkey",
+        "fk_delivery_volunteer_volunteer",
+        "vehicles_current_location_id_fkey"
+      ]
+    },
+    {
+      "file": "ReliefFlow-Relational-Schema.drawio",
+      "page": 6,
+      "stem": "ReliefFlow-Relational-Schema-06",
+      "name": "06 Incident documents",
+      "full": [
+        "incident_reports"
+      ],
+      "contexts": [
+        "app_users",
+        "disasters"
+      ],
+      "foreignKeys": [],
+      "applicationReferences": [
+        "reportedBy",
+        "disasterId"
+      ]
+    }
+  ]
+}

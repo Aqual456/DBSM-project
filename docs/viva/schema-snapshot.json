@@ -1,0 +1,1784 @@
+{
+  "generatedAt": "2026-11-17T23:23:21.469Z",
+  "tables": [
+    "allocation_items",
+    "allocations",
+    "app_users",
+    "audit_logs",
+    "data_change_log",
+    "deliveries",
+    "delivery_volunteers",
+    "disaster_locations",
+    "disasters",
+    "integration_sync_runs",
+    "inventory",
+    "inventory_movements",
+    "locations",
+    "login_attempts",
+    "relief_camps",
+    "request_items",
+    "resource_categories",
+    "resource_requests",
+    "resources",
+    "roles",
+    "schema_migrations",
+    "sessions",
+    "vehicles",
+    "volunteers",
+    "warehouses"
+  ],
+  "columns": [
+    {
+      "table": "allocation_items",
+      "name": "allocation_item_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 1
+    },
+    {
+      "table": "allocation_items",
+      "name": "allocation_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 2
+    },
+    {
+      "table": "allocation_items",
+      "name": "request_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 3
+    },
+    {
+      "table": "allocation_items",
+      "name": "resource_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 4
+    },
+    {
+      "table": "allocation_items",
+      "name": "warehouse_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 5
+    },
+    {
+      "table": "allocation_items",
+      "name": "quantity_allocated",
+      "type": "NUMERIC(14,3)",
+      "nullable": false,
+      "generated": false,
+      "pos": 6
+    },
+    {
+      "table": "allocations",
+      "name": "allocation_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 1
+    },
+    {
+      "table": "allocations",
+      "name": "request_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 2
+    },
+    {
+      "table": "allocations",
+      "name": "allocated_by",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 3
+    },
+    {
+      "table": "allocations",
+      "name": "allocated_at",
+      "type": "TIMESTAMPTZ",
+      "nullable": false,
+      "generated": false,
+      "pos": 4
+    },
+    {
+      "table": "allocations",
+      "name": "status",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "generated": false,
+      "pos": 5
+    },
+    {
+      "table": "allocations",
+      "name": "remarks",
+      "type": "TEXT",
+      "nullable": true,
+      "generated": false,
+      "pos": 6
+    },
+    {
+      "table": "app_users",
+      "name": "user_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 1
+    },
+    {
+      "table": "app_users",
+      "name": "role_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 2
+    },
+    {
+      "table": "app_users",
+      "name": "full_name",
+      "type": "VARCHAR(120)",
+      "nullable": false,
+      "generated": false,
+      "pos": 3
+    },
+    {
+      "table": "app_users",
+      "name": "email",
+      "type": "VARCHAR(254)",
+      "nullable": false,
+      "generated": false,
+      "pos": 4
+    },
+    {
+      "table": "app_users",
+      "name": "password_hash",
+      "type": "TEXT",
+      "nullable": false,
+      "generated": false,
+      "pos": 5
+    },
+    {
+      "table": "app_users",
+      "name": "phone",
+      "type": "VARCHAR(25)",
+      "nullable": true,
+      "generated": false,
+      "pos": 6
+    },
+    {
+      "table": "app_users",
+      "name": "is_active",
+      "type": "BOOLEAN",
+      "nullable": false,
+      "generated": false,
+      "pos": 7
+    },
+    {
+      "table": "app_users",
+      "name": "created_at",
+      "type": "TIMESTAMPTZ",
+      "nullable": false,
+      "generated": false,
+      "pos": 8
+    },
+    {
+      "table": "audit_logs",
+      "name": "audit_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 1
+    },
+    {
+      "table": "audit_logs",
+      "name": "user_id",
+      "type": "BIGINT",
+      "nullable": true,
+      "generated": false,
+      "pos": 2
+    },
+    {
+      "table": "audit_logs",
+      "name": "action",
+      "type": "TEXT",
+      "nullable": false,
+      "generated": false,
+      "pos": 3
+    },
+    {
+      "table": "audit_logs",
+      "name": "details",
+      "type": "JSONB",
+      "nullable": false,
+      "generated": false,
+      "pos": 4
+    },
+    {
+      "table": "audit_logs",
+      "name": "created_at",
+      "type": "TIMESTAMPTZ",
+      "nullable": false,
+      "generated": false,
+      "pos": 5
+    },
+    {
+      "table": "data_change_log",
+      "name": "change_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 1
+    },
+    {
+      "table": "data_change_log",
+      "name": "table_name",
+      "type": "TEXT",
+      "nullable": false,
+      "generated": false,
+      "pos": 2
+    },
+    {
+      "table": "data_change_log",
+      "name": "operation",
+      "type": "TEXT",
+      "nullable": false,
+      "generated": false,
+      "pos": 3
+    },
+    {
+      "table": "data_change_log",
+      "name": "row_data",
+      "type": "JSONB",
+      "nullable": true,
+      "generated": false,
+      "pos": 4
+    },
+    {
+      "table": "data_change_log",
+      "name": "changed_fields",
+      "type": "JSONB",
+      "nullable": true,
+      "generated": false,
+      "pos": 5
+    },
+    {
+      "table": "data_change_log",
+      "name": "changed_by",
+      "type": "BIGINT",
+      "nullable": true,
+      "generated": false,
+      "pos": 6
+    },
+    {
+      "table": "data_change_log",
+      "name": "txid",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 7
+    },
+    {
+      "table": "data_change_log",
+      "name": "changed_at",
+      "type": "TIMESTAMPTZ",
+      "nullable": false,
+      "generated": false,
+      "pos": 8
+    },
+    {
+      "table": "deliveries",
+      "name": "delivery_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 1
+    },
+    {
+      "table": "deliveries",
+      "name": "allocation_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 2
+    },
+    {
+      "table": "deliveries",
+      "name": "vehicle_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 3
+    },
+    {
+      "table": "deliveries",
+      "name": "driver_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 4
+    },
+    {
+      "table": "deliveries",
+      "name": "source_location_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 5
+    },
+    {
+      "table": "deliveries",
+      "name": "destination_location_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 6
+    },
+    {
+      "table": "deliveries",
+      "name": "departure_time",
+      "type": "TIMESTAMPTZ",
+      "nullable": true,
+      "generated": false,
+      "pos": 7
+    },
+    {
+      "table": "deliveries",
+      "name": "expected_arrival",
+      "type": "TIMESTAMPTZ",
+      "nullable": true,
+      "generated": false,
+      "pos": 8
+    },
+    {
+      "table": "deliveries",
+      "name": "actual_arrival",
+      "type": "TIMESTAMPTZ",
+      "nullable": true,
+      "generated": false,
+      "pos": 9
+    },
+    {
+      "table": "deliveries",
+      "name": "status",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "generated": false,
+      "pos": 10
+    },
+    {
+      "table": "delivery_volunteers",
+      "name": "delivery_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 1
+    },
+    {
+      "table": "delivery_volunteers",
+      "name": "volunteer_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 2
+    },
+    {
+      "table": "delivery_volunteers",
+      "name": "assigned_role",
+      "type": "VARCHAR(60)",
+      "nullable": false,
+      "generated": false,
+      "pos": 3
+    },
+    {
+      "table": "disaster_locations",
+      "name": "disaster_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 1
+    },
+    {
+      "table": "disaster_locations",
+      "name": "location_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 2
+    },
+    {
+      "table": "disaster_locations",
+      "name": "impact_level",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "generated": false,
+      "pos": 3
+    },
+    {
+      "table": "disaster_locations",
+      "name": "affected_population",
+      "type": "INTEGER",
+      "nullable": false,
+      "generated": false,
+      "pos": 4
+    },
+    {
+      "table": "disaster_locations",
+      "name": "reported_at",
+      "type": "TIMESTAMPTZ",
+      "nullable": false,
+      "generated": false,
+      "pos": 5
+    },
+    {
+      "table": "disasters",
+      "name": "disaster_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 1
+    },
+    {
+      "table": "disasters",
+      "name": "disaster_name",
+      "type": "VARCHAR(160)",
+      "nullable": false,
+      "generated": false,
+      "pos": 2
+    },
+    {
+      "table": "disasters",
+      "name": "disaster_type",
+      "type": "VARCHAR(50)",
+      "nullable": false,
+      "generated": false,
+      "pos": 3
+    },
+    {
+      "table": "disasters",
+      "name": "severity",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "generated": false,
+      "pos": 4
+    },
+    {
+      "table": "disasters",
+      "name": "started_at",
+      "type": "TIMESTAMPTZ",
+      "nullable": false,
+      "generated": false,
+      "pos": 5
+    },
+    {
+      "table": "disasters",
+      "name": "ended_at",
+      "type": "TIMESTAMPTZ",
+      "nullable": true,
+      "generated": false,
+      "pos": 6
+    },
+    {
+      "table": "disasters",
+      "name": "status",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "generated": false,
+      "pos": 7
+    },
+    {
+      "table": "disasters",
+      "name": "description",
+      "type": "TEXT",
+      "nullable": true,
+      "generated": false,
+      "pos": 8
+    },
+    {
+      "table": "disasters",
+      "name": "created_by",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 9
+    },
+    {
+      "table": "disasters",
+      "name": "created_at",
+      "type": "TIMESTAMPTZ",
+      "nullable": false,
+      "generated": false,
+      "pos": 10
+    },
+    {
+      "table": "disasters",
+      "name": "event_location_id",
+      "type": "BIGINT",
+      "nullable": true,
+      "generated": false,
+      "pos": 11
+    },
+    {
+      "table": "disasters",
+      "name": "search_vector",
+      "type": "TSVECTOR",
+      "nullable": true,
+      "generated": true,
+      "pos": 12
+    },
+    {
+      "table": "integration_sync_runs",
+      "name": "run_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 1
+    },
+    {
+      "table": "integration_sync_runs",
+      "name": "target",
+      "type": "TEXT",
+      "nullable": false,
+      "generated": false,
+      "pos": 2
+    },
+    {
+      "table": "integration_sync_runs",
+      "name": "status",
+      "type": "TEXT",
+      "nullable": false,
+      "generated": false,
+      "pos": 3
+    },
+    {
+      "table": "integration_sync_runs",
+      "name": "attempts",
+      "type": "INTEGER",
+      "nullable": false,
+      "generated": false,
+      "pos": 4
+    },
+    {
+      "table": "integration_sync_runs",
+      "name": "records_synced",
+      "type": "INTEGER",
+      "nullable": false,
+      "generated": false,
+      "pos": 5
+    },
+    {
+      "table": "integration_sync_runs",
+      "name": "detail",
+      "type": "TEXT",
+      "nullable": true,
+      "generated": false,
+      "pos": 6
+    },
+    {
+      "table": "integration_sync_runs",
+      "name": "triggered_by",
+      "type": "BIGINT",
+      "nullable": true,
+      "generated": false,
+      "pos": 7
+    },
+    {
+      "table": "integration_sync_runs",
+      "name": "started_at",
+      "type": "TIMESTAMPTZ",
+      "nullable": false,
+      "generated": false,
+      "pos": 8
+    },
+    {
+      "table": "integration_sync_runs",
+      "name": "finished_at",
+      "type": "TIMESTAMPTZ",
+      "nullable": true,
+      "generated": false,
+      "pos": 9
+    },
+    {
+      "table": "inventory",
+      "name": "warehouse_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 1
+    },
+    {
+      "table": "inventory",
+      "name": "resource_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 2
+    },
+    {
+      "table": "inventory",
+      "name": "quantity_available",
+      "type": "NUMERIC(14,3)",
+      "nullable": false,
+      "generated": false,
+      "pos": 3
+    },
+    {
+      "table": "inventory",
+      "name": "minimum_threshold",
+      "type": "NUMERIC(14,3)",
+      "nullable": false,
+      "generated": false,
+      "pos": 4
+    },
+    {
+      "table": "inventory",
+      "name": "last_updated",
+      "type": "TIMESTAMPTZ",
+      "nullable": false,
+      "generated": false,
+      "pos": 5
+    },
+    {
+      "table": "inventory_movements",
+      "name": "movement_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 1
+    },
+    {
+      "table": "inventory_movements",
+      "name": "warehouse_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 2
+    },
+    {
+      "table": "inventory_movements",
+      "name": "resource_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 3
+    },
+    {
+      "table": "inventory_movements",
+      "name": "delta",
+      "type": "NUMERIC(14,3)",
+      "nullable": false,
+      "generated": false,
+      "pos": 4
+    },
+    {
+      "table": "inventory_movements",
+      "name": "reason",
+      "type": "TEXT",
+      "nullable": false,
+      "generated": false,
+      "pos": 5
+    },
+    {
+      "table": "inventory_movements",
+      "name": "created_at",
+      "type": "TIMESTAMPTZ",
+      "nullable": false,
+      "generated": false,
+      "pos": 6
+    },
+    {
+      "table": "locations",
+      "name": "location_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 1
+    },
+    {
+      "table": "locations",
+      "name": "location_name",
+      "type": "VARCHAR(160)",
+      "nullable": false,
+      "generated": false,
+      "pos": 2
+    },
+    {
+      "table": "locations",
+      "name": "location_type",
+      "type": "VARCHAR(40)",
+      "nullable": false,
+      "generated": false,
+      "pos": 3
+    },
+    {
+      "table": "locations",
+      "name": "address",
+      "type": "TEXT",
+      "nullable": false,
+      "generated": false,
+      "pos": 4
+    },
+    {
+      "table": "locations",
+      "name": "latitude",
+      "type": "NUMERIC(9,6)",
+      "nullable": true,
+      "generated": false,
+      "pos": 5
+    },
+    {
+      "table": "locations",
+      "name": "longitude",
+      "type": "NUMERIC(9,6)",
+      "nullable": true,
+      "generated": false,
+      "pos": 6
+    },
+    {
+      "table": "login_attempts",
+      "name": "email",
+      "type": "TEXT",
+      "nullable": false,
+      "generated": false,
+      "pos": 1
+    },
+    {
+      "table": "login_attempts",
+      "name": "attempts",
+      "type": "INTEGER",
+      "nullable": false,
+      "generated": false,
+      "pos": 2
+    },
+    {
+      "table": "login_attempts",
+      "name": "window_start",
+      "type": "TIMESTAMPTZ",
+      "nullable": false,
+      "generated": false,
+      "pos": 3
+    },
+    {
+      "table": "relief_camps",
+      "name": "camp_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 1
+    },
+    {
+      "table": "relief_camps",
+      "name": "location_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 2
+    },
+    {
+      "table": "relief_camps",
+      "name": "camp_name",
+      "type": "VARCHAR(160)",
+      "nullable": false,
+      "generated": false,
+      "pos": 3
+    },
+    {
+      "table": "relief_camps",
+      "name": "capacity",
+      "type": "INTEGER",
+      "nullable": false,
+      "generated": false,
+      "pos": 4
+    },
+    {
+      "table": "relief_camps",
+      "name": "current_population",
+      "type": "INTEGER",
+      "nullable": false,
+      "generated": false,
+      "pos": 5
+    },
+    {
+      "table": "relief_camps",
+      "name": "manager_id",
+      "type": "BIGINT",
+      "nullable": true,
+      "generated": false,
+      "pos": 6
+    },
+    {
+      "table": "relief_camps",
+      "name": "status",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "generated": false,
+      "pos": 7
+    },
+    {
+      "table": "relief_camps",
+      "name": "established_at",
+      "type": "DATE",
+      "nullable": false,
+      "generated": false,
+      "pos": 8
+    },
+    {
+      "table": "request_items",
+      "name": "request_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 1
+    },
+    {
+      "table": "request_items",
+      "name": "resource_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 2
+    },
+    {
+      "table": "request_items",
+      "name": "quantity_requested",
+      "type": "NUMERIC(14,3)",
+      "nullable": false,
+      "generated": false,
+      "pos": 3
+    },
+    {
+      "table": "resource_categories",
+      "name": "category_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 1
+    },
+    {
+      "table": "resource_categories",
+      "name": "category_name",
+      "type": "VARCHAR(80)",
+      "nullable": false,
+      "generated": false,
+      "pos": 2
+    },
+    {
+      "table": "resource_categories",
+      "name": "description",
+      "type": "TEXT",
+      "nullable": true,
+      "generated": false,
+      "pos": 3
+    },
+    {
+      "table": "resource_requests",
+      "name": "request_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 1
+    },
+    {
+      "table": "resource_requests",
+      "name": "camp_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 2
+    },
+    {
+      "table": "resource_requests",
+      "name": "disaster_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 3
+    },
+    {
+      "table": "resource_requests",
+      "name": "requested_by",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 4
+    },
+    {
+      "table": "resource_requests",
+      "name": "requested_at",
+      "type": "TIMESTAMPTZ",
+      "nullable": false,
+      "generated": false,
+      "pos": 5
+    },
+    {
+      "table": "resource_requests",
+      "name": "need_by",
+      "type": "TIMESTAMPTZ",
+      "nullable": false,
+      "generated": false,
+      "pos": 6
+    },
+    {
+      "table": "resource_requests",
+      "name": "priority_score",
+      "type": "NUMERIC(5,2)",
+      "nullable": false,
+      "generated": false,
+      "pos": 7
+    },
+    {
+      "table": "resource_requests",
+      "name": "priority_level",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "generated": false,
+      "pos": 8
+    },
+    {
+      "table": "resource_requests",
+      "name": "status",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "generated": false,
+      "pos": 9
+    },
+    {
+      "table": "resource_requests",
+      "name": "medical_emergency",
+      "type": "BOOLEAN",
+      "nullable": false,
+      "generated": false,
+      "pos": 10
+    },
+    {
+      "table": "resource_requests",
+      "name": "remarks",
+      "type": "TEXT",
+      "nullable": true,
+      "generated": false,
+      "pos": 11
+    },
+    {
+      "table": "resource_requests",
+      "name": "search_vector",
+      "type": "TSVECTOR",
+      "nullable": true,
+      "generated": true,
+      "pos": 12
+    },
+    {
+      "table": "resources",
+      "name": "resource_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 1
+    },
+    {
+      "table": "resources",
+      "name": "category_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 2
+    },
+    {
+      "table": "resources",
+      "name": "resource_name",
+      "type": "VARCHAR(120)",
+      "nullable": false,
+      "generated": false,
+      "pos": 3
+    },
+    {
+      "table": "resources",
+      "name": "unit",
+      "type": "VARCHAR(30)",
+      "nullable": false,
+      "generated": false,
+      "pos": 4
+    },
+    {
+      "table": "resources",
+      "name": "description",
+      "type": "TEXT",
+      "nullable": true,
+      "generated": false,
+      "pos": 5
+    },
+    {
+      "table": "resources",
+      "name": "is_perishable",
+      "type": "BOOLEAN",
+      "nullable": false,
+      "generated": false,
+      "pos": 6
+    },
+    {
+      "table": "roles",
+      "name": "role_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 1
+    },
+    {
+      "table": "roles",
+      "name": "role_name",
+      "type": "VARCHAR(40)",
+      "nullable": false,
+      "generated": false,
+      "pos": 2
+    },
+    {
+      "table": "roles",
+      "name": "description",
+      "type": "TEXT",
+      "nullable": true,
+      "generated": false,
+      "pos": 3
+    },
+    {
+      "table": "schema_migrations",
+      "name": "filename",
+      "type": "TEXT",
+      "nullable": false,
+      "generated": false,
+      "pos": 1
+    },
+    {
+      "table": "schema_migrations",
+      "name": "applied_at",
+      "type": "TIMESTAMPTZ",
+      "nullable": false,
+      "generated": false,
+      "pos": 2
+    },
+    {
+      "table": "sessions",
+      "name": "token_hash",
+      "type": "TEXT",
+      "nullable": false,
+      "generated": false,
+      "pos": 1
+    },
+    {
+      "table": "sessions",
+      "name": "user_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 2
+    },
+    {
+      "table": "sessions",
+      "name": "expires_at",
+      "type": "TIMESTAMPTZ",
+      "nullable": false,
+      "generated": false,
+      "pos": 3
+    },
+    {
+      "table": "vehicles",
+      "name": "vehicle_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 1
+    },
+    {
+      "table": "vehicles",
+      "name": "vehicle_number",
+      "type": "VARCHAR(30)",
+      "nullable": false,
+      "generated": false,
+      "pos": 2
+    },
+    {
+      "table": "vehicles",
+      "name": "vehicle_type",
+      "type": "VARCHAR(50)",
+      "nullable": false,
+      "generated": false,
+      "pos": 3
+    },
+    {
+      "table": "vehicles",
+      "name": "capacity",
+      "type": "NUMERIC(14,2)",
+      "nullable": false,
+      "generated": false,
+      "pos": 4
+    },
+    {
+      "table": "vehicles",
+      "name": "status",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "generated": false,
+      "pos": 5
+    },
+    {
+      "table": "vehicles",
+      "name": "current_location_id",
+      "type": "BIGINT",
+      "nullable": true,
+      "generated": false,
+      "pos": 6
+    },
+    {
+      "table": "volunteers",
+      "name": "volunteer_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 1
+    },
+    {
+      "table": "volunteers",
+      "name": "full_name",
+      "type": "VARCHAR(120)",
+      "nullable": false,
+      "generated": false,
+      "pos": 2
+    },
+    {
+      "table": "volunteers",
+      "name": "phone",
+      "type": "VARCHAR(25)",
+      "nullable": false,
+      "generated": false,
+      "pos": 3
+    },
+    {
+      "table": "volunteers",
+      "name": "email",
+      "type": "VARCHAR(254)",
+      "nullable": true,
+      "generated": false,
+      "pos": 4
+    },
+    {
+      "table": "volunteers",
+      "name": "skills",
+      "type": "TEXT",
+      "nullable": true,
+      "generated": false,
+      "pos": 5
+    },
+    {
+      "table": "volunteers",
+      "name": "availability_status",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "generated": false,
+      "pos": 6
+    },
+    {
+      "table": "volunteers",
+      "name": "registered_at",
+      "type": "TIMESTAMPTZ",
+      "nullable": false,
+      "generated": false,
+      "pos": 7
+    },
+    {
+      "table": "warehouses",
+      "name": "warehouse_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 1
+    },
+    {
+      "table": "warehouses",
+      "name": "location_id",
+      "type": "BIGINT",
+      "nullable": false,
+      "generated": false,
+      "pos": 2
+    },
+    {
+      "table": "warehouses",
+      "name": "warehouse_name",
+      "type": "VARCHAR(160)",
+      "nullable": false,
+      "generated": false,
+      "pos": 3
+    },
+    {
+      "table": "warehouses",
+      "name": "manager_id",
+      "type": "BIGINT",
+      "nullable": true,
+      "generated": false,
+      "pos": 4
+    },
+    {
+      "table": "warehouses",
+      "name": "capacity",
+      "type": "NUMERIC(14,2)",
+      "nullable": false,
+      "generated": false,
+      "pos": 5
+    },
+    {
+      "table": "warehouses",
+      "name": "status",
+      "type": "VARCHAR(20)",
+      "nullable": false,
+      "generated": false,
+      "pos": 6
+    }
+  ],
+  "primaryKeys": {
+    "roles": [
+      "role_id"
+    ],
+    "app_users": [
+      "user_id"
+    ],
+    "inventory_movements": [
+      "movement_id"
+    ],
+    "disasters": [
+      "disaster_id"
+    ],
+    "locations": [
+      "location_id"
+    ],
+    "disaster_locations": [
+      "disaster_id",
+      "location_id"
+    ],
+    "relief_camps": [
+      "camp_id"
+    ],
+    "resource_categories": [
+      "category_id"
+    ],
+    "resources": [
+      "resource_id"
+    ],
+    "warehouses": [
+      "warehouse_id"
+    ],
+    "sessions": [
+      "token_hash"
+    ],
+    "inventory": [
+      "warehouse_id",
+      "resource_id"
+    ],
+    "resource_requests": [
+      "request_id"
+    ],
+    "login_attempts": [
+      "email"
+    ],
+    "audit_logs": [
+      "audit_id"
+    ],
+    "request_items": [
+      "request_id",
+      "resource_id"
+    ],
+    "allocations": [
+      "allocation_id"
+    ],
+    "allocation_items": [
+      "allocation_item_id"
+    ],
+    "vehicles": [
+      "vehicle_id"
+    ],
+    "deliveries": [
+      "delivery_id"
+    ],
+    "delivery_volunteers": [
+      "delivery_id",
+      "volunteer_id"
+    ],
+    "volunteers": [
+      "volunteer_id"
+    ],
+    "schema_migrations": [
+      "filename"
+    ],
+    "data_change_log": [
+      "change_id"
+    ],
+    "integration_sync_runs": [
+      "run_id"
+    ]
+  },
+  "uniqueKeys": {
+    "roles": [
+      [
+        "role_name"
+      ]
+    ],
+    "app_users": [
+      [
+        "email"
+      ],
+      [
+        "phone"
+      ]
+    ],
+    "resource_categories": [
+      [
+        "category_name"
+      ]
+    ],
+    "resources": [
+      [
+        "category_id",
+        "resource_name"
+      ]
+    ],
+    "allocations": [
+      [
+        "allocation_id",
+        "request_id"
+      ]
+    ],
+    "vehicles": [
+      [
+        "vehicle_number"
+      ]
+    ],
+    "volunteers": [
+      [
+        "phone"
+      ],
+      [
+        "email"
+      ]
+    ]
+  },
+  "foreignKeys": [
+    {
+      "name": "app_users_role_id_fkey",
+      "child": "app_users",
+      "cols": [
+        "role_id"
+      ],
+      "parent": "roles",
+      "refs": [
+        "role_id"
+      ],
+      "onDelete": "RESTRICT"
+    },
+    {
+      "name": "audit_logs_user_id_fkey",
+      "child": "audit_logs",
+      "cols": [
+        "user_id"
+      ],
+      "parent": "app_users",
+      "refs": [
+        "user_id"
+      ],
+      "onDelete": "RESTRICT"
+    },
+    {
+      "name": "disasters_created_by_fkey",
+      "child": "disasters",
+      "cols": [
+        "created_by"
+      ],
+      "parent": "app_users",
+      "refs": [
+        "user_id"
+      ],
+      "onDelete": "RESTRICT"
+    },
+    {
+      "name": "disaster_locations_disaster_id_fkey",
+      "child": "disaster_locations",
+      "cols": [
+        "disaster_id"
+      ],
+      "parent": "disasters",
+      "refs": [
+        "disaster_id"
+      ],
+      "onDelete": "CASCADE"
+    },
+    {
+      "name": "disaster_locations_location_id_fkey",
+      "child": "disaster_locations",
+      "cols": [
+        "location_id"
+      ],
+      "parent": "locations",
+      "refs": [
+        "location_id"
+      ],
+      "onDelete": "RESTRICT"
+    },
+    {
+      "name": "vehicles_current_location_id_fkey",
+      "child": "vehicles",
+      "cols": [
+        "current_location_id"
+      ],
+      "parent": "locations",
+      "refs": [
+        "location_id"
+      ],
+      "onDelete": "SET NULL"
+    },
+    {
+      "name": "inventory_movements_warehouse_id_resource_id_fkey",
+      "child": "inventory_movements",
+      "cols": [
+        "warehouse_id",
+        "resource_id"
+      ],
+      "parent": "inventory",
+      "refs": [
+        "warehouse_id",
+        "resource_id"
+      ],
+      "onDelete": "NO ACTION"
+    },
+    {
+      "name": "relief_camps_location_id_fkey",
+      "child": "relief_camps",
+      "cols": [
+        "location_id"
+      ],
+      "parent": "locations",
+      "refs": [
+        "location_id"
+      ],
+      "onDelete": "RESTRICT"
+    },
+    {
+      "name": "relief_camps_manager_id_fkey",
+      "child": "relief_camps",
+      "cols": [
+        "manager_id"
+      ],
+      "parent": "app_users",
+      "refs": [
+        "user_id"
+      ],
+      "onDelete": "SET NULL"
+    },
+    {
+      "name": "resources_category_id_fkey",
+      "child": "resources",
+      "cols": [
+        "category_id"
+      ],
+      "parent": "resource_categories",
+      "refs": [
+        "category_id"
+      ],
+      "onDelete": "RESTRICT"
+    },
+    {
+      "name": "warehouses_location_id_fkey",
+      "child": "warehouses",
+      "cols": [
+        "location_id"
+      ],
+      "parent": "locations",
+      "refs": [
+        "location_id"
+      ],
+      "onDelete": "RESTRICT"
+    },
+    {
+      "name": "warehouses_manager_id_fkey",
+      "child": "warehouses",
+      "cols": [
+        "manager_id"
+      ],
+      "parent": "app_users",
+      "refs": [
+        "user_id"
+      ],
+      "onDelete": "SET NULL"
+    },
+    {
+      "name": "sessions_user_id_fkey",
+      "child": "sessions",
+      "cols": [
+        "user_id"
+      ],
+      "parent": "app_users",
+      "refs": [
+        "user_id"
+      ],
+      "onDelete": "CASCADE"
+    },
+    {
+      "name": "inventory_warehouse_id_fkey",
+      "child": "inventory",
+      "cols": [
+        "warehouse_id"
+      ],
+      "parent": "warehouses",
+      "refs": [
+        "warehouse_id"
+      ],
+      "onDelete": "RESTRICT"
+    },
+    {
+      "name": "inventory_resource_id_fkey",
+      "child": "inventory",
+      "cols": [
+        "resource_id"
+      ],
+      "parent": "resources",
+      "refs": [
+        "resource_id"
+      ],
+      "onDelete": "RESTRICT"
+    },
+    {
+      "name": "resource_requests_camp_id_fkey",
+      "child": "resource_requests",
+      "cols": [
+        "camp_id"
+      ],
+      "parent": "relief_camps",
+      "refs": [
+        "camp_id"
+      ],
+      "onDelete": "RESTRICT"
+    },
+    {
+      "name": "resource_requests_disaster_id_fkey",
+      "child": "resource_requests",
+      "cols": [
+        "disaster_id"
+      ],
+      "parent": "disasters",
+      "refs": [
+        "disaster_id"
+      ],
+      "onDelete": "RESTRICT"
+    },
+    {
+      "name": "resource_requests_requested_by_fkey",
+      "child": "resource_requests",
+      "cols": [
+        "requested_by"
+      ],
+      "parent": "app_users",
+      "refs": [
+        "user_id"
+      ],
+      "onDelete": "RESTRICT"
+    },
+    {
+      "name": "request_items_request_id_fkey",
+      "child": "request_items",
+      "cols": [
+        "request_id"
+      ],
+      "parent": "resource_requests",
+      "refs": [
+        "request_id"
+      ],
+      "onDelete": "CASCADE"
+    },
+    {
+      "name": "request_items_resource_id_fkey",
+      "child": "request_items",
+      "cols": [
+        "resource_id"
+      ],
+      "parent": "resources",
+      "refs": [
+        "resource_id"
+      ],
+      "onDelete": "RESTRICT"
+    },
+    {
+      "name": "allocations_request_id_fkey",
+      "child": "allocations",
+      "cols": [
+        "request_id"
+      ],
+      "parent": "resource_requests",
+      "refs": [
+        "request_id"
+      ],
+      "onDelete": "RESTRICT"
+    },
+    {
+      "name": "allocations_allocated_by_fkey",
+      "child": "allocations",
+      "cols": [
+        "allocated_by"
+      ],
+      "parent": "app_users",
+      "refs": [
+        "user_id"
+      ],
+      "onDelete": "RESTRICT"
+    },
+    {
+      "name": "allocation_items_allocation_id_request_id_fkey",
+      "child": "allocation_items",
+      "cols": [
+        "allocation_id",
+        "request_id"
+      ],
+      "parent": "allocations",
+      "refs": [
+        "allocation_id",
+        "request_id"
+      ],
+      "onDelete": "CASCADE"
+    },
+    {
+      "name": "allocation_items_request_id_resource_id_fkey",
+      "child": "allocation_items",
+      "cols": [
+        "request_id",
+        "resource_id"
+      ],
+      "parent": "request_items",
+      "refs": [
+        "request_id",
+        "resource_id"
+      ],
+      "onDelete": "RESTRICT"
+    },
+    {
+      "name": "allocation_items_warehouse_id_resource_id_fkey",
+      "child": "allocation_items",
+      "cols": [
+        "warehouse_id",
+        "resource_id"
+      ],
+      "parent": "inventory",
+      "refs": [
+        "warehouse_id",
+        "resource_id"
+      ],
+      "onDelete": "RESTRICT"
+    },
+    {
+      "name": "deliveries_allocation_id_fkey",
+      "child": "deliveries",
+      "cols": [
+        "allocation_id"
+      ],
+      "parent": "allocations",
+      "refs": [
+        "allocation_id"
+      ],
+      "onDelete": "RESTRICT"
+    },
+    {
+      "name": "deliveries_vehicle_id_fkey",
+      "child": "deliveries",
+      "cols": [
+        "vehicle_id"
+      ],
+      "parent": "vehicles",
+      "refs": [
+        "vehicle_id"
+      ],
+      "onDelete": "RESTRICT"
+    },
+    {
+      "name": "deliveries_driver_id_fkey",
+      "child": "deliveries",
+      "cols": [
+        "driver_id"
+      ],
+      "parent": "app_users",
+      "refs": [
+        "user_id"
+      ],
+      "onDelete": "RESTRICT"
+    },
+    {
+      "name": "deliveries_source_location_id_fkey",
+      "child": "deliveries",
+      "cols": [
+        "source_location_id"
+      ],
+      "parent": "locations",
+      "refs": [
+        "location_id"
+      ],
+      "onDelete": "RESTRICT"
+    },
+    {
+      "name": "deliveries_destination_location_id_fkey",
+      "child": "deliveries",
+      "cols": [
+        "destination_location_id"
+      ],
+      "parent": "locations",
+      "refs": [
+        "location_id"
+      ],
+      "onDelete": "RESTRICT"
+    },
+    {
+      "name": "delivery_volunteers_delivery_id_fkey",
+      "child": "delivery_volunteers",
+      "cols": [
+        "delivery_id"
+      ],
+      "parent": "deliveries",
+      "refs": [
+        "delivery_id"
+      ],
+      "onDelete": "CASCADE"
+    },
+    {
+      "name": "fk_delivery_volunteer_volunteer",
+      "child": "delivery_volunteers",
+      "cols": [
+        "volunteer_id"
+      ],
+      "parent": "volunteers",
+      "refs": [
+        "volunteer_id"
+      ],
+      "onDelete": "CASCADE"
+    },
+    {
+      "name": "disasters_event_location_id_fkey",
+      "child": "disasters",
+      "cols": [
+        "event_location_id"
+      ],
+      "parent": "locations",
+      "refs": [
+        "location_id"
+      ],
+      "onDelete": "NO ACTION"
+    },
+    {
+      "name": "integration_sync_runs_triggered_by_fkey",
+      "child": "integration_sync_runs",
+      "cols": [
+        "triggered_by"
+      ],
+      "parent": "app_users",
+      "refs": [
+        "user_id"
+      ],
+      "onDelete": "SET NULL"
+    }
+  ]
+}

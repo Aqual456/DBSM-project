@@ -1,0 +1,24 @@
+{
+  "ranAt": "2026-11-17T21:35:24.002Z",
+  "results": [
+    {
+      "test": "Redis: set/get with TTL, prefix invalidation, INCR rate limiting",
+      "status": "PASS",
+      "detail": "round trip 3.3 ms"
+    },
+    {
+      "test": "Neo4j: controlled sync matches PostgreSQL counts; all Cypher queries execute",
+      "status": "PASS",
+      "detail": "172 records synced, 86 nodes"
+    },
+    {
+      "test": "Neo4j: failed sync retries 3× and is recorded as FAILED, previous graph kept",
+      "status": "PASS"
+    },
+    {
+      "test": "pgvector: sync embeds all sources; nearest-neighbour search is ordered by cosine similarity; HNSW index used",
+      "status": "PASS",
+      "detail": "44 vectors (Lexical hashing fallback (not semantic)); top hit \"Request #8 — Guwahati Stadium Shelter\" cos=0.3236"
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: reliefflow-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: reliefflow
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - reliefflow_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d reliefflow"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+  mongo:
+    image: mongo:7
+    container_name: reliefflow-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - reliefflow_mongodata:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.adminCommand('ping').ok"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # ---- Optional services (Unit 4 demonstrations). The core app runs without them. ----
+  # Start with: docker compose --profile optional up -d --no-deps redis neo4j vectordb
+  redis:
+    profiles: ["optional"]
+    image: redis:7-alpine
+    container_name: reliefflow-redis
+    restart: unless-stopped
+    command: ["redis-server", "--save", "", "--appendonly", "no", "--maxmemory", "64mb", "--maxmemory-policy", "allkeys-lru"]
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+  neo4j:
+    profiles: ["optional"]
+    image: neo4j:5-community
+    container_name: reliefflow-neo4j
+    restart: unless-stopped
+    environment:
+      NEO4J_AUTH: neo4j/${NEO4J_PASSWORD:-reliefflow-graph-dev}
+      NEO4J_server_memory_heap_max__size: 512m
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    volumes:
+      - reliefflow_neo4jdata:/data
+  vectordb:
+    profiles: ["optional"]
+    image: pgvector/pgvector:pg16
+    container_name: reliefflow-vectordb
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: reliefflow_vectors
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${VECTOR_DB_PASSWORD:-reliefflow-vector-dev}
+    ports:
+      - "5433:5432"
+    volumes:
+      - reliefflow_vectordata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d reliefflow_vectors"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+volumes:
+  reliefflow_pgdata:
+  reliefflow_mongodata:
+  reliefflow_neo4jdata:
+  reliefflow_vectordata:

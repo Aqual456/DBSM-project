@@ -1,0 +1,21 @@
+{
+  "collection": "incident_reports",
+  "document": {
+    "_id": "ObjectId",
+    "disasterId": "Number (reference to PostgreSQL disasters.disaster_id)",
+    "reportedBy": "Number (reference to PostgreSQL app_users.user_id)",
+    "reportType": "DAMAGE | MEDICAL | SUPPLY | SAFETY | GENERAL",
+    "description": "String",
+    "location": { "label": "String", "latitude": "Number?", "longitude": "Number?" },
+    "severity": "LOW | MODERATE | HIGH | CRITICAL",
+    "tags": ["String"],
+    "createdAt": "Date",
+    "updatedAt": "Date"
+  },
+  "indexes": [
+    { "keys": { "disasterId": 1, "createdAt": -1 } },
+    { "keys": { "reportType": 1, "severity": 1 } },
+    { "keys": { "description": "text", "tags": "text" } }
+  ],
+  "design_note": "MongoDB stores flexible, field-submitted incident narratives. PostgreSQL remains the source of truth for users, disasters, locations, inventory, requests, allocations and deliveries. disasterId and reportedBy are application-level references, not MongoDB foreign keys."
+}

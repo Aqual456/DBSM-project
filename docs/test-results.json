@@ -1,0 +1,117 @@
+{
+  "database": "reliefflow_test_1794951246599",
+  "results": [
+    {
+      "test": "Administrator provisioning creates a usable account and preserves working credentials",
+      "status": "PASS"
+    },
+    {
+      "test": "Authentication: invalid credentials, cookie flags, role sessions and unauthenticated rejection",
+      "status": "PASS"
+    },
+    {
+      "test": "Disasters: create, normalized duplicate detection, distinct events, edit, malformed input",
+      "status": "PASS"
+    },
+    {
+      "test": "Camps: create, update occupancy, reject negatives and over capacity, close empty camp",
+      "status": "PASS"
+    },
+    {
+      "test": "Warehouses: create, duplicate detection, persistence, edit and status",
+      "status": "PASS"
+    },
+    {
+      "test": "Inventory: add, adjust, low stock, reject negatives, movement persistence",
+      "status": "PASS"
+    },
+    {
+      "test": "Requests: authenticated ownership, create, duplicate items, valid approval/rejection/cancellation",
+      "status": "PASS"
+    },
+    {
+      "test": "Authorization: direct API calls for field officer, coordinator, driver and CSRF",
+      "status": "PASS"
+    },
+    {
+      "test": "Allocations: partial fulfillment, stock deduction, over-allocation and atomic rollback",
+      "status": "PASS"
+    },
+    {
+      "test": "Concurrent allocations: serialize outstanding demand, reject loser, preserve stock",
+      "status": "PASS"
+    },
+    {
+      "test": "Vehicles and volunteers: create, edit, validate unique identities",
+      "status": "PASS"
+    },
+    {
+      "test": "Delivery assignments: valid driver, vehicle, volunteers; reject double booking and invalid transitions",
+      "status": "PASS"
+    },
+    {
+      "test": "Full delivery lifecycle fulfills request and driver ownership is enforced",
+      "status": "PASS"
+    },
+    {
+      "test": "Shared-stock concurrency and cancellation restore stock exactly once",
+      "status": "PASS"
+    },
+    {
+      "test": "MongoDB incidents: persist, authenticated author, validate references and required fields",
+      "status": "PASS"
+    },
+    {
+      "test": "Analytics and audit: compare live aggregates with SQL records",
+      "status": "PASS"
+    },
+    {
+      "test": "Users: create, role assignment, revoke prior sessions",
+      "status": "PASS"
+    },
+    {
+      "test": "Input hardening: malformed JSON, wrong content type, unexpected fields, invalid ids, huge numbers",
+      "status": "PASS"
+    },
+    {
+      "test": "Optimistic concurrency: stale camp edits and stale stock adjustments are rejected",
+      "status": "PASS"
+    },
+    {
+      "test": "Camp occupancy: concurrent admissions never lose updates; capacity and closed camps enforced",
+      "status": "PASS"
+    },
+    {
+      "test": "Logistics edge cases: concurrent vehicle double booking, unavailable volunteer, cancel after dispatch, DB guards",
+      "status": "PASS"
+    },
+    {
+      "test": "Database objects: views, functions, procedure and row-change audit trigger",
+      "status": "PASS"
+    },
+    {
+      "test": "Users: last-admin protection, password reset and deactivation revoke sessions",
+      "status": "PASS"
+    },
+    {
+      "test": "Read models: request pipeline, intelligence recommendations, map, ER introspection",
+      "status": "PASS"
+    },
+    {
+      "test": "Degraded mode: optional services disabled, core keeps working",
+      "status": "PASS"
+    },
+    {
+      "test": "DBMS lab: curated demos run and roll back; playground guard; concurrency scenarios; trace",
+      "status": "PASS"
+    },
+    {
+      "test": "Browser (Playwright): login, every screen, workflow actions, lab run, mobile layout, logout",
+      "status": "PASS"
+    },
+    {
+      "test": "Logout and session expiration reject reuse",
+      "status": "PASS"
+    }
+  ]
+}

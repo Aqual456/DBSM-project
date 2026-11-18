@@ -1,0 +1,403 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="4400" height="3520" viewBox="0 0 4400 3520" font-family="Segoe UI, Arial, sans-serif">
+<style>
+  .ent{fill:#eaf1ff;stroke:#1d4ed8;stroke-width:2}
+  .ent.ext{fill:#f3f0ff;stroke:#6d4fd8;stroke-dasharray:7 4}
+  .entt{font-size:16px;font-weight:700;fill:#0f1e3d;text-anchor:middle;letter-spacing:.5px}
+  .rel{fill:#fff7e6;stroke:#b45309;stroke-width:2}
+  .rel.ext{fill:#f8f5ff;stroke:#6d4fd8;stroke-dasharray:7 4}
+  .relt{font-size:12.5px;font-weight:700;fill:#7c2d12;text-anchor:middle}
+  .attr{fill:#ffffff;stroke:#64748b;stroke-width:1.3}
+  .attrt{font-size:12.5px;fill:#172033;text-anchor:middle}
+  .attrt.small{font-size:11px}
+  .card{font-size:17px;font-weight:800;fill:#dc2626;text-anchor:middle}
+  .note{font-size:11px;fill:#6d4fd8;text-anchor:middle;font-style:italic}
+  .title{font-size:34px;font-weight:800;fill:#0f1e3d}
+  .sub{font-size:17px;fill:#475569}
+  .legh{font-size:17px;font-weight:700;fill:#0f1e3d}
+  .legt{font-size:14px;fill:#334155}
+</style>
+<rect width="4400" height="3520" fill="#ffffff"/>
+<text x="40" y="70" class="title">ReliefFlow — Entity–Relationship Diagram (entire database)</text>
+  <text x="40" y="104" class="sub">Generated from the live PostgreSQL catalog: 25 tables, 34 foreign keys, every relationship checked against a real FK · plus the MongoDB incident document</text>
+  <rect x="2950" y="2980" width="1410" height="500" rx="12" fill="none" stroke="#cbd5e1" stroke-dasharray="6 6"/>
+  <text x="2975" y="3015" class="legh">Stand-alone system tables (no relationships)</text>
+<path d="M1650,380 L2150,470" fill="none" stroke="#334155" stroke-width="7"/>
+<path d="M1650,380 L2150,470" fill="none" stroke="#ffffff" stroke-width="3"/>
+<path d="M1650,380 L1230,300" fill="none" stroke="#334155" stroke-width="1.6"/>
+<path d="M2620,340 L3050,300" fill="none" stroke="#334155" stroke-width="7"/>
+<path d="M2620,340 L3050,300" fill="none" stroke="#ffffff" stroke-width="3"/>
+<path d="M2620,340 L2150,470" fill="none" stroke="#334155" stroke-width="1.6"/>
+<path d="M3000,620 L3700,560" fill="none" stroke="#334155" stroke-width="1.6"/>
+<path d="M3000,620 L2150,470" fill="none" stroke="#334155" stroke-width="1.6"/>
+<path d="M1150,560 L560,470" fill="none" stroke="#334155" stroke-width="1.6"/>
+<path d="M1150,560 L2150,470" fill="none" stroke="#334155" stroke-width="1.6"/>
+<path d="M1350,820 L900,1250" fill="none" stroke="#334155" stroke-width="7"/>
+<path d="M1350,820 L900,1250" fill="none" stroke="#ffffff" stroke-width="3"/>
+<path d="M1350,820 L2150,470" fill="none" stroke="#334155" stroke-width="1.6"/>
+<path d="M1900,860 L1700,1250" fill="none" stroke="#334155" stroke-width="7"/>
+<path d="M1900,860 L1700,1250" fill="none" stroke="#ffffff" stroke-width="3"/>
+<path d="M1900,860 L2150,470" fill="none" stroke="#334155" stroke-width="1.6"/>
+<path d="M2380,860 L2550,1250" fill="none" stroke="#334155" stroke-width="7"/>
+<path d="M2380,860 L2550,1250" fill="none" stroke="#ffffff" stroke-width="3"/>
+<path d="M2380,860 L2150,470" fill="none" stroke="#334155" stroke-width="1.6"/>
+<path d="M2900,860 L3350,1250" fill="none" stroke="#334155" stroke-width="7"/>
+<path d="M2900,860 L3350,1250" fill="none" stroke="#ffffff" stroke-width="3"/>
+<path d="M2900,860 L2150,470" fill="none" stroke="#334155" stroke-width="1.6"/>
+<path d="M1120,1700 L1250,1950" fill="none" stroke="#334155" stroke-width="1.6"/>
+<path d="M1120,1700 L1120,700 L2150,470" fill="none" stroke="#334155" stroke-width="1.6"/>
+<path d="M640,2850 L900,2650" fill="none" stroke="#334155" stroke-width="1.6"/>
+<path d="M640,2850 L55,2850 L55,620 L1900,620 L2150,470" fill="none" stroke="#334155" stroke-width="1.6"/>
+<path d="M800,960 L520,1000" fill="none" stroke="#7c6fcf" stroke-width="7" stroke-dasharray="8 5"/>
+<path d="M800,960 L520,1000" fill="none" stroke="#ffffff" stroke-width="3"/>
+<path d="M800,960 L900,1250" fill="none" stroke="#7c6fcf" stroke-width="1.6" stroke-dasharray="8 5"/>
+<path d="M520,760 L520,1000" fill="none" stroke="#7c6fcf" stroke-width="7" stroke-dasharray="8 5"/>
+<path d="M520,760 L520,1000" fill="none" stroke="#ffffff" stroke-width="3"/>
+<path d="M520,760 L520,660 L1800,660 L2150,470" fill="none" stroke="#7c6fcf" stroke-width="1.6" stroke-dasharray="8 5"/>
+<path d="M900,1650 L900,1250" fill="none" stroke="#334155" stroke-width="1.6"/>
+<path d="M900,1650 L600,2050 L330,2300" fill="none" stroke="#334155" stroke-width="1.6"/>
+<path d="M600,1650 L900,1250" fill="none" stroke="#334155" stroke-width="7"/>
+<path d="M600,1650 L900,1250" fill="none" stroke="#ffffff" stroke-width="3"/>
+<path d="M600,1650 L330,2300" fill="none" stroke="#334155" stroke-width="7"/>
+<path d="M600,1650 L330,2300" fill="none" stroke="#ffffff" stroke-width="3"/>
+<line x1="600" y1="1650" x2="435" y2="1610" stroke="#64748b" stroke-width="1.2"/>
+<line x1="600" y1="1650" x2="410" y2="1660" stroke="#64748b" stroke-width="1.2"/>
+<line x1="600" y1="1650" x2="450" y2="1710" stroke="#64748b" stroke-width="1.2"/>
+<path d="M800,2150 L1250,1950" fill="none" stroke="#334155" stroke-width="7"/>
+<path d="M800,2150 L1250,1950" fill="none" stroke="#ffffff" stroke-width="3"/>
+<path d="M800,2150 L330,2300" fill="none" stroke="#334155" stroke-width="1.6"/>
+<path d="M620,2500 L900,2650" fill="none" stroke="#334155" stroke-width="7"/>
+<path d="M620,2500 L900,2650" fill="none" stroke="#ffffff" stroke-width="3"/>
+<path d="M620,2500 L330,2300" fill="none" stroke="#334155" stroke-width="1.6"/>
+<path d="M1500,1620 L1700,1250" fill="none" stroke="#334155" stroke-width="7"/>
+<path d="M1500,1620 L1700,1250" fill="none" stroke="#ffffff" stroke-width="3"/>
+<path d="M1500,1620 L1250,1950" fill="none" stroke="#334155" stroke-width="1.6"/>
+<path d="M1300,1250 L1700,1250" fill="none" stroke="#334155" stroke-width="7"/>
+<path d="M1300,1250 L1700,1250" fill="none" stroke="#ffffff" stroke-width="3"/>
+<path d="M1300,1250 L900,1250" fill="none" stroke="#334155" stroke-width="1.6"/>
+<path d="M1880,1600 L2050,1950" fill="none" stroke="#334155" stroke-width="7"/>
+<path d="M1880,1600 L2050,1950" fill="none" stroke="#ffffff" stroke-width="3"/>
+<path d="M1880,1600 L1700,1250" fill="none" stroke="#334155" stroke-width="1.6"/>
+<path d="M2300,2300 L2050,1950" fill="none" stroke="#334155" stroke-width="7"/>
+<path d="M2300,2300 L2050,1950" fill="none" stroke="#ffffff" stroke-width="3"/>
+<path d="M2300,2300 L2650,2650" fill="none" stroke="#334155" stroke-width="1.6"/>
+<path d="M2130,1250 L2550,1250" fill="none" stroke="#334155" stroke-width="7"/>
+<path d="M2130,1250 L2550,1250" fill="none" stroke="#ffffff" stroke-width="3"/>
+<path d="M2130,1250 L1700,1250" fill="none" stroke="#334155" stroke-width="1.6"/>
+<path d="M2720,1600 L2900,1950" fill="none" stroke="#334155" stroke-width="7"/>
+<path d="M2720,1600 L2900,1950" fill="none" stroke="#ffffff" stroke-width="3"/>
+<path d="M2720,1600 L2550,1250" fill="none" stroke="#334155" stroke-width="1.6"/>
+<path d="M2470,1950 L2900,1950" fill="none" stroke="#334155" stroke-width="7"/>
+<path d="M2470,1950 L2900,1950" fill="none" stroke="#ffffff" stroke-width="3"/>
+<path d="M2470,1950 L2050,1950" fill="none" stroke="#334155" stroke-width="1.6"/>
+<path d="M2250,2650 L2900,2300 L2900,1950" fill="none" stroke="#334155" stroke-width="7"/>
+<path d="M2250,2650 L2900,2300 L2900,1950" fill="none" stroke="#ffffff" stroke-width="3"/>
+<path d="M2250,2650 L1700,2650" fill="none" stroke="#334155" stroke-width="1.6"/>
+<path d="M2950,1250 L3350,1250" fill="none" stroke="#334155" stroke-width="7"/>
+<path d="M2950,1250 L3350,1250" fill="none" stroke="#ffffff" stroke-width="3"/>
+<path d="M2950,1250 L2550,1250" fill="none" stroke="#334155" stroke-width="1.6"/>
+<path d="M3700,1250 L3350,1250" fill="none" stroke="#334155" stroke-width="7"/>
+<path d="M3700,1250 L3350,1250" fill="none" stroke="#ffffff" stroke-width="3"/>
+<path d="M3700,1250 L4050,1250" fill="none" stroke="#334155" stroke-width="1.6"/>
+<path d="M3350,1700 L3350,1450 L3350,1250" fill="none" stroke="#334155" stroke-width="7"/>
+<path d="M3350,1700 L3350,1450 L3350,1250" fill="none" stroke="#ffffff" stroke-width="3"/>
+<path d="M3350,1700 L3350,2420 L330,2420 L330,2300" fill="none" stroke="#334155" stroke-width="1.6"/>
+<path d="M3600,1650 L3500,1400 L3350,1250" fill="none" stroke="#334155" stroke-width="7"/>
+<path d="M3600,1650 L3500,1400 L3350,1250" fill="none" stroke="#ffffff" stroke-width="3"/>
+<path d="M3600,1650 L3600,2470 L400,2470 L330,2300" fill="none" stroke="#334155" stroke-width="1.6"/>
+<path d="M4050,1650 L4050,1250" fill="none" stroke="#334155" stroke-width="1.6"/>
+<path d="M4050,1650 L4050,2520 L450,2520 L330,2300" fill="none" stroke="#334155" stroke-width="1.6"/>
+<path d="M3700,1950 L3350,1950 L3350,1250" fill="none" stroke="#334155" stroke-width="1.6"/>
+<path d="M3700,1950 L4050,1950" fill="none" stroke="#334155" stroke-width="1.6"/>
+<line x1="3700" y1="1950" x2="3700" y2="2025" stroke="#64748b" stroke-width="1.2"/>
+<path d="M1300,2650 L1700,2650" fill="none" stroke="#334155" stroke-width="7"/>
+<path d="M1300,2650 L1700,2650" fill="none" stroke="#ffffff" stroke-width="3"/>
+<path d="M1300,2650 L900,2650" fill="none" stroke="#334155" stroke-width="1.6"/>
+<path d="M2050,2850 L1700,2850 L1700,2650" fill="none" stroke="#334155" stroke-width="7"/>
+<path d="M2050,2850 L1700,2850 L1700,2650" fill="none" stroke="#ffffff" stroke-width="3"/>
+<path d="M2050,2850 L2650,2850 L2650,2650" fill="none" stroke="#334155" stroke-width="1.6"/>
+<path d="M3050,2650 L2650,2650" fill="none" stroke="#334155" stroke-width="7"/>
+<path d="M3050,2650 L2650,2650" fill="none" stroke="#ffffff" stroke-width="3"/>
+<path d="M3050,2650 L3450,2650" fill="none" stroke="#334155" stroke-width="1.6"/>
+<path d="M1700,2960 L1700,3250" fill="none" stroke="#334155" stroke-width="7"/>
+<path d="M1700,2960 L1700,3250" fill="none" stroke="#ffffff" stroke-width="3"/>
+<path d="M1700,2960 L1700,2650" fill="none" stroke="#334155" stroke-width="1.6"/>
+<text x="2051" y="472" class="card">N</text>
+<text x="1330" y="311" class="card">1</text>
+<text x="2954" y="329" class="card">N</text>
+<text x="2243" y="436" class="card">1</text>
+<text x="3604" y="588" class="card">N</text>
+<text x="2249" y="479" class="card">1</text>
+<text x="659" y="477" class="card">N</text>
+<text x="2054" y="499" class="card">1</text>
+<text x="938" y="1200" class="card">N</text>
+<text x="2059" y="531" class="card">1</text>
+<text x="1711" y="1203" class="card">N</text>
+<text x="2132" y="530" class="card">1</text>
+<text x="2517" y="1215" class="card">N</text>
+<text x="2189" y="515" class="card">1</text>
+<text x="3288" y="1221" class="card">N</text>
+<text x="2243" y="508" class="card">1</text>
+<text x="1213" y="1916" class="card">N</text>
+<text x="2056" y="511" class="card">1</text>
+<text x="849" y="2713" class="card">N</text>
+<text x="2082" y="533" class="card">1</text>
+<text x="635" y="975" class="card">N</text>
+<text x="871" y="1214" class="card">1</text>
+<text x="506" y="959" class="card">N</text>
+<text x="2074" y="533" class="card">1</text>
+<text x="914" y="1303" class="card">N</text>
+<text x="370" y="2250" class="card">1</text>
+<text x="877" y="1311" class="card">M</text>
+<text x="336" y="2254" class="card">N</text>
+<text x="1159" y="2012" class="card">N</text>
+<text x="423" y="2262" class="card">1</text>
+<text x="810" y="2623" class="card">N</text>
+<text x="404" y="2340" class="card">1</text>
+<text x="1687" y="1309" class="card">N</text>
+<text x="1274" y="1901" class="card">1</text>
+<text x="1578" y="1270" class="card">N</text>
+<text x="997" y="1242" class="card">1</text>
+<text x="2015" y="1916" class="card">N</text>
+<text x="1736" y="1296" class="card">1</text>
+<text x="2094" y="1994" class="card">N</text>
+<text x="2594" y="2620" class="card">1</text>
+<text x="2453" y="1270" class="card">N</text>
+<text x="1822" y="1242" class="card">1</text>
+<text x="2864" y="1916" class="card">N</text>
+<text x="2585" y="1296" class="card">1</text>
+<text x="2783" y="1970" class="card">N</text>
+<text x="2152" y="1942" class="card">1</text>
+<text x="2914" y="2003" class="card">N</text>
+<text x="1797" y="2642" class="card">1</text>
+<text x="3253" y="1270" class="card">N</text>
+<text x="2647" y="1242" class="card">1</text>
+<text x="3447" y="1242" class="card">N</text>
+<text x="3953" y="1270" class="card">1</text>
+<text x="3364" y="1303" class="card">N</text>
+<text x="344" y="2353" class="card">1</text>
+<text x="3406" y="1292" class="card">N</text>
+<text x="362" y="2347" class="card">1</text>
+<text x="4064" y="1303" class="card">N</text>
+<text x="368" y="2346" class="card">1</text>
+<text x="3364" y="1303" class="card">M</text>
+<text x="3953" y="1970" class="card">N</text>
+<text x="1603" y="2670" class="card">N</text>
+<text x="997" y="2642" class="card">1</text>
+<text x="1714" y="2703" class="card">N</text>
+<text x="2664" y="2703" class="card">1</text>
+<text x="2747" y="2642" class="card">N</text>
+<text x="3353" y="2670" class="card">1</text>
+<text x="1686" y="3209" class="card">N</text>
+<text x="1714" y="2703" class="card">1</text>
+<line x1="2150" y1="470" x2="1987" y2="442" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="1987" cy="442" rx="43.3" ry="17" class="attr"/><text x="1987" y="446" class="attrt" text-decoration="underline">user_id</text>
+<line x1="2150" y1="470" x2="2015" y2="396" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="2015" cy="396" rx="51.1" ry="17" class="attr"/><text x="2015" y="400" class="attrt">full_name</text>
+<line x1="2150" y1="470" x2="2067" y2="346" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="2067" cy="346" rx="38" ry="17" class="attr"/><text x="2067" y="350" class="attrt">email</text>
+<line x1="2150" y1="470" x2="2150" y2="299" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="2150" cy="299" rx="66.69999999999999" ry="17" class="attr"/><text x="2150" y="303" class="attrt">password_hash</text>
+<line x1="2150" y1="470" x2="2269" y2="270" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="2269" cy="270" rx="38" ry="17" class="attr"/><text x="2269" y="274" class="attrt">phone</text>
+<line x1="2150" y1="470" x2="2306" y2="378" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="2306" cy="378" rx="51.1" ry="17" class="attr"/><text x="2306" y="382" class="attrt">is_active</text>
+<line x1="2150" y1="470" x2="2313" y2="442" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="2313" cy="442" rx="55" ry="17" class="attr"/><text x="2313" y="446" class="attrt">created_at</text>
+<line x1="1230" y1="300" x2="1097" y2="274" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="1097" cy="274" rx="43.3" ry="17" class="attr"/><text x="1097" y="278" class="attrt" text-decoration="underline">role_id</text>
+<line x1="1230" y1="300" x2="1218" y2="220" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="1218" cy="220" rx="51.1" ry="17" class="attr"/><text x="1218" y="224" class="attrt">role_name</text>
+<line x1="1230" y1="300" x2="1377" y2="242" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="1377" cy="242" rx="58.9" ry="17" class="attr"/><text x="1377" y="246" class="attrt">description</text>
+<line x1="3050" y1="300" x2="2903" y2="253" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="2903" cy="253" rx="55" ry="17" class="attr"/><text x="2903" y="257" class="attrt" text-decoration="underline">token_hash</text>
+<line x1="3050" y1="300" x2="3197" y2="277" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="3197" cy="277" rx="55" ry="17" class="attr"/><text x="3197" y="281" class="attrt">expires_at</text>
+<line x1="3700" y1="560" x2="3654" y2="484" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="3654" cy="484" rx="47.2" ry="17" class="attr"/><text x="3654" y="488" class="attrt" text-decoration="underline">audit_id</text>
+<line x1="3700" y1="560" x2="3768" y2="490" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="3768" cy="490" rx="39.4" ry="17" class="attr"/><text x="3768" y="494" class="attrt">action</text>
+<line x1="3700" y1="560" x2="3833" y2="546" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="3833" cy="546" rx="43.3" ry="17" class="attr"/><text x="3833" y="550" class="attrt">details</text>
+<line x1="3700" y1="560" x2="3809" y2="616" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="3809" cy="616" rx="55" ry="17" class="attr"/><text x="3809" y="620" class="attrt">created_at</text>
+<line x1="560" y1="470" x2="420" y2="521" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="420" cy="521" rx="39.4" ry="17" class="attr"/><text x="420" y="525" class="attrt" text-decoration="underline">run_id</text>
+<line x1="560" y1="470" x2="329" y2="523" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="329" cy="523" rx="39.4" ry="17" class="attr"/><text x="329" y="527" class="attrt">target</text>
+<line x1="560" y1="470" x2="410" y2="433" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="410" cy="433" rx="39.4" ry="17" class="attr"/><text x="410" y="437" class="attrt">status</text>
+<line x1="560" y1="470" x2="441" y2="385" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="441" cy="385" rx="47.2" ry="17" class="attr"/><text x="441" y="389" class="attrt">attempts</text>
+<line x1="560" y1="470" x2="502" y2="339" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="502" cy="339" rx="70.6" ry="17" class="attr"/><text x="502" y="343" class="attrt">records_synced</text>
+<line x1="560" y1="470" x2="596" y2="293" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="596" cy="293" rx="39.4" ry="17" class="attr"/><text x="596" y="297" class="attrt">detail</text>
+<line x1="560" y1="470" x2="702" y2="310" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="702" cy="310" rx="55" ry="17" class="attr"/><text x="702" y="314" class="attrt">started_at</text>
+<line x1="560" y1="470" x2="718" y2="408" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="718" cy="408" rx="58.9" ry="17" class="attr"/><text x="718" y="412" class="attrt">finished_at</text>
+<line x1="520" y1="1000" x2="502" y2="1130" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="502" cy="1130" rx="38" ry="17" class="attr"/><text x="502" y="1134" class="attrt" text-decoration="underline">_id</text>
+<line x1="520" y1="1000" x2="398" y2="1180" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="398" cy="1180" rx="55" ry="17" class="attr"/><text x="398" y="1184" class="attrt">reportType</text>
+<line x1="520" y1="1000" x2="338" y2="1116" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="338" cy="1116" rx="47.2" ry="17" class="attr"/><text x="338" y="1120" class="attrt">severity</text>
+<line x1="520" y1="1000" x2="329" y2="1047" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="329" cy="1047" rx="58.9" ry="17" class="attr"/><text x="329" y="1051" class="attrt">description</text>
+<line x1="520" y1="1000" x2="259" y2="968" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="259" cy="968" rx="47.2" ry="17" class="attr"/><text x="259" y="972" class="attrt">location</text>
+<line x1="259" y1="968" x2="175" y2="1058" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="175" cy="1058" rx="38" ry="14" class="attr"/><text x="175" y="1062" class="attrt small">label</text>
+<line x1="259" y1="968" x2="154" y2="980" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="154" cy="980" rx="44.8" ry="14" class="attr"/><text x="154" y="984" class="attrt small">latitude</text>
+<line x1="259" y1="968" x2="70" y2="1018" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="70" cy="1018" rx="48.4" ry="14" class="attr"/><text x="70" y="1022" class="attrt small">longitude</text>
+<line x1="520" y1="1000" x2="251" y2="922" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="251" cy="922" rx="39.4" ry="17" class="attr"/><text x="251" y="926" class="attrt">status</text>
+<line x1="520" y1="1000" x2="328" y2="874" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="328" cy="874" rx="38" ry="17" class="attr"/><ellipse cx="328" cy="874" rx="34" ry="13" class="attr"/><text x="328" y="878" class="attrt">tags</text>
+<line x1="520" y1="1000" x2="401" y2="827" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="401" cy="827" rx="43.3" ry="17" class="attr"/><ellipse cx="401" cy="827" rx="39.3" ry="13" class="attr"/><text x="401" y="831" class="attrt">updates</text>
+<line x1="520" y1="1000" x2="488" y2="710" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="488" cy="710" rx="51.1" ry="17" class="attr"/><text x="488" y="714" class="attrt">createdAt</text>
+<line x1="900" y1="1250" x2="761" y2="1372" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="761" cy="1372" rx="58.9" ry="17" class="attr"/><text x="761" y="1376" class="attrt" text-decoration="underline">disaster_id</text>
+<line x1="900" y1="1250" x2="631" y2="1420" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="631" cy="1420" rx="66.69999999999999" ry="17" class="attr"/><text x="631" y="1424" class="attrt">disaster_name</text>
+<line x1="900" y1="1250" x2="620" y2="1351" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="620" cy="1351" rx="66.69999999999999" ry="17" class="attr"/><text x="620" y="1355" class="attrt">disaster_type</text>
+<line x1="900" y1="1250" x2="501" y2="1420" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="501" cy="1420" rx="47.2" ry="17" class="attr"/><text x="501" y="1424" class="attrt">severity</text>
+<line x1="900" y1="1250" x2="668" y2="1240" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="668" cy="1240" rx="55" ry="17" class="attr"/><text x="668" y="1244" class="attrt">started_at</text>
+<line x1="900" y1="1250" x2="549" y2="1250" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="549" cy="1250" rx="47.2" ry="17" class="attr"/><text x="549" y="1254" class="attrt">ended_at</text>
+<line x1="900" y1="1250" x2="692" y2="1167" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="692" cy="1167" rx="39.4" ry="17" class="attr"/><text x="692" y="1171" class="attrt">status</text>
+<line x1="900" y1="1250" x2="710" y2="1121" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="710" cy="1121" rx="58.9" ry="17" class="attr"/><text x="710" y="1125" class="attrt">description</text>
+<line x1="900" y1="1250" x2="745" y2="1074" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="745" cy="1074" rx="55" ry="17" class="attr"/><text x="745" y="1078" class="attrt">created_at</text>
+<line x1="900" y1="1250" x2="794" y2="1025" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="794" cy="1025" rx="66.69999999999999" ry="17" class="attr" stroke-dasharray="5 4"/><text x="794" y="1029" class="attrt">search_vector</text>
+<line x1="1700" y1="1250" x2="1491" y2="1201" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="1491" cy="1201" rx="55" ry="17" class="attr"/><text x="1491" y="1205" class="attrt" text-decoration="underline">request_id</text>
+<line x1="1700" y1="1250" x2="1512" y2="1155" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="1512" cy="1155" rx="62.8" ry="17" class="attr"/><text x="1512" y="1159" class="attrt">requested_at</text>
+<line x1="1700" y1="1250" x2="1556" y2="1110" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="1556" cy="1110" rx="43.3" ry="17" class="attr"/><text x="1556" y="1114" class="attrt">need_by</text>
+<line x1="1700" y1="1250" x2="1616" y2="1061" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="1616" cy="1061" rx="70.6" ry="17" class="attr"/><text x="1616" y="1065" class="attrt">priority_score</text>
+<line x1="1700" y1="1250" x2="1700" y2="1016" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="1700" cy="1016" rx="70.6" ry="17" class="attr"/><text x="1700" y="1020" class="attrt">priority_level</text>
+<line x1="1700" y1="1250" x2="1813" y2="967" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="1813" cy="967" rx="39.4" ry="17" class="attr"/><text x="1813" y="971" class="attrt">status</text>
+<line x1="1700" y1="1250" x2="1908" y2="1019" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="1908" cy="1019" rx="82.3" ry="17" class="attr"/><text x="1908" y="1023" class="attrt">medical_emergency</text>
+<line x1="1700" y1="1250" x2="1910" y2="1138" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="1910" cy="1138" rx="43.3" ry="17" class="attr"/><text x="1910" y="1142" class="attrt">remarks</text>
+<line x1="1700" y1="1250" x2="2021" y2="1093" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="2021" cy="1093" rx="66.69999999999999" ry="17" class="attr" stroke-dasharray="5 4"/><text x="2021" y="1097" class="attrt">search_vector</text>
+<line x1="2550" y1="1250" x2="2415" y2="1190" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="2415" cy="1190" rx="66.69999999999999" ry="17" class="attr"/><text x="2415" y="1194" class="attrt" text-decoration="underline">allocation_id</text>
+<line x1="2550" y1="1250" x2="2496" y2="1143" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="2496" cy="1143" rx="62.8" ry="17" class="attr"/><text x="2496" y="1147" class="attrt">allocated_at</text>
+<line x1="2550" y1="1250" x2="2611" y2="1123" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="2611" cy="1123" rx="39.4" ry="17" class="attr"/><text x="2611" y="1127" class="attrt">status</text>
+<line x1="2550" y1="1250" x2="2685" y2="1190" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="2685" cy="1190" rx="43.3" ry="17" class="attr"/><text x="2685" y="1194" class="attrt">remarks</text>
+<line x1="3350" y1="1250" x2="3180" y2="1198" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="3180" cy="1198" rx="58.9" ry="17" class="attr"/><text x="3180" y="1202" class="attrt" text-decoration="underline">delivery_id</text>
+<line x1="3350" y1="1250" x2="3249" y2="1145" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="3249" cy="1145" rx="70.6" ry="17" class="attr"/><text x="3249" y="1149" class="attrt">departure_time</text>
+<line x1="3350" y1="1250" x2="3350" y2="1098" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="3350" cy="1098" rx="78.4" ry="17" class="attr"/><text x="3350" y="1102" class="attrt">expected_arrival</text>
+<line x1="3350" y1="1250" x2="3511" y2="1051" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="3511" cy="1051" rx="70.6" ry="17" class="attr"/><text x="3511" y="1055" class="attrt">actual_arrival</text>
+<line x1="3350" y1="1250" x2="3520" y2="1198" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="3520" cy="1198" rx="39.4" ry="17" class="attr"/><text x="3520" y="1202" class="attrt">status</text>
+<line x1="4050" y1="1250" x2="4050" y2="1166" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="4050" cy="1166" rx="55" ry="17" class="attr"/><text x="4050" y="1170" class="attrt" text-decoration="underline">vehicle_id</text>
+<line x1="4050" y1="1250" x2="4186" y2="1117" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="4186" cy="1117" rx="70.6" ry="17" class="attr"/><text x="4186" y="1121" class="attrt">vehicle_number</text>
+<line x1="4050" y1="1250" x2="4204" y2="1211" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="4204" cy="1211" rx="62.8" ry="17" class="attr"/><text x="4204" y="1215" class="attrt">vehicle_type</text>
+<line x1="4050" y1="1250" x2="4191" y2="1287" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="4191" cy="1287" rx="47.2" ry="17" class="attr"/><text x="4191" y="1291" class="attrt">capacity</text>
+<line x1="4050" y1="1250" x2="4126" y2="1335" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="4126" cy="1335" rx="39.4" ry="17" class="attr"/><text x="4126" y="1339" class="attrt">status</text>
+<line x1="4050" y1="1950" x2="4108" y2="1848" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="4108" cy="1848" rx="62.8" ry="17" class="attr"/><text x="4108" y="1852" class="attrt" text-decoration="underline">volunteer_id</text>
+<line x1="4050" y1="1950" x2="4234" y2="1809" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="4234" cy="1809" rx="51.1" ry="17" class="attr"/><text x="4234" y="1813" class="attrt">full_name</text>
+<line x1="4050" y1="1950" x2="4209" y2="1913" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="4209" cy="1913" rx="38" ry="17" class="attr"/><text x="4209" y="1917" class="attrt">phone</text>
+<line x1="4050" y1="1950" x2="4218" y2="1959" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="4218" cy="1959" rx="38" ry="17" class="attr"/><text x="4218" y="1963" class="attrt">email</text>
+<line x1="4050" y1="1950" x2="4196" y2="2004" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="4196" cy="2004" rx="39.4" ry="17" class="attr"/><text x="4196" y="2008" class="attrt">skills</text>
+<line x1="4050" y1="1950" x2="4155" y2="2050" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="4155" cy="2050" rx="90.1" ry="17" class="attr"/><text x="4155" y="2054" class="attrt">availability_status</text>
+<line x1="4050" y1="1950" x2="4087" y2="2098" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="4087" cy="2098" rx="66.69999999999999" ry="17" class="attr"/><text x="4087" y="2102" class="attrt">registered_at</text>
+<line x1="1250" y1="1950" x2="1340" y2="2052" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="1340" cy="2052" rx="43.3" ry="17" class="attr"/><text x="1340" y="2056" class="attrt" text-decoration="underline">camp_id</text>
+<line x1="1250" y1="1950" x2="1290" y2="2100" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="1290" cy="2100" rx="51.1" ry="17" class="attr"/><text x="1290" y="2104" class="attrt">camp_name</text>
+<line x1="1250" y1="1950" x2="1212" y2="2150" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="1212" cy="2150" rx="47.2" ry="17" class="attr"/><text x="1212" y="2154" class="attrt">capacity</text>
+<line x1="1250" y1="1950" x2="1093" y2="2197" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="1093" cy="2197" rx="86.2" ry="17" class="attr"/><text x="1093" y="2201" class="attrt">current_population</text>
+<line x1="1250" y1="1950" x2="1063" y2="2084" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="1063" cy="2084" rx="39.4" ry="17" class="attr"/><text x="1063" y="2088" class="attrt">status</text>
+<line x1="1250" y1="1950" x2="1060" y2="2010" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="1060" cy="2010" rx="70.6" ry="17" class="attr"/><text x="1060" y="2014" class="attrt">established_at</text>
+<line x1="1250" y1="1950" x2="1064" y2="1957" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="1064" cy="1957" rx="66.69999999999999" ry="17" class="attr" stroke-dasharray="5 4"/><text x="1064" y="1961" class="attrt">occupancy_pct</text>
+<line x1="2050" y1="1950" x2="2119" y2="2020" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="2119" cy="2020" rx="82.3" ry="17" class="attr"/><text x="2119" y="2024" class="attrt">resource (via OF)</text><line x1="2062.9" y1="2027" x2="2175.1" y2="2027" stroke="#172033" stroke-dasharray="3 2"/>
+<line x1="2050" y1="1950" x2="1989" y2="2065" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="1989" cy="2065" rx="86.2" ry="17" class="attr"/><text x="1989" y="2069" class="attrt">quantity_requested</text>
+<line x1="2900" y1="1950" x2="3070" y2="2005" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="3070" cy="2005" rx="86.2" ry="17" class="attr"/><text x="3070" y="2009" class="attrt" text-decoration="underline">allocation_item_id</text>
+<line x1="2900" y1="1950" x2="2929" y2="2049" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="2929" cy="2049" rx="86.2" ry="17" class="attr"/><text x="2929" y="2053" class="attrt">quantity_allocated</text>
+<line x1="900" y1="2650" x2="875" y2="2735" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="875" cy="2735" rx="62.8" ry="17" class="attr"/><text x="875" y="2739" class="attrt" text-decoration="underline">warehouse_id</text>
+<line x1="900" y1="2650" x2="735" y2="2784" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="735" cy="2784" rx="70.6" ry="17" class="attr"/><text x="735" y="2788" class="attrt">warehouse_name</text>
+<line x1="900" y1="2650" x2="761" y2="2670" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="761" cy="2670" rx="47.2" ry="17" class="attr"/><text x="761" y="2674" class="attrt">capacity</text>
+<line x1="900" y1="2650" x2="766" y2="2620" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="766" cy="2620" rx="39.4" ry="17" class="attr"/><text x="766" y="2624" class="attrt">status</text>
+<line x1="1700" y1="2650" x2="1525" y2="2594" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="1525" cy="2594" rx="105.7" ry="17" class="attr"/><text x="1525" y="2598" class="attrt">resource (via STOCK OF)</text><line x1="1449.1" y1="2601" x2="1600.9" y2="2601" stroke="#172033" stroke-dasharray="3 2"/>
+<line x1="1700" y1="2650" x2="1636" y2="2546" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="1636" cy="2546" rx="86.2" ry="17" class="attr"/><text x="1636" y="2550" class="attrt">quantity_available</text>
+<line x1="1700" y1="2650" x2="1782" y2="2500" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="1782" cy="2500" rx="82.3" ry="17" class="attr"/><text x="1782" y="2504" class="attrt">minimum_threshold</text>
+<line x1="1700" y1="2650" x2="1856" y2="2602" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="1856" cy="2602" rx="62.8" ry="17" class="attr"/><text x="1856" y="2606" class="attrt">last_updated</text>
+<line x1="2650" y1="2650" x2="2759" y2="2706" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="2759" cy="2706" rx="58.9" ry="17" class="attr"/><text x="2759" y="2710" class="attrt" text-decoration="underline">resource_id</text>
+<line x1="2650" y1="2650" x2="2722" y2="2754" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="2722" cy="2754" rx="66.69999999999999" ry="17" class="attr"/><text x="2722" y="2758" class="attrt">resource_name</text>
+<line x1="2650" y1="2650" x2="2650" y2="2800" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="2650" cy="2800" rx="38" ry="17" class="attr"/><text x="2650" y="2804" class="attrt">unit</text>
+<line x1="2650" y1="2650" x2="2539" y2="2837" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="2539" cy="2837" rx="58.9" ry="17" class="attr"/><text x="2539" y="2841" class="attrt">description</text>
+<line x1="2650" y1="2650" x2="2493" y2="2746" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="2493" cy="2746" rx="66.69999999999999" ry="17" class="attr"/><text x="2493" y="2750" class="attrt">is_perishable</text>
+<line x1="3450" y1="2650" x2="3559" y2="2594" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="3559" cy="2594" rx="58.9" ry="17" class="attr"/><text x="3559" y="2598" class="attrt" text-decoration="underline">category_id</text>
+<line x1="3450" y1="2650" x2="3607" y2="2694" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="3607" cy="2694" rx="66.69999999999999" ry="17" class="attr"/><text x="3607" y="2698" class="attrt">category_name</text>
+<line x1="3450" y1="2650" x2="3501" y2="2739" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="3501" cy="2739" rx="58.9" ry="17" class="attr"/><text x="3501" y="2743" class="attrt">description</text>
+<line x1="1700" y1="3250" x2="1855" y2="3307" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="1855" cy="3307" rx="58.9" ry="17" class="attr"/><text x="1855" y="3311" class="attrt" text-decoration="underline">movement_id</text>
+<line x1="1700" y1="3250" x2="1749" y2="3353" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="1749" cy="3353" rx="38" ry="17" class="attr"/><text x="1749" y="3357" class="attrt">delta</text>
+<line x1="1700" y1="3250" x2="1629" y2="3333" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="1629" cy="3333" rx="39.4" ry="17" class="attr"/><text x="1629" y="3337" class="attrt">reason</text>
+<line x1="1700" y1="3250" x2="1539" y2="3279" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="1539" cy="3279" rx="55" ry="17" class="attr"/><text x="1539" y="3283" class="attrt">created_at</text>
+<line x1="330" y1="2300" x2="303" y2="2398" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="303" cy="2398" rx="58.9" ry="17" class="attr"/><text x="303" y="2402" class="attrt" text-decoration="underline">location_id</text>
+<line x1="330" y1="2300" x2="161" y2="2404" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="161" cy="2404" rx="66.69999999999999" ry="17" class="attr"/><text x="161" y="2408" class="attrt">location_name</text>
+<line x1="330" y1="2300" x2="173" y2="2300" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="173" cy="2300" rx="66.69999999999999" ry="17" class="attr"/><text x="173" y="2304" class="attrt">location_type</text>
+<line x1="330" y1="2300" x2="209" y2="2236" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="209" cy="2236" rx="43.3" ry="17" class="attr"/><text x="209" y="2240" class="attrt">address</text>
+<line x1="330" y1="2300" x2="300" y2="2189" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="300" cy="2189" rx="58.9" ry="17" class="attr"/><text x="300" y="2193" class="attrt">coordinates</text>
+<line x1="300.21933753012144" y1="2188.5197623590184" x2="239" y2="2139" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="239" cy="2139" rx="44.8" ry="14" class="attr"/><text x="239" y="2143" class="attrt small">latitude</text>
+<line x1="300.21933753012144" y1="2188.5197623590184" x2="331" y2="2096" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="331" cy="2096" rx="48.4" ry="14" class="attr"/><text x="331" y="2100" class="attrt small">longitude</text>
+<line x1="3150" y1="3300" x2="3011" y2="3296" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="3011" cy="3296" rx="38" ry="17" class="attr"/><text x="3011" y="3300" class="attrt" text-decoration="underline">email</text>
+<line x1="3150" y1="3300" x2="3150" y2="3226" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="3150" cy="3226" rx="47.2" ry="17" class="attr"/><text x="3150" y="3230" class="attrt">attempts</text>
+<line x1="3150" y1="3300" x2="3318" y2="3280" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="3318" cy="3280" rx="62.8" ry="17" class="attr"/><text x="3318" y="3284" class="attrt">window_start</text>
+<line x1="3900" y1="3150" x2="3733" y2="3154" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="3733" cy="3154" rx="51.1" ry="17" class="attr"/><text x="3733" y="3158" class="attrt" text-decoration="underline">change_id</text>
+<line x1="3900" y1="3150" x2="3731" y2="3098" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="3731" cy="3098" rx="55" ry="17" class="attr"/><text x="3731" y="3102" class="attrt">table_name</text>
+<line x1="3900" y1="3150" x2="3778" y2="3050" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="3778" cy="3050" rx="51.1" ry="17" class="attr"/><text x="3778" y="3054" class="attrt">operation</text>
+<line x1="3900" y1="3150" x2="3852" y2="3005" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="3852" cy="3005" rx="47.2" ry="17" class="attr"/><text x="3852" y="3009" class="attrt">row_data</text>
+<line x1="3900" y1="3150" x2="3959" y2="2957" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="3959" cy="2957" rx="70.6" ry="17" class="attr"/><text x="3959" y="2961" class="attrt">changed_fields</text>
+<line x1="3900" y1="3150" x2="4100" y2="2951" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="4100" cy="2951" rx="55" ry="17" class="attr"/><text x="4100" y="2955" class="attrt">changed_by</text>
+<line x1="3900" y1="3150" x2="4063" y2="3101" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="4063" cy="3101" rx="38" ry="17" class="attr"/><text x="4063" y="3105" class="attrt">txid</text>
+<line x1="3900" y1="3150" x2="4172" y2="3086" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="4172" cy="3086" rx="55" ry="17" class="attr"/><text x="4172" y="3090" class="attrt">changed_at</text>
+<line x1="3900" y1="2650" x2="3736" y2="2666" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="3736" cy="2666" rx="47.2" ry="17" class="attr"/><text x="3736" y="2670" class="attrt" text-decoration="underline">filename</text>
+<line x1="3900" y1="2650" x2="4071" y2="2630" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="4071" cy="2630" rx="55" ry="17" class="attr"/><text x="4071" y="2634" class="attrt">applied_at</text>
+<polygon points="1650,346 1743.2,380 1650,414 1556.8,380" class="rel"/><text x="1650" y="385" class="relt">HAS ROLE</text>
+<polygon points="2620,306 2750.2,340 2620,374 2489.8,340" class="rel"/><text x="2620" y="345" class="relt">AUTHENTICATES</text>
+<polygon points="3000,586 3093.2,620 3000,654 2906.8,620" class="rel"/><text x="3000" y="625" class="relt">PERFORMS</text>
+<polygon points="1150,526 1243.2,560 1150,594 1056.8,560" class="rel"/><text x="1150" y="565" class="relt">TRIGGERS</text>
+<polygon points="1350,786 1435.8,820 1350,854 1264.2,820" class="rel"/><text x="1350" y="825" class="relt">CREATES</text>
+<polygon points="1900,826 2000.6,860 1900,894 1799.4,860" class="rel"/><text x="1900" y="865" class="relt">RAISED BY</text>
+<polygon points="2380,826 2502.8,860 2380,894 2257.2,860" class="rel"/><text x="2380" y="865" class="relt">ALLOCATED BY</text>
+<polygon points="2900,826 2978.4,860 2900,894 2821.6,860" class="rel"/><text x="2900" y="865" class="relt">DRIVES</text>
+<polygon points="1120,1666 1205.8,1700 1120,1734 1034.2,1700" class="rel"/><text x="1120" y="1705" class="relt">MANAGES</text>
+<polygon points="640,2816 725.8,2850 640,2884 554.2,2850" class="rel"/><text x="640" y="2855" class="relt">MANAGES</text>
+<polygon points="800,926 908,960 800,994 692,960" class="rel ext"/><text x="800" y="965" class="relt">REPORTS ON</text><text x="800" y="1010" class="note">application-level reference</text>
+<polygon points="520,726 635.4,760 520,794 404.6,760" class="rel ext"/><text x="520" y="765" class="relt">REPORTED BY</text>
+<polygon points="900,1616 1000.6,1650 900,1684 799.4,1650" class="rel"/><text x="900" y="1655" class="relt">OCCURS AT</text>
+<polygon points="600,1616 685.8,1650 600,1684 514.2,1650" class="rel"/><text x="600" y="1655" class="relt">AFFECTS</text><line x1="435" y1="1610" x2="435" y2="1610" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="435" cy="1610" rx="62.8" ry="17" class="attr"/><text x="435" y="1614" class="attrt">impact_level</text><line x1="410" y1="1660" x2="410" y2="1660" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="410" cy="1660" rx="90.1" ry="17" class="attr"/><text x="410" y="1664" class="attrt">affected_population</text><line x1="450" y1="1710" x2="450" y2="1710" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="450" cy="1710" rx="58.9" ry="17" class="attr"/><text x="450" y="1714" class="attrt">reported_at</text>
+<polygon points="800,2116 908,2150 800,2184 692,2150" class="rel"/><text x="800" y="2155" class="relt">LOCATED AT</text>
+<polygon points="620,2466 713.2,2500 620,2534 526.8,2500" class="rel"/><text x="620" y="2505" class="relt">SITED AT</text>
+<polygon points="1500,1586 1600.6,1620 1500,1654 1399.4,1620" class="rel"/><text x="1500" y="1625" class="relt">RAISED AT</text>
+<polygon points="1300,1216 1370,1250 1300,1284 1230,1250" class="rel"/><text x="1300" y="1255" class="relt">FOR</text>
+<polygon points="1880,1566 1973.2,1600 1880,1634 1786.8,1600" class="rel"/><polygon points="1880,1573 1961.2,1600 1880,1627 1798.8,1600" class="rel" fill="none"/><text x="1880" y="1605" class="relt">CONTAINS</text>
+<polygon points="2300,2266 2370,2300 2300,2334 2230,2300" class="rel"/><polygon points="2300,2273 2358,2300 2300,2327 2242,2300" class="rel" fill="none"/><text x="2300" y="2305" class="relt">OF</text>
+<polygon points="2130,1216 2215.8,1250 2130,1284 2044.2,1250" class="rel"/><text x="2130" y="1255" class="relt">FULFILS</text>
+<polygon points="2720,1566 2805.8,1600 2720,1634 2634.2,1600" class="rel"/><text x="2720" y="1605" class="relt">PART OF</text>
+<polygon points="2470,1916 2548.4,1950 2470,1984 2391.6,1950" class="rel"/><text x="2470" y="1955" class="relt">COVERS</text>
+<polygon points="2250,2616 2358,2650 2250,2684 2142,2650" class="rel"/><text x="2250" y="2655" class="relt">DRAWS FROM</text>
+<polygon points="2950,1216 3058,1250 2950,1284 2842,1250" class="rel"/><text x="2950" y="1255" class="relt">TRANSPORTS</text><text x="2950" y="1300" class="note">≤ 1 active</text>
+<polygon points="3700,1216 3770,1250 3700,1284 3630,1250" class="rel"/><text x="3700" y="1255" class="relt">USES</text>
+<polygon points="3350,1666 3420,1700 3350,1734 3280,1700" class="rel"/><text x="3350" y="1705" class="relt">FROM</text>
+<polygon points="3600,1616 3670,1650 3600,1684 3530,1650" class="rel"/><text x="3600" y="1655" class="relt">TO</text>
+<polygon points="4050,1616 4172.8,1650 4050,1684 3927.2,1650" class="rel"/><text x="4050" y="1655" class="relt">LAST SEEN AT</text>
+<polygon points="3700,1916 3800.6,1950 3700,1984 3599.4,1950" class="rel"/><text x="3700" y="1955" class="relt">CREWED BY</text><line x1="3700" y1="2025" x2="3700" y2="2025" stroke="#94a3b8" stroke-width="1.1"/><ellipse cx="3700" cy="2025" rx="66.69999999999999" ry="17" class="attr"/><text x="3700" y="2029" class="attrt">assigned_role</text>
+<polygon points="1300,2616 1371,2650 1300,2684 1229,2650" class="rel"/><polygon points="1300,2623 1359,2650 1300,2677 1241,2650" class="rel" fill="none"/><text x="1300" y="2655" class="relt">HOLDS</text>
+<polygon points="2050,2816 2143.2,2850 2050,2884 1956.8,2850" class="rel"/><polygon points="2050,2823 2131.2,2850 2050,2877 1968.8,2850" class="rel" fill="none"/><text x="2050" y="2855" class="relt">STOCK OF</text>
+<polygon points="3050,2616 3158,2650 3050,2684 2942,2650" class="rel"/><text x="3050" y="2655" class="relt">BELONGS TO</text>
+<polygon points="1700,2926 1770,2960 1700,2994 1630,2960" class="rel"/><text x="1700" y="2965" class="relt">LOGS</text>
+<rect x="2075" y="445" width="150" height="50" rx="3" class="ent"/><text x="2150" y="476" class="entt">USER</text>
+<rect x="1155" y="275" width="150" height="50" rx="3" class="ent"/><text x="1230" y="306" class="entt">ROLE</text>
+<rect x="2975" y="275" width="150" height="50" rx="3" class="ent"/><text x="3050" y="306" class="entt">SESSION</text>
+<rect x="3625" y="535" width="150" height="50" rx="3" class="ent"/><text x="3700" y="566" class="entt">AUDIT LOG</text>
+<rect x="485" y="445" width="150" height="50" rx="3" class="ent"/><text x="560" y="476" class="entt">SYNC RUN</text>
+<rect x="425" y="975" width="190" height="50" rx="3" class="ent ext"/><text x="520" y="1006" class="entt">INCIDENT REPORT</text><text x="520" y="1044" class="note">MongoDB document</text>
+<rect x="825" y="1225" width="150" height="50" rx="3" class="ent"/><text x="900" y="1256" class="entt">DISASTER</text>
+<rect x="1600" y="1225" width="200" height="50" rx="3" class="ent"/><text x="1700" y="1256" class="entt">RESOURCE REQUEST</text>
+<rect x="2475" y="1225" width="150" height="50" rx="3" class="ent"/><text x="2550" y="1256" class="entt">ALLOCATION</text>
+<rect x="3275" y="1225" width="150" height="50" rx="3" class="ent"/><text x="3350" y="1256" class="entt">DELIVERY</text>
+<rect x="3975" y="1225" width="150" height="50" rx="3" class="ent"/><text x="4050" y="1256" class="entt">VEHICLE</text>
+<rect x="3975" y="1925" width="150" height="50" rx="3" class="ent"/><text x="4050" y="1956" class="entt">VOLUNTEER</text>
+<rect x="1175" y="1925" width="150" height="50" rx="3" class="ent"/><text x="1250" y="1956" class="entt">RELIEF CAMP</text>
+<rect x="1970" y="1925" width="160" height="50" rx="3" class="ent"/><rect x="1975" y="1930" width="150" height="40" rx="2" class="ent" fill="none"/><text x="2050" y="1956" class="entt">REQUEST ITEM</text>
+<rect x="2805" y="1925" width="190" height="50" rx="3" class="ent"/><text x="2900" y="1956" class="entt">ALLOCATION ITEM</text>
+<rect x="825" y="2625" width="150" height="50" rx="3" class="ent"/><text x="900" y="2656" class="entt">WAREHOUSE</text>
+<rect x="1625" y="2625" width="150" height="50" rx="3" class="ent"/><rect x="1630" y="2630" width="140" height="40" rx="2" class="ent" fill="none"/><text x="1700" y="2656" class="entt">STOCK LINE</text>
+<rect x="2575" y="2625" width="150" height="50" rx="3" class="ent"/><text x="2650" y="2656" class="entt">RESOURCE</text>
+<rect x="3375" y="2625" width="150" height="50" rx="3" class="ent"/><text x="3450" y="2656" class="entt">CATEGORY</text>
+<rect x="1610" y="3225" width="180" height="50" rx="3" class="ent"/><text x="1700" y="3256" class="entt">STOCK MOVEMENT</text>
+<rect x="255" y="2275" width="150" height="50" rx="3" class="ent"/><text x="330" y="2306" class="entt">LOCATION</text>
+<rect x="3065" y="3275" width="170" height="50" rx="3" class="ent"/><text x="3150" y="3306" class="entt">LOGIN ATTEMPT</text>
+<rect x="3805" y="3125" width="190" height="50" rx="3" class="ent"/><text x="3900" y="3156" class="entt">DATA CHANGE LOG</text>
+<rect x="3800" y="2625" width="200" height="50" rx="3" class="ent"/><text x="3900" y="2656" class="entt">SCHEMA MIGRATION</text>
+
+  <g transform="translate(40,3080)">
+    <rect width="1080" height="400" rx="10" fill="#f8fafc" stroke="#cbd5e1"/>
+    <text x="24" y="40" class="legh">Notation (Chen)</text>
+    <rect x="24" y="64" width="120" height="40" class="ent"/><text x="84" y="89" class="entt" style="font-size:13px">ENTITY</text>
+    <text x="160" y="90" class="legt">Strong entity (own primary key)</text>
+    <rect x="24" y="120" width="120" height="40" class="ent"/><rect x="29" y="125" width="110" height="30" class="ent" fill="none"/><text x="84" y="145" class="entt" style="font-size:13px">WEAK</text>
+    <text x="160" y="146" class="legt">Weak entity (identified through its owners)</text>
+    <polygon points="84,172 144,198 84,224 24,198" class="rel"/><text x="84" y="202" class="relt" style="font-size:11px">REL</text>
+    <text x="160" y="203" class="legt">Relationship · double diamond = identifying</text>
+    <ellipse cx="84" cy="258" rx="58" ry="17" class="attr"/><text x="84" y="262" class="attrt" text-decoration="underline">key</text>
+    <text x="160" y="263" class="legt">Attribute · underlined = key · dashed underline = partial key</text>
+    <ellipse cx="84" cy="304" rx="58" ry="17" class="attr" stroke-dasharray="5 4"/><text x="84" y="308" class="attrt">derived</text>
+    <text x="160" y="309" class="legt">Derived (computed) · double ellipse = multivalued</text>
+    <line x1="560" y1="80" x2="660" y2="80" stroke="#334155" stroke-width="7"/><line x1="560" y1="80" x2="660" y2="80" stroke="#fff" stroke-width="3"/>
+    <text x="680" y="86" class="legt">Total participation (NOT NULL FK)</text>
+    <line x1="560" y1="128" x2="660" y2="128" stroke="#334155" stroke-width="1.6"/>
+    <text x="680" y="134" class="legt">Partial participation (nullable FK)</text>
+    <line x1="560" y1="176" x2="660" y2="176" stroke="#7c6fcf" stroke-width="1.6" stroke-dasharray="8 5"/>
+    <text x="680" y="182" class="legt">Cross-database reference (MongoDB → PostgreSQL)</text>
+    <text x="560" y="230" class="legt">1 / N / M = cardinality written beside each entity.</text>
+    <text x="560" y="258" class="legt">Foreign-key columns are not drawn as attributes:</text>
+    <text x="560" y="282" class="legt">in Chen notation they are the relationships.</text>
+    <text x="560" y="320" class="legt">AFFECTS and CREWED BY are M:N relationships that become</text>
+    <text x="560" y="344" class="legt">the tables disaster_locations and delivery_volunteers.</text>
+  </g>
+</svg>

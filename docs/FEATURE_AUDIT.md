@@ -1,0 +1,6 @@
+# Initial feature inventory (static inspection)
+The supplied code has three screens: home and requests duplicate the same request form; disasters supports listing/creation. Six API groups exist (health, dashboard, disasters, requests, request-options, incidents). PostgreSQL defines all fourteen modules, but authentication, camps, warehouses, inventory management, allocations, deliveries, vehicles, volunteers, analytics and user administration have no executable workflows. Incident reports have an API only. Navigation contains placeholder links. No tests exist. The db:seed command references a missing file.
+
+Database risks: allocation cancellation does not restore stock; cancelled lines still count in allocation validation; direct allocation edits can affect history; no audit history or sessions. Disaster creators and request submitters are supplied by clients. Database errors are returned verbatim. Mongo connects eagerly, including during builds. Production PostgreSQL disables certificate validation.
+
+Preservation: source backup created under backups/source-* before edits. No Git repository exists. Existing .env and development database records must be preserved. New integration fixtures use an isolated database.

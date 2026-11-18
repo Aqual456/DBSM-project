@@ -1,0 +1,20 @@
+{
+  "$jsonSchema": {
+    "bsonType": "object",
+    "required": ["disasterId", "reportedBy", "reportType", "description", "location", "severity", "createdAt", "updatedAt"],
+    "properties": {
+      "disasterId": {"bsonType": ["int", "long", "double"], "minimum": 1},
+      "reportedBy": {"bsonType": ["int", "long", "double"], "minimum": 1},
+      "reporterName": {"bsonType": "string", "maxLength": 120},
+      "reportType": {"enum": ["DAMAGE", "MEDICAL", "SUPPLY", "SAFETY", "GENERAL"]},
+      "description": {"bsonType": "string", "minLength": 10, "maxLength": 10000},
+      "severity": {"enum": ["LOW", "MODERATE", "HIGH", "CRITICAL"]},
+      "status": {"enum": ["OPEN", "MONITORING", "RESOLVED"]},
+      "location": {"bsonType": "object", "required": ["label"], "properties": {"label": {"bsonType": "string", "minLength": 2, "maxLength": 200}, "latitude": {"bsonType": ["int", "long", "double"], "minimum": -90, "maximum": 90}, "longitude": {"bsonType": ["int", "long", "double"], "minimum": -180, "maximum": 180}}},
+      "tags": {"bsonType": "array", "maxItems": 20, "items": {"bsonType": "string", "maxLength": 40}},
+      "updates": {"bsonType": "array", "maxItems": 500, "items": {"bsonType": "object", "required": ["note", "by", "at"], "properties": {"note": {"bsonType": "string", "minLength": 3, "maxLength": 2000}, "by": {"bsonType": ["int", "long", "double"]}, "byName": {"bsonType": "string"}, "at": {"bsonType": "date"}}}},
+      "createdAt": {"bsonType": "date"},
+      "updatedAt": {"bsonType": "date"}
+    }
+  }
+}

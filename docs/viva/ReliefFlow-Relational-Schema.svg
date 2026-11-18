@@ -1,0 +1,825 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2830" height="2476" viewBox="0 0 2830 2476" font-family="Segoe UI, Arial, sans-serif">
+<defs><marker id="arr0" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/></marker><marker id="arr1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0f9d8a"/></marker><marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#d97706"/></marker><marker id="arr3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7c3aed"/></marker><marker id="arr4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#db2777"/></marker><marker id="arr5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0891b2"/></marker><marker id="arr6" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#65a30d"/></marker><marker id="arr7" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#dc2626"/></marker></defs>
+<style>
+  .tname{font-size:15px;font-weight:700;fill:#fff}
+  .tpk{font-size:10.5px;fill:#93c5fd;text-anchor:end}
+  .col{font-size:12.5px;fill:#172033}
+  .colk{font-size:12.5px;fill:#b45309;font-weight:700}
+  .type{font-size:11px;fill:#64748b;text-anchor:end;font-family:Consolas,monospace}
+  .tag{font-size:10px;fill:#2563eb;font-weight:700}
+  .title{font-size:34px;font-weight:800;fill:#0f1e3d}
+  .sub{font-size:17px;fill:#475569}
+  .fkl{font-size:13px;fill:#334155;font-family:Consolas,monospace}
+  .legh{font-size:17px;font-weight:700;fill:#0f1e3d}
+</style>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="60" y="70" class="title">ReliefFlow — Relational Schema (entire PostgreSQL database)</text>
+<text x="60" y="104" class="sub">25 tables · 151 columns · 34 foreign keys · PK underlined · * = NOT NULL · UQ = unique (alternate key) · arrows run from the foreign key to the referenced key</text>
+<path d="M580,220 C514,220 526,196 460,196" fill="none" stroke="#2563eb" stroke-width="1.7" opacity="0.85" marker-end="url(#arr0)"/>
+<circle cx="580" cy="220" r="3.5" fill="#2563eb"/>
+<path d="M1930,220 C1842,220 998,196 910,196" fill="none" stroke="#0f9d8a" stroke-width="1.7" opacity="0.85" marker-end="url(#arr1)"/>
+<circle cx="1930" cy="220" r="3.5" fill="#0f9d8a"/>
+<path d="M580,720 C461.2,720 461.2,196 580,196" fill="none" stroke="#d97706" stroke-width="1.7" opacity="0.85" marker-end="url(#arr2)"/>
+<circle cx="580" cy="720" r="3.5" fill="#d97706"/>
+<path d="M1030,528 C898,528 1042,528 910,528" fill="none" stroke="#7c3aed" stroke-width="1.7" opacity="0.85" marker-end="url(#arr3)"/>
+<circle cx="1030" cy="528" r="3.5" fill="#7c3aed"/>
+<path d="M1030,552 C876,552 614,528 460,528" fill="none" stroke="#db2777" stroke-width="1.7" opacity="0.85" marker-end="url(#arr4)"/>
+<circle cx="1030" cy="552" r="3.5" fill="#db2777"/>
+<path d="M130,1788 C37.599999999999994,1788 37.599999999999994,528 130,528" fill="none" stroke="#0891b2" stroke-width="1.7" opacity="0.85" marker-end="url(#arr5)"/>
+<circle cx="130" cy="1788" r="3.5" fill="#0891b2"/>
+<path d="M1930,980 C1842,980 1898,956 1810,956" fill="none" stroke="#65a30d" stroke-width="1.7" opacity="0.85" marker-end="url(#arr6)"/>
+<circle cx="1930" cy="980" r="3.5" fill="#65a30d"/>
+<path d="M1480,552 C1370,552 570,528 460,528" fill="none" stroke="#dc2626" stroke-width="1.7" opacity="0.85" marker-end="url(#arr7)"/>
+<circle cx="1480" cy="552" r="3.5" fill="#dc2626"/>
+<path d="M1480,648 C1348,648 1042,196 910,196" fill="none" stroke="#2563eb" stroke-width="1.7" opacity="0.85" marker-end="url(#arr0)"/>
+<circle cx="1480" cy="648" r="3.5" fill="#2563eb"/>
+<path d="M580,980 C426,980 614,956 460,956" fill="none" stroke="#0f9d8a" stroke-width="1.7" opacity="0.85" marker-end="url(#arr1)"/>
+<circle cx="580" cy="980" r="3.5" fill="#0f9d8a"/>
+<path d="M1030,980 C964,980 526,528 460,528" fill="none" stroke="#d97706" stroke-width="1.7" opacity="0.85" marker-end="url(#arr2)"/>
+<circle cx="1030" cy="980" r="3.5" fill="#d97706"/>
+<path d="M1030,1028 C942,1028 998,196 910,196" fill="none" stroke="#7c3aed" stroke-width="1.7" opacity="0.85" marker-end="url(#arr3)"/>
+<circle cx="1030" cy="1028" r="3.5" fill="#7c3aed"/>
+<path d="M1030,220 C920,220 1020,196 910,196" fill="none" stroke="#db2777" stroke-width="1.7" opacity="0.85" marker-end="url(#arr4)"/>
+<circle cx="1030" cy="220" r="3.5" fill="#db2777"/>
+<path d="M1480,956 C1348,956 1492,956 1360,956" fill="none" stroke="#0891b2" stroke-width="1.7" opacity="0.85" marker-end="url(#arr5)"/>
+<circle cx="1480" cy="956" r="3.5" fill="#0891b2"/>
+<path d="M1480,980 C1326,980 1064,956 910,956" fill="none" stroke="#65a30d" stroke-width="1.7" opacity="0.85" marker-end="url(#arr6)"/>
+<circle cx="1480" cy="980" r="3.5" fill="#65a30d"/>
+<path d="M460,1264 C526,1264 1414,528 1480,528" fill="none" stroke="#dc2626" stroke-width="1.7" opacity="0.85" marker-end="url(#arr7)"/>
+<circle cx="460" cy="1264" r="3.5" fill="#dc2626"/>
+<path d="M460,1288 C548,1288 492,528 580,528" fill="none" stroke="#2563eb" stroke-width="1.7" opacity="0.85" marker-end="url(#arr0)"/>
+<circle cx="460" cy="1288" r="3.5" fill="#2563eb"/>
+<path d="M460,1312 C570,1312 470,196 580,196" fill="none" stroke="#0f9d8a" stroke-width="1.7" opacity="0.85" marker-end="url(#arr1)"/>
+<circle cx="460" cy="1312" r="3.5" fill="#0f9d8a"/>
+<path d="M580,1240 C448,1240 592,1240 460,1240" fill="none" stroke="#d97706" stroke-width="1.7" opacity="0.85" marker-end="url(#arr2)"/>
+<circle cx="580" cy="1240" r="3.5" fill="#d97706"/>
+<path d="M580,1264 C434.79999999999995,1264 434.79999999999995,956 580,956" fill="none" stroke="#7c3aed" stroke-width="1.7" opacity="0.85" marker-end="url(#arr3)"/>
+<circle cx="580" cy="1264" r="3.5" fill="#7c3aed"/>
+<path d="M1030,1264 C964,1264 526,1240 460,1240" fill="none" stroke="#db2777" stroke-width="1.7" opacity="0.85" marker-end="url(#arr4)"/>
+<circle cx="1030" cy="1264" r="3.5" fill="#db2777"/>
+<path d="M1030,1288 C942,1288 998,196 910,196" fill="none" stroke="#0891b2" stroke-width="1.7" opacity="0.85" marker-end="url(#arr5)"/>
+<circle cx="1030" cy="1288" r="3.5" fill="#0891b2"/>
+<path d="M1480,1264 C1370,1264 1470,1240 1360,1240" fill="none" stroke="#65a30d" stroke-width="1.7" opacity="0.85" marker-end="url(#arr6)"/>
+<circle cx="1480" cy="1264" r="3.5" fill="#65a30d"/>
+<path d="M1480,1288 C1348,1288 1042,1240 910,1240" fill="none" stroke="#dc2626" stroke-width="1.7" opacity="0.85" marker-end="url(#arr7)"/>
+<circle cx="1480" cy="1288" r="3.5" fill="#dc2626"/>
+<path d="M1480,1336 C1414,1336 1414,956 1480,956" fill="none" stroke="#2563eb" stroke-width="1.7" opacity="0.85" marker-end="url(#arr0)"/>
+<circle cx="1480" cy="1336" r="3.5" fill="#2563eb"/>
+<path d="M1030,1692 C937.6,1692 937.6,1240 1030,1240" fill="none" stroke="#0f9d8a" stroke-width="1.7" opacity="0.85" marker-end="url(#arr1)"/>
+<circle cx="1030" cy="1692" r="3.5" fill="#0f9d8a"/>
+<path d="M1030,1716 C942,1716 548,1668 460,1668" fill="none" stroke="#d97706" stroke-width="1.7" opacity="0.85" marker-end="url(#arr2)"/>
+<circle cx="1030" cy="1716" r="3.5" fill="#d97706"/>
+<path d="M1030,1740 C920,1740 1020,196 910,196" fill="none" stroke="#7c3aed" stroke-width="1.7" opacity="0.85" marker-end="url(#arr3)"/>
+<circle cx="1030" cy="1740" r="3.5" fill="#7c3aed"/>
+<path d="M1030,1764 C898,1764 592,528 460,528" fill="none" stroke="#db2777" stroke-width="1.7" opacity="0.85" marker-end="url(#arr4)"/>
+<circle cx="1030" cy="1764" r="3.5" fill="#db2777"/>
+<path d="M1030,1788 C876,1788 614,528 460,528" fill="none" stroke="#0891b2" stroke-width="1.7" opacity="0.85" marker-end="url(#arr5)"/>
+<circle cx="1030" cy="1788" r="3.5" fill="#0891b2"/>
+<path d="M1480,1668 C1414,1668 1426,1668 1360,1668" fill="none" stroke="#65a30d" stroke-width="1.7" opacity="0.85" marker-end="url(#arr6)"/>
+<circle cx="1480" cy="1668" r="3.5" fill="#65a30d"/>
+<path d="M1480,1692 C1392,1692 998,1668 910,1668" fill="none" stroke="#dc2626" stroke-width="1.7" opacity="0.85" marker-end="url(#arr7)"/>
+<circle cx="1480" cy="1692" r="3.5" fill="#dc2626"/>
+<path d="M580,768 C470,768 570,528 460,528" fill="none" stroke="#2563eb" stroke-width="1.7" opacity="0.85" marker-end="url(#arr0)"/>
+<circle cx="580" cy="768" r="3.5" fill="#2563eb"/>
+<path d="M1930,672 C1798,672 1042,196 910,196" fill="none" stroke="#0f9d8a" stroke-width="1.7" opacity="0.85" marker-end="url(#arr1)"/>
+<circle cx="1930" cy="672" r="3.5" fill="#0f9d8a"/>
+<g><rect x="130" y="140" width="330" height="122" rx="8" fill="#fff" stroke="#94a3b8" stroke-width="1.4"/>
+<rect x="130" y="140" width="330" height="36" rx="8" fill="#101b2d"/><rect x="130" y="166" width="330" height="10" fill="#101b2d"/>
+<text x="142" y="164" class="tname">roles</text>
+<text x="448" y="164" class="tpk">PK (role_id)</text>
+<rect x="130" y="180" width="330" height="24" fill="#ffffff"/>
+<text x="140" y="196.5" class="tag">PK</text>
+<text x="188" y="196.5" class="colk" text-decoration="underline">role_id *</text>
+<text x="450" y="196.5" class="type">BIGINT</text>
+<rect x="130" y="204" width="330" height="24" fill="#f8fafc"/>
+<text x="140" y="220.5" class="tag">UQ</text>
+<text x="188" y="220.5" class="col">role_name *</text>
+<text x="450" y="220.5" class="type">VARCHAR(40)</text>
+<rect x="130" y="228" width="330" height="24" fill="#ffffff"/>
+<text x="140" y="244.5" class="tag"></text>
+<text x="188" y="244.5" class="col">description</text>
+<text x="450" y="244.5" class="type">TEXT</text></g>
+<g><rect x="580" y="140" width="330" height="242" rx="8" fill="#fff" stroke="#94a3b8" stroke-width="1.4"/>
+<rect x="580" y="140" width="330" height="36" rx="8" fill="#101b2d"/><rect x="580" y="166" width="330" height="10" fill="#101b2d"/>
+<text x="592" y="164" class="tname">app_users</text>
+<text x="898" y="164" class="tpk">PK (user_id)</text>
+<rect x="580" y="180" width="330" height="24" fill="#ffffff"/>
+<text x="590" y="196.5" class="tag">PK</text>
+<text x="638" y="196.5" class="colk" text-decoration="underline">user_id *</text>
+<text x="900" y="196.5" class="type">BIGINT</text>
+<rect x="580" y="204" width="330" height="24" fill="#f8fafc"/>
+<text x="590" y="220.5" class="tag">FK</text>
+<text x="638" y="220.5" class="col">role_id *</text>
+<text x="900" y="220.5" class="type">BIGINT</text>
+<rect x="580" y="228" width="330" height="24" fill="#ffffff"/>
+<text x="590" y="244.5" class="tag"></text>
+<text x="638" y="244.5" class="col">full_name *</text>
+<text x="900" y="244.5" class="type">VARCHAR(120)</text>
+<rect x="580" y="252" width="330" height="24" fill="#f8fafc"/>
+<text x="590" y="268.5" class="tag">UQ</text>
+<text x="638" y="268.5" class="col">email *</text>
+<text x="900" y="268.5" class="type">VARCHAR(254)</text>
+<rect x="580" y="276" width="330" height="24" fill="#ffffff"/>
+<text x="590" y="292.5" class="tag"></text>
+<text x="638" y="292.5" class="col">password_hash *</text>
+<text x="900" y="292.5" class="type">TEXT</text>
+<rect x="580" y="300" width="330" height="24" fill="#f8fafc"/>
+<text x="590" y="316.5" class="tag">UQ</text>
+<text x="638" y="316.5" class="col">phone</text>
+<text x="900" y="316.5" class="type">VARCHAR(25)</text>
+<rect x="580" y="324" width="330" height="24" fill="#ffffff"/>
+<text x="590" y="340.5" class="tag"></text>
+<text x="638" y="340.5" class="col">is_active *</text>
+<text x="900" y="340.5" class="type">BOOLEAN</text>
+<rect x="580" y="348" width="330" height="24" fill="#f8fafc"/>
+<text x="590" y="364.5" class="tag"></text>
+<text x="638" y="364.5" class="col">created_at *</text>
+<text x="900" y="364.5" class="type">TIMESTAMPTZ</text></g>
+<g><rect x="1030" y="140" width="330" height="122" rx="8" fill="#fff" stroke="#94a3b8" stroke-width="1.4"/>
+<rect x="1030" y="140" width="330" height="36" rx="8" fill="#101b2d"/><rect x="1030" y="166" width="330" height="10" fill="#101b2d"/>
+<text x="1042" y="164" class="tname">sessions</text>
+<text x="1348" y="164" class="tpk">PK (token_hash)</text>
+<rect x="1030" y="180" width="330" height="24" fill="#ffffff"/>
+<text x="1040" y="196.5" class="tag">PK</text>
+<text x="1088" y="196.5" class="colk" text-decoration="underline">token_hash *</text>
+<text x="1350" y="196.5" class="type">TEXT</text>
+<rect x="1030" y="204" width="330" height="24" fill="#f8fafc"/>
+<text x="1040" y="220.5" class="tag">FK</text>
+<text x="1088" y="220.5" class="col">user_id *</text>
+<text x="1350" y="220.5" class="type">BIGINT</text>
+<rect x="1030" y="228" width="330" height="24" fill="#ffffff"/>
+<text x="1040" y="244.5" class="tag"></text>
+<text x="1088" y="244.5" class="col">expires_at *</text>
+<text x="1350" y="244.5" class="type">TIMESTAMPTZ</text></g>
+<g><rect x="1480" y="140" width="330" height="122" rx="8" fill="#fff" stroke="#94a3b8" stroke-width="1.4"/>
+<rect x="1480" y="140" width="330" height="36" rx="8" fill="#101b2d"/><rect x="1480" y="166" width="330" height="10" fill="#101b2d"/>
+<text x="1492" y="164" class="tname">login_attempts</text>
+<text x="1798" y="164" class="tpk">PK (email)</text>
+<rect x="1480" y="180" width="330" height="24" fill="#ffffff"/>
+<text x="1490" y="196.5" class="tag">PK</text>
+<text x="1538" y="196.5" class="colk" text-decoration="underline">email *</text>
+<text x="1800" y="196.5" class="type">TEXT</text>
+<rect x="1480" y="204" width="330" height="24" fill="#f8fafc"/>
+<text x="1490" y="220.5" class="tag"></text>
+<text x="1538" y="220.5" class="col">attempts *</text>
+<text x="1800" y="220.5" class="type">INTEGER</text>
+<rect x="1480" y="228" width="330" height="24" fill="#ffffff"/>
+<text x="1490" y="244.5" class="tag"></text>
+<text x="1538" y="244.5" class="col">window_start *</text>
+<text x="1800" y="244.5" class="type">TIMESTAMPTZ</text></g>
+<g><rect x="1930" y="140" width="330" height="170" rx="8" fill="#fff" stroke="#94a3b8" stroke-width="1.4"/>
+<rect x="1930" y="140" width="330" height="36" rx="8" fill="#101b2d"/><rect x="1930" y="166" width="330" height="10" fill="#101b2d"/>
+<text x="1942" y="164" class="tname">audit_logs</text>
+<text x="2248" y="164" class="tpk">PK (audit_id)</text>
+<rect x="1930" y="180" width="330" height="24" fill="#ffffff"/>
+<text x="1940" y="196.5" class="tag">PK</text>
+<text x="1988" y="196.5" class="colk" text-decoration="underline">audit_id *</text>
+<text x="2250" y="196.5" class="type">BIGINT</text>
+<rect x="1930" y="204" width="330" height="24" fill="#f8fafc"/>
+<text x="1940" y="220.5" class="tag">FK</text>
+<text x="1988" y="220.5" class="col">user_id</text>
+<text x="2250" y="220.5" class="type">BIGINT</text>
+<rect x="1930" y="228" width="330" height="24" fill="#ffffff"/>
+<text x="1940" y="244.5" class="tag"></text>
+<text x="1988" y="244.5" class="col">action *</text>
+<text x="2250" y="244.5" class="type">TEXT</text>
+<rect x="1930" y="252" width="330" height="24" fill="#f8fafc"/>
+<text x="1940" y="268.5" class="tag"></text>
+<text x="1988" y="268.5" class="col">details *</text>
+<text x="2250" y="268.5" class="type">JSONB</text>
+<rect x="1930" y="276" width="330" height="24" fill="#ffffff"/>
+<text x="1940" y="292.5" class="tag"></text>
+<text x="1988" y="292.5" class="col">created_at *</text>
+<text x="2250" y="292.5" class="type">TIMESTAMPTZ</text></g>
+<g><rect x="2380" y="140" width="330" height="242" rx="8" fill="#fff" stroke="#94a3b8" stroke-width="1.4"/>
+<rect x="2380" y="140" width="330" height="36" rx="8" fill="#101b2d"/><rect x="2380" y="166" width="330" height="10" fill="#101b2d"/>
+<text x="2392" y="164" class="tname">data_change_log</text>
+<text x="2698" y="164" class="tpk">PK (change_id)</text>
+<rect x="2380" y="180" width="330" height="24" fill="#ffffff"/>
+<text x="2390" y="196.5" class="tag">PK</text>
+<text x="2438" y="196.5" class="colk" text-decoration="underline">change_id *</text>
+<text x="2700" y="196.5" class="type">BIGINT</text>
+<rect x="2380" y="204" width="330" height="24" fill="#f8fafc"/>
+<text x="2390" y="220.5" class="tag"></text>
+<text x="2438" y="220.5" class="col">table_name *</text>
+<text x="2700" y="220.5" class="type">TEXT</text>
+<rect x="2380" y="228" width="330" height="24" fill="#ffffff"/>
+<text x="2390" y="244.5" class="tag"></text>
+<text x="2438" y="244.5" class="col">operation *</text>
+<text x="2700" y="244.5" class="type">TEXT</text>
+<rect x="2380" y="252" width="330" height="24" fill="#f8fafc"/>
+<text x="2390" y="268.5" class="tag"></text>
+<text x="2438" y="268.5" class="col">row_data</text>
+<text x="2700" y="268.5" class="type">JSONB</text>
+<rect x="2380" y="276" width="330" height="24" fill="#ffffff"/>
+<text x="2390" y="292.5" class="tag"></text>
+<text x="2438" y="292.5" class="col">changed_fields</text>
+<text x="2700" y="292.5" class="type">JSONB</text>
+<rect x="2380" y="300" width="330" height="24" fill="#f8fafc"/>
+<text x="2390" y="316.5" class="tag"></text>
+<text x="2438" y="316.5" class="col">changed_by</text>
+<text x="2700" y="316.5" class="type">BIGINT</text>
+<rect x="2380" y="324" width="330" height="24" fill="#ffffff"/>
+<text x="2390" y="340.5" class="tag"></text>
+<text x="2438" y="340.5" class="col">txid *</text>
+<text x="2700" y="340.5" class="type">BIGINT</text>
+<rect x="2380" y="348" width="330" height="24" fill="#f8fafc"/>
+<text x="2390" y="364.5" class="tag"></text>
+<text x="2438" y="364.5" class="col">changed_at *</text>
+<text x="2700" y="364.5" class="type">TIMESTAMPTZ</text></g>
+<g><rect x="130" y="472" width="330" height="194" rx="8" fill="#fff" stroke="#94a3b8" stroke-width="1.4"/>
+<rect x="130" y="472" width="330" height="36" rx="8" fill="#101b2d"/><rect x="130" y="498" width="330" height="10" fill="#101b2d"/>
+<text x="142" y="496" class="tname">locations</text>
+<text x="448" y="496" class="tpk">PK (location_id)</text>
+<rect x="130" y="512" width="330" height="24" fill="#ffffff"/>
+<text x="140" y="528.5" class="tag">PK</text>
+<text x="188" y="528.5" class="colk" text-decoration="underline">location_id *</text>
+<text x="450" y="528.5" class="type">BIGINT</text>
+<rect x="130" y="536" width="330" height="24" fill="#f8fafc"/>
+<text x="140" y="552.5" class="tag"></text>
+<text x="188" y="552.5" class="col">location_name *</text>
+<text x="450" y="552.5" class="type">VARCHAR(160)</text>
+<rect x="130" y="560" width="330" height="24" fill="#ffffff"/>
+<text x="140" y="576.5" class="tag"></text>
+<text x="188" y="576.5" class="col">location_type *</text>
+<text x="450" y="576.5" class="type">VARCHAR(40)</text>
+<rect x="130" y="584" width="330" height="24" fill="#f8fafc"/>
+<text x="140" y="600.5" class="tag"></text>
+<text x="188" y="600.5" class="col">address *</text>
+<text x="450" y="600.5" class="type">TEXT</text>
+<rect x="130" y="608" width="330" height="24" fill="#ffffff"/>
+<text x="140" y="624.5" class="tag"></text>
+<text x="188" y="624.5" class="col">latitude</text>
+<text x="450" y="624.5" class="type">NUMERIC(9,6)</text>
+<rect x="130" y="632" width="330" height="24" fill="#f8fafc"/>
+<text x="140" y="648.5" class="tag"></text>
+<text x="188" y="648.5" class="col">longitude</text>
+<text x="450" y="648.5" class="type">NUMERIC(9,6)</text></g>
+<g><rect x="580" y="472" width="330" height="338" rx="8" fill="#fff" stroke="#94a3b8" stroke-width="1.4"/>
+<rect x="580" y="472" width="330" height="36" rx="8" fill="#101b2d"/><rect x="580" y="498" width="330" height="10" fill="#101b2d"/>
+<text x="592" y="496" class="tname">disasters</text>
+<text x="898" y="496" class="tpk">PK (disaster_id)</text>
+<rect x="580" y="512" width="330" height="24" fill="#ffffff"/>
+<text x="590" y="528.5" class="tag">PK</text>
+<text x="638" y="528.5" class="colk" text-decoration="underline">disaster_id *</text>
+<text x="900" y="528.5" class="type">BIGINT</text>
+<rect x="580" y="536" width="330" height="24" fill="#f8fafc"/>
+<text x="590" y="552.5" class="tag"></text>
+<text x="638" y="552.5" class="col">disaster_name *</text>
+<text x="900" y="552.5" class="type">VARCHAR(160)</text>
+<rect x="580" y="560" width="330" height="24" fill="#ffffff"/>
+<text x="590" y="576.5" class="tag"></text>
+<text x="638" y="576.5" class="col">disaster_type *</text>
+<text x="900" y="576.5" class="type">VARCHAR(50)</text>
+<rect x="580" y="584" width="330" height="24" fill="#f8fafc"/>
+<text x="590" y="600.5" class="tag"></text>
+<text x="638" y="600.5" class="col">severity *</text>
+<text x="900" y="600.5" class="type">VARCHAR(20)</text>
+<rect x="580" y="608" width="330" height="24" fill="#ffffff"/>
+<text x="590" y="624.5" class="tag"></text>
+<text x="638" y="624.5" class="col">started_at *</text>
+<text x="900" y="624.5" class="type">TIMESTAMPTZ</text>
+<rect x="580" y="632" width="330" height="24" fill="#f8fafc"/>
+<text x="590" y="648.5" class="tag"></text>
+<text x="638" y="648.5" class="col">ended_at</text>
+<text x="900" y="648.5" class="type">TIMESTAMPTZ</text>
+<rect x="580" y="656" width="330" height="24" fill="#ffffff"/>
+<text x="590" y="672.5" class="tag"></text>
+<text x="638" y="672.5" class="col">status *</text>
+<text x="900" y="672.5" class="type">VARCHAR(20)</text>
+<rect x="580" y="680" width="330" height="24" fill="#f8fafc"/>
+<text x="590" y="696.5" class="tag"></text>
+<text x="638" y="696.5" class="col">description</text>
+<text x="900" y="696.5" class="type">TEXT</text>
+<rect x="580" y="704" width="330" height="24" fill="#ffffff"/>
+<text x="590" y="720.5" class="tag">FK</text>
+<text x="638" y="720.5" class="col">created_by *</text>
+<text x="900" y="720.5" class="type">BIGINT</text>
+<rect x="580" y="728" width="330" height="24" fill="#f8fafc"/>
+<text x="590" y="744.5" class="tag"></text>
+<text x="638" y="744.5" class="col">created_at *</text>
+<text x="900" y="744.5" class="type">TIMESTAMPTZ</text>
+<rect x="580" y="752" width="330" height="24" fill="#ffffff"/>
+<text x="590" y="768.5" class="tag">FK</text>
+<text x="638" y="768.5" class="col">event_location_id</text>
+<text x="900" y="768.5" class="type">BIGINT</text>
+<rect x="580" y="776" width="330" height="24" fill="#f8fafc"/>
+<text x="590" y="792.5" class="tag"></text>
+<text x="638" y="792.5" class="col">search_vector</text>
+<text x="900" y="792.5" class="type">TSVECTOR (gen)</text></g>
+<g><rect x="1030" y="472" width="330" height="170" rx="8" fill="#fff" stroke="#94a3b8" stroke-width="1.4"/>
+<rect x="1030" y="472" width="330" height="36" rx="8" fill="#101b2d"/><rect x="1030" y="498" width="330" height="10" fill="#101b2d"/>
+<text x="1042" y="496" class="tname">disaster_locations</text>
+<text x="1348" y="496" class="tpk">PK (disaster_id, location_id)</text>
+<rect x="1030" y="512" width="330" height="24" fill="#ffffff"/>
+<text x="1040" y="528.5" class="tag">PK FK</text>
+<text x="1088" y="528.5" class="colk" text-decoration="underline">disaster_id *</text>
+<text x="1350" y="528.5" class="type">BIGINT</text>
+<rect x="1030" y="536" width="330" height="24" fill="#f8fafc"/>
+<text x="1040" y="552.5" class="tag">PK FK</text>
+<text x="1088" y="552.5" class="colk" text-decoration="underline">location_id *</text>
+<text x="1350" y="552.5" class="type">BIGINT</text>
+<rect x="1030" y="560" width="330" height="24" fill="#ffffff"/>
+<text x="1040" y="576.5" class="tag"></text>
+<text x="1088" y="576.5" class="col">impact_level *</text>
+<text x="1350" y="576.5" class="type">VARCHAR(20)</text>
+<rect x="1030" y="584" width="330" height="24" fill="#f8fafc"/>
+<text x="1040" y="600.5" class="tag"></text>
+<text x="1088" y="600.5" class="col">affected_population *</text>
+<text x="1350" y="600.5" class="type">INTEGER</text>
+<rect x="1030" y="608" width="330" height="24" fill="#ffffff"/>
+<text x="1040" y="624.5" class="tag"></text>
+<text x="1088" y="624.5" class="col">reported_at *</text>
+<text x="1350" y="624.5" class="type">TIMESTAMPTZ</text></g>
+<g><rect x="1480" y="472" width="330" height="242" rx="8" fill="#fff" stroke="#94a3b8" stroke-width="1.4"/>
+<rect x="1480" y="472" width="330" height="36" rx="8" fill="#101b2d"/><rect x="1480" y="498" width="330" height="10" fill="#101b2d"/>
+<text x="1492" y="496" class="tname">relief_camps</text>
+<text x="1798" y="496" class="tpk">PK (camp_id)</text>
+<rect x="1480" y="512" width="330" height="24" fill="#ffffff"/>
+<text x="1490" y="528.5" class="tag">PK</text>
+<text x="1538" y="528.5" class="colk" text-decoration="underline">camp_id *</text>
+<text x="1800" y="528.5" class="type">BIGINT</text>
+<rect x="1480" y="536" width="330" height="24" fill="#f8fafc"/>
+<text x="1490" y="552.5" class="tag">FK</text>
+<text x="1538" y="552.5" class="col">location_id *</text>
+<text x="1800" y="552.5" class="type">BIGINT</text>
+<rect x="1480" y="560" width="330" height="24" fill="#ffffff"/>
+<text x="1490" y="576.5" class="tag"></text>
+<text x="1538" y="576.5" class="col">camp_name *</text>
+<text x="1800" y="576.5" class="type">VARCHAR(160)</text>
+<rect x="1480" y="584" width="330" height="24" fill="#f8fafc"/>
+<text x="1490" y="600.5" class="tag"></text>
+<text x="1538" y="600.5" class="col">capacity *</text>
+<text x="1800" y="600.5" class="type">INTEGER</text>
+<rect x="1480" y="608" width="330" height="24" fill="#ffffff"/>
+<text x="1490" y="624.5" class="tag"></text>
+<text x="1538" y="624.5" class="col">current_population *</text>
+<text x="1800" y="624.5" class="type">INTEGER</text>
+<rect x="1480" y="632" width="330" height="24" fill="#f8fafc"/>
+<text x="1490" y="648.5" class="tag">FK</text>
+<text x="1538" y="648.5" class="col">manager_id</text>
+<text x="1800" y="648.5" class="type">BIGINT</text>
+<rect x="1480" y="656" width="330" height="24" fill="#ffffff"/>
+<text x="1490" y="672.5" class="tag"></text>
+<text x="1538" y="672.5" class="col">status *</text>
+<text x="1800" y="672.5" class="type">VARCHAR(20)</text>
+<rect x="1480" y="680" width="330" height="24" fill="#f8fafc"/>
+<text x="1490" y="696.5" class="tag"></text>
+<text x="1538" y="696.5" class="col">established_at *</text>
+<text x="1800" y="696.5" class="type">DATE</text></g>
+<g><rect x="1930" y="472" width="330" height="266" rx="8" fill="#fff" stroke="#94a3b8" stroke-width="1.4"/>
+<rect x="1930" y="472" width="330" height="36" rx="8" fill="#101b2d"/><rect x="1930" y="498" width="330" height="10" fill="#101b2d"/>
+<text x="1942" y="496" class="tname">integration_sync_runs</text>
+<text x="2248" y="496" class="tpk">PK (run_id)</text>
+<rect x="1930" y="512" width="330" height="24" fill="#ffffff"/>
+<text x="1940" y="528.5" class="tag">PK</text>
+<text x="1988" y="528.5" class="colk" text-decoration="underline">run_id *</text>
+<text x="2250" y="528.5" class="type">BIGINT</text>
+<rect x="1930" y="536" width="330" height="24" fill="#f8fafc"/>
+<text x="1940" y="552.5" class="tag"></text>
+<text x="1988" y="552.5" class="col">target *</text>
+<text x="2250" y="552.5" class="type">TEXT</text>
+<rect x="1930" y="560" width="330" height="24" fill="#ffffff"/>
+<text x="1940" y="576.5" class="tag"></text>
+<text x="1988" y="576.5" class="col">status *</text>
+<text x="2250" y="576.5" class="type">TEXT</text>
+<rect x="1930" y="584" width="330" height="24" fill="#f8fafc"/>
+<text x="1940" y="600.5" class="tag"></text>
+<text x="1988" y="600.5" class="col">attempts *</text>
+<text x="2250" y="600.5" class="type">INTEGER</text>
+<rect x="1930" y="608" width="330" height="24" fill="#ffffff"/>
+<text x="1940" y="624.5" class="tag"></text>
+<text x="1988" y="624.5" class="col">records_synced *</text>
+<text x="2250" y="624.5" class="type">INTEGER</text>
+<rect x="1930" y="632" width="330" height="24" fill="#f8fafc"/>
+<text x="1940" y="648.5" class="tag"></text>
+<text x="1988" y="648.5" class="col">detail</text>
+<text x="2250" y="648.5" class="type">TEXT</text>
+<rect x="1930" y="656" width="330" height="24" fill="#ffffff"/>
+<text x="1940" y="672.5" class="tag">FK</text>
+<text x="1988" y="672.5" class="col">triggered_by</text>
+<text x="2250" y="672.5" class="type">BIGINT</text>
+<rect x="1930" y="680" width="330" height="24" fill="#f8fafc"/>
+<text x="1940" y="696.5" class="tag"></text>
+<text x="1988" y="696.5" class="col">started_at *</text>
+<text x="2250" y="696.5" class="type">TIMESTAMPTZ</text>
+<rect x="1930" y="704" width="330" height="24" fill="#ffffff"/>
+<text x="1940" y="720.5" class="tag"></text>
+<text x="1988" y="720.5" class="col">finished_at</text>
+<text x="2250" y="720.5" class="type">TIMESTAMPTZ</text></g>
+<g><rect x="130" y="900" width="330" height="122" rx="8" fill="#fff" stroke="#94a3b8" stroke-width="1.4"/>
+<rect x="130" y="900" width="330" height="36" rx="8" fill="#101b2d"/><rect x="130" y="926" width="330" height="10" fill="#101b2d"/>
+<text x="142" y="924" class="tname">resource_categories</text>
+<text x="448" y="924" class="tpk">PK (category_id)</text>
+<rect x="130" y="940" width="330" height="24" fill="#ffffff"/>
+<text x="140" y="956.5" class="tag">PK</text>
+<text x="188" y="956.5" class="colk" text-decoration="underline">category_id *</text>
+<text x="450" y="956.5" class="type">BIGINT</text>
+<rect x="130" y="964" width="330" height="24" fill="#f8fafc"/>
+<text x="140" y="980.5" class="tag">UQ</text>
+<text x="188" y="980.5" class="col">category_name *</text>
+<text x="450" y="980.5" class="type">VARCHAR(80)</text>
+<rect x="130" y="988" width="330" height="24" fill="#ffffff"/>
+<text x="140" y="1004.5" class="tag"></text>
+<text x="188" y="1004.5" class="col">description</text>
+<text x="450" y="1004.5" class="type">TEXT</text></g>
+<g><rect x="580" y="900" width="330" height="194" rx="8" fill="#fff" stroke="#94a3b8" stroke-width="1.4"/>
+<rect x="580" y="900" width="330" height="36" rx="8" fill="#101b2d"/><rect x="580" y="926" width="330" height="10" fill="#101b2d"/>
+<text x="592" y="924" class="tname">resources</text>
+<text x="898" y="924" class="tpk">PK (resource_id)</text>
+<rect x="580" y="940" width="330" height="24" fill="#ffffff"/>
+<text x="590" y="956.5" class="tag">PK</text>
+<text x="638" y="956.5" class="colk" text-decoration="underline">resource_id *</text>
+<text x="900" y="956.5" class="type">BIGINT</text>
+<rect x="580" y="964" width="330" height="24" fill="#f8fafc"/>
+<text x="590" y="980.5" class="tag">FK</text>
+<text x="638" y="980.5" class="col">category_id *</text>
+<text x="900" y="980.5" class="type">BIGINT</text>
+<rect x="580" y="988" width="330" height="24" fill="#ffffff"/>
+<text x="590" y="1004.5" class="tag"></text>
+<text x="638" y="1004.5" class="col">resource_name *</text>
+<text x="900" y="1004.5" class="type">VARCHAR(120)</text>
+<rect x="580" y="1012" width="330" height="24" fill="#f8fafc"/>
+<text x="590" y="1028.5" class="tag"></text>
+<text x="638" y="1028.5" class="col">unit *</text>
+<text x="900" y="1028.5" class="type">VARCHAR(30)</text>
+<rect x="580" y="1036" width="330" height="24" fill="#ffffff"/>
+<text x="590" y="1052.5" class="tag"></text>
+<text x="638" y="1052.5" class="col">description</text>
+<text x="900" y="1052.5" class="type">TEXT</text>
+<rect x="580" y="1060" width="330" height="24" fill="#f8fafc"/>
+<text x="590" y="1076.5" class="tag"></text>
+<text x="638" y="1076.5" class="col">is_perishable *</text>
+<text x="900" y="1076.5" class="type">BOOLEAN</text></g>
+<g><rect x="1030" y="900" width="330" height="194" rx="8" fill="#fff" stroke="#94a3b8" stroke-width="1.4"/>
+<rect x="1030" y="900" width="330" height="36" rx="8" fill="#101b2d"/><rect x="1030" y="926" width="330" height="10" fill="#101b2d"/>
+<text x="1042" y="924" class="tname">warehouses</text>
+<text x="1348" y="924" class="tpk">PK (warehouse_id)</text>
+<rect x="1030" y="940" width="330" height="24" fill="#ffffff"/>
+<text x="1040" y="956.5" class="tag">PK</text>
+<text x="1088" y="956.5" class="colk" text-decoration="underline">warehouse_id *</text>
+<text x="1350" y="956.5" class="type">BIGINT</text>
+<rect x="1030" y="964" width="330" height="24" fill="#f8fafc"/>
+<text x="1040" y="980.5" class="tag">FK</text>
+<text x="1088" y="980.5" class="col">location_id *</text>
+<text x="1350" y="980.5" class="type">BIGINT</text>
+<rect x="1030" y="988" width="330" height="24" fill="#ffffff"/>
+<text x="1040" y="1004.5" class="tag"></text>
+<text x="1088" y="1004.5" class="col">warehouse_name *</text>
+<text x="1350" y="1004.5" class="type">VARCHAR(160)</text>
+<rect x="1030" y="1012" width="330" height="24" fill="#f8fafc"/>
+<text x="1040" y="1028.5" class="tag">FK</text>
+<text x="1088" y="1028.5" class="col">manager_id</text>
+<text x="1350" y="1028.5" class="type">BIGINT</text>
+<rect x="1030" y="1036" width="330" height="24" fill="#ffffff"/>
+<text x="1040" y="1052.5" class="tag"></text>
+<text x="1088" y="1052.5" class="col">capacity *</text>
+<text x="1350" y="1052.5" class="type">NUMERIC(14,2)</text>
+<rect x="1030" y="1060" width="330" height="24" fill="#f8fafc"/>
+<text x="1040" y="1076.5" class="tag"></text>
+<text x="1088" y="1076.5" class="col">status *</text>
+<text x="1350" y="1076.5" class="type">VARCHAR(20)</text></g>
+<g><rect x="1480" y="900" width="330" height="170" rx="8" fill="#fff" stroke="#94a3b8" stroke-width="1.4"/>
+<rect x="1480" y="900" width="330" height="36" rx="8" fill="#101b2d"/><rect x="1480" y="926" width="330" height="10" fill="#101b2d"/>
+<text x="1492" y="924" class="tname">inventory</text>
+<text x="1798" y="924" class="tpk">PK (warehouse_id, resource_id)</text>
+<rect x="1480" y="940" width="330" height="24" fill="#ffffff"/>
+<text x="1490" y="956.5" class="tag">PK FK</text>
+<text x="1538" y="956.5" class="colk" text-decoration="underline">warehouse_id *</text>
+<text x="1800" y="956.5" class="type">BIGINT</text>
+<rect x="1480" y="964" width="330" height="24" fill="#f8fafc"/>
+<text x="1490" y="980.5" class="tag">PK FK</text>
+<text x="1538" y="980.5" class="colk" text-decoration="underline">resource_id *</text>
+<text x="1800" y="980.5" class="type">BIGINT</text>
+<rect x="1480" y="988" width="330" height="24" fill="#ffffff"/>
+<text x="1490" y="1004.5" class="tag"></text>
+<text x="1538" y="1004.5" class="col">quantity_available *</text>
+<text x="1800" y="1004.5" class="type">NUMERIC(14,3)</text>
+<rect x="1480" y="1012" width="330" height="24" fill="#f8fafc"/>
+<text x="1490" y="1028.5" class="tag"></text>
+<text x="1538" y="1028.5" class="col">minimum_threshold *</text>
+<text x="1800" y="1028.5" class="type">NUMERIC(14,3)</text>
+<rect x="1480" y="1036" width="330" height="24" fill="#ffffff"/>
+<text x="1490" y="1052.5" class="tag"></text>
+<text x="1538" y="1052.5" class="col">last_updated *</text>
+<text x="1800" y="1052.5" class="type">TIMESTAMPTZ</text></g>
+<g><rect x="1930" y="900" width="330" height="194" rx="8" fill="#fff" stroke="#94a3b8" stroke-width="1.4"/>
+<rect x="1930" y="900" width="330" height="36" rx="8" fill="#101b2d"/><rect x="1930" y="926" width="330" height="10" fill="#101b2d"/>
+<text x="1942" y="924" class="tname">inventory_movements</text>
+<text x="2248" y="924" class="tpk">PK (movement_id)</text>
+<rect x="1930" y="940" width="330" height="24" fill="#ffffff"/>
+<text x="1940" y="956.5" class="tag">PK</text>
+<text x="1988" y="956.5" class="colk" text-decoration="underline">movement_id *</text>
+<text x="2250" y="956.5" class="type">BIGINT</text>
+<rect x="1930" y="964" width="330" height="24" fill="#f8fafc"/>
+<text x="1940" y="980.5" class="tag">FK</text>
+<text x="1988" y="980.5" class="col">warehouse_id *</text>
+<text x="2250" y="980.5" class="type">BIGINT</text>
+<rect x="1930" y="988" width="330" height="24" fill="#ffffff"/>
+<text x="1940" y="1004.5" class="tag">FK</text>
+<text x="1988" y="1004.5" class="col">resource_id *</text>
+<text x="2250" y="1004.5" class="type">BIGINT</text>
+<rect x="1930" y="1012" width="330" height="24" fill="#f8fafc"/>
+<text x="1940" y="1028.5" class="tag"></text>
+<text x="1988" y="1028.5" class="col">delta *</text>
+<text x="2250" y="1028.5" class="type">NUMERIC(14,3)</text>
+<rect x="1930" y="1036" width="330" height="24" fill="#ffffff"/>
+<text x="1940" y="1052.5" class="tag"></text>
+<text x="1988" y="1052.5" class="col">reason *</text>
+<text x="2250" y="1052.5" class="type">TEXT</text>
+<rect x="1930" y="1060" width="330" height="24" fill="#f8fafc"/>
+<text x="1940" y="1076.5" class="tag"></text>
+<text x="1988" y="1076.5" class="col">created_at *</text>
+<text x="2250" y="1076.5" class="type">TIMESTAMPTZ</text></g>
+<g><rect x="2380" y="900" width="330" height="98" rx="8" fill="#fff" stroke="#94a3b8" stroke-width="1.4"/>
+<rect x="2380" y="900" width="330" height="36" rx="8" fill="#101b2d"/><rect x="2380" y="926" width="330" height="10" fill="#101b2d"/>
+<text x="2392" y="924" class="tname">schema_migrations</text>
+<text x="2698" y="924" class="tpk">PK (filename)</text>
+<rect x="2380" y="940" width="330" height="24" fill="#ffffff"/>
+<text x="2390" y="956.5" class="tag">PK</text>
+<text x="2438" y="956.5" class="colk" text-decoration="underline">filename *</text>
+<text x="2700" y="956.5" class="type">TEXT</text>
+<rect x="2380" y="964" width="330" height="24" fill="#f8fafc"/>
+<text x="2390" y="980.5" class="tag"></text>
+<text x="2438" y="980.5" class="col">applied_at *</text>
+<text x="2700" y="980.5" class="type">TIMESTAMPTZ</text></g>
+<g><rect x="130" y="1184" width="330" height="338" rx="8" fill="#fff" stroke="#94a3b8" stroke-width="1.4"/>
+<rect x="130" y="1184" width="330" height="36" rx="8" fill="#101b2d"/><rect x="130" y="1210" width="330" height="10" fill="#101b2d"/>
+<text x="142" y="1208" class="tname">resource_requests</text>
+<text x="448" y="1208" class="tpk">PK (request_id)</text>
+<rect x="130" y="1224" width="330" height="24" fill="#ffffff"/>
+<text x="140" y="1240.5" class="tag">PK</text>
+<text x="188" y="1240.5" class="colk" text-decoration="underline">request_id *</text>
+<text x="450" y="1240.5" class="type">BIGINT</text>
+<rect x="130" y="1248" width="330" height="24" fill="#f8fafc"/>
+<text x="140" y="1264.5" class="tag">FK</text>
+<text x="188" y="1264.5" class="col">camp_id *</text>
+<text x="450" y="1264.5" class="type">BIGINT</text>
+<rect x="130" y="1272" width="330" height="24" fill="#ffffff"/>
+<text x="140" y="1288.5" class="tag">FK</text>
+<text x="188" y="1288.5" class="col">disaster_id *</text>
+<text x="450" y="1288.5" class="type">BIGINT</text>
+<rect x="130" y="1296" width="330" height="24" fill="#f8fafc"/>
+<text x="140" y="1312.5" class="tag">FK</text>
+<text x="188" y="1312.5" class="col">requested_by *</text>
+<text x="450" y="1312.5" class="type">BIGINT</text>
+<rect x="130" y="1320" width="330" height="24" fill="#ffffff"/>
+<text x="140" y="1336.5" class="tag"></text>
+<text x="188" y="1336.5" class="col">requested_at *</text>
+<text x="450" y="1336.5" class="type">TIMESTAMPTZ</text>
+<rect x="130" y="1344" width="330" height="24" fill="#f8fafc"/>
+<text x="140" y="1360.5" class="tag"></text>
+<text x="188" y="1360.5" class="col">need_by *</text>
+<text x="450" y="1360.5" class="type">TIMESTAMPTZ</text>
+<rect x="130" y="1368" width="330" height="24" fill="#ffffff"/>
+<text x="140" y="1384.5" class="tag"></text>
+<text x="188" y="1384.5" class="col">priority_score *</text>
+<text x="450" y="1384.5" class="type">NUMERIC(5,2)</text>
+<rect x="130" y="1392" width="330" height="24" fill="#f8fafc"/>
+<text x="140" y="1408.5" class="tag"></text>
+<text x="188" y="1408.5" class="col">priority_level *</text>
+<text x="450" y="1408.5" class="type">VARCHAR(20)</text>
+<rect x="130" y="1416" width="330" height="24" fill="#ffffff"/>
+<text x="140" y="1432.5" class="tag"></text>
+<text x="188" y="1432.5" class="col">status *</text>
+<text x="450" y="1432.5" class="type">VARCHAR(20)</text>
+<rect x="130" y="1440" width="330" height="24" fill="#f8fafc"/>
+<text x="140" y="1456.5" class="tag"></text>
+<text x="188" y="1456.5" class="col">medical_emergency *</text>
+<text x="450" y="1456.5" class="type">BOOLEAN</text>
+<rect x="130" y="1464" width="330" height="24" fill="#ffffff"/>
+<text x="140" y="1480.5" class="tag"></text>
+<text x="188" y="1480.5" class="col">remarks</text>
+<text x="450" y="1480.5" class="type">TEXT</text>
+<rect x="130" y="1488" width="330" height="24" fill="#f8fafc"/>
+<text x="140" y="1504.5" class="tag"></text>
+<text x="188" y="1504.5" class="col">search_vector</text>
+<text x="450" y="1504.5" class="type">TSVECTOR (gen)</text></g>
+<g><rect x="580" y="1184" width="330" height="122" rx="8" fill="#fff" stroke="#94a3b8" stroke-width="1.4"/>
+<rect x="580" y="1184" width="330" height="36" rx="8" fill="#101b2d"/><rect x="580" y="1210" width="330" height="10" fill="#101b2d"/>
+<text x="592" y="1208" class="tname">request_items</text>
+<text x="898" y="1208" class="tpk">PK (request_id, resource_id)</text>
+<rect x="580" y="1224" width="330" height="24" fill="#ffffff"/>
+<text x="590" y="1240.5" class="tag">PK FK</text>
+<text x="638" y="1240.5" class="colk" text-decoration="underline">request_id *</text>
+<text x="900" y="1240.5" class="type">BIGINT</text>
+<rect x="580" y="1248" width="330" height="24" fill="#f8fafc"/>
+<text x="590" y="1264.5" class="tag">PK FK</text>
+<text x="638" y="1264.5" class="colk" text-decoration="underline">resource_id *</text>
+<text x="900" y="1264.5" class="type">BIGINT</text>
+<rect x="580" y="1272" width="330" height="24" fill="#ffffff"/>
+<text x="590" y="1288.5" class="tag"></text>
+<text x="638" y="1288.5" class="col">quantity_requested *</text>
+<text x="900" y="1288.5" class="type">NUMERIC(14,3)</text></g>
+<g><rect x="1030" y="1184" width="330" height="194" rx="8" fill="#fff" stroke="#94a3b8" stroke-width="1.4"/>
+<rect x="1030" y="1184" width="330" height="36" rx="8" fill="#101b2d"/><rect x="1030" y="1210" width="330" height="10" fill="#101b2d"/>
+<text x="1042" y="1208" class="tname">allocations</text>
+<text x="1348" y="1208" class="tpk">PK (allocation_id)</text>
+<rect x="1030" y="1224" width="330" height="24" fill="#ffffff"/>
+<text x="1040" y="1240.5" class="tag">PK</text>
+<text x="1088" y="1240.5" class="colk" text-decoration="underline">allocation_id *</text>
+<text x="1350" y="1240.5" class="type">BIGINT</text>
+<rect x="1030" y="1248" width="330" height="24" fill="#f8fafc"/>
+<text x="1040" y="1264.5" class="tag">FK</text>
+<text x="1088" y="1264.5" class="col">request_id *</text>
+<text x="1350" y="1264.5" class="type">BIGINT</text>
+<rect x="1030" y="1272" width="330" height="24" fill="#ffffff"/>
+<text x="1040" y="1288.5" class="tag">FK</text>
+<text x="1088" y="1288.5" class="col">allocated_by *</text>
+<text x="1350" y="1288.5" class="type">BIGINT</text>
+<rect x="1030" y="1296" width="330" height="24" fill="#f8fafc"/>
+<text x="1040" y="1312.5" class="tag"></text>
+<text x="1088" y="1312.5" class="col">allocated_at *</text>
+<text x="1350" y="1312.5" class="type">TIMESTAMPTZ</text>
+<rect x="1030" y="1320" width="330" height="24" fill="#ffffff"/>
+<text x="1040" y="1336.5" class="tag"></text>
+<text x="1088" y="1336.5" class="col">status *</text>
+<text x="1350" y="1336.5" class="type">VARCHAR(20)</text>
+<rect x="1030" y="1344" width="330" height="24" fill="#f8fafc"/>
+<text x="1040" y="1360.5" class="tag"></text>
+<text x="1088" y="1360.5" class="col">remarks</text>
+<text x="1350" y="1360.5" class="type">TEXT</text></g>
+<g><rect x="1480" y="1184" width="330" height="194" rx="8" fill="#fff" stroke="#94a3b8" stroke-width="1.4"/>
+<rect x="1480" y="1184" width="330" height="36" rx="8" fill="#101b2d"/><rect x="1480" y="1210" width="330" height="10" fill="#101b2d"/>
+<text x="1492" y="1208" class="tname">allocation_items</text>
+<text x="1798" y="1208" class="tpk">PK (allocation_item_id)</text>
+<rect x="1480" y="1224" width="330" height="24" fill="#ffffff"/>
+<text x="1490" y="1240.5" class="tag">PK</text>
+<text x="1538" y="1240.5" class="colk" text-decoration="underline">allocation_item_id *</text>
+<text x="1800" y="1240.5" class="type">BIGINT</text>
+<rect x="1480" y="1248" width="330" height="24" fill="#f8fafc"/>
+<text x="1490" y="1264.5" class="tag">FK</text>
+<text x="1538" y="1264.5" class="col">allocation_id *</text>
+<text x="1800" y="1264.5" class="type">BIGINT</text>
+<rect x="1480" y="1272" width="330" height="24" fill="#ffffff"/>
+<text x="1490" y="1288.5" class="tag">FK</text>
+<text x="1538" y="1288.5" class="col">request_id *</text>
+<text x="1800" y="1288.5" class="type">BIGINT</text>
+<rect x="1480" y="1296" width="330" height="24" fill="#f8fafc"/>
+<text x="1490" y="1312.5" class="tag">FK</text>
+<text x="1538" y="1312.5" class="col">resource_id *</text>
+<text x="1800" y="1312.5" class="type">BIGINT</text>
+<rect x="1480" y="1320" width="330" height="24" fill="#ffffff"/>
+<text x="1490" y="1336.5" class="tag">FK</text>
+<text x="1538" y="1336.5" class="col">warehouse_id *</text>
+<text x="1800" y="1336.5" class="type">BIGINT</text>
+<rect x="1480" y="1344" width="330" height="24" fill="#f8fafc"/>
+<text x="1490" y="1360.5" class="tag"></text>
+<text x="1538" y="1360.5" class="col">quantity_allocated *</text>
+<text x="1800" y="1360.5" class="type">NUMERIC(14,3)</text></g>
+<g><rect x="130" y="1612" width="330" height="194" rx="8" fill="#fff" stroke="#94a3b8" stroke-width="1.4"/>
+<rect x="130" y="1612" width="330" height="36" rx="8" fill="#101b2d"/><rect x="130" y="1638" width="330" height="10" fill="#101b2d"/>
+<text x="142" y="1636" class="tname">vehicles</text>
+<text x="448" y="1636" class="tpk">PK (vehicle_id)</text>
+<rect x="130" y="1652" width="330" height="24" fill="#ffffff"/>
+<text x="140" y="1668.5" class="tag">PK</text>
+<text x="188" y="1668.5" class="colk" text-decoration="underline">vehicle_id *</text>
+<text x="450" y="1668.5" class="type">BIGINT</text>
+<rect x="130" y="1676" width="330" height="24" fill="#f8fafc"/>
+<text x="140" y="1692.5" class="tag">UQ</text>
+<text x="188" y="1692.5" class="col">vehicle_number *</text>
+<text x="450" y="1692.5" class="type">VARCHAR(30)</text>
+<rect x="130" y="1700" width="330" height="24" fill="#ffffff"/>
+<text x="140" y="1716.5" class="tag"></text>
+<text x="188" y="1716.5" class="col">vehicle_type *</text>
+<text x="450" y="1716.5" class="type">VARCHAR(50)</text>
+<rect x="130" y="1724" width="330" height="24" fill="#f8fafc"/>
+<text x="140" y="1740.5" class="tag"></text>
+<text x="188" y="1740.5" class="col">capacity *</text>
+<text x="450" y="1740.5" class="type">NUMERIC(14,2)</text>
+<rect x="130" y="1748" width="330" height="24" fill="#ffffff"/>
+<text x="140" y="1764.5" class="tag"></text>
+<text x="188" y="1764.5" class="col">status *</text>
+<text x="450" y="1764.5" class="type">VARCHAR(20)</text>
+<rect x="130" y="1772" width="330" height="24" fill="#f8fafc"/>
+<text x="140" y="1788.5" class="tag">FK</text>
+<text x="188" y="1788.5" class="col">current_location_id</text>
+<text x="450" y="1788.5" class="type">BIGINT</text></g>
+<g><rect x="580" y="1612" width="330" height="218" rx="8" fill="#fff" stroke="#94a3b8" stroke-width="1.4"/>
+<rect x="580" y="1612" width="330" height="36" rx="8" fill="#101b2d"/><rect x="580" y="1638" width="330" height="10" fill="#101b2d"/>
+<text x="592" y="1636" class="tname">volunteers</text>
+<text x="898" y="1636" class="tpk">PK (volunteer_id)</text>
+<rect x="580" y="1652" width="330" height="24" fill="#ffffff"/>
+<text x="590" y="1668.5" class="tag">PK</text>
+<text x="638" y="1668.5" class="colk" text-decoration="underline">volunteer_id *</text>
+<text x="900" y="1668.5" class="type">BIGINT</text>
+<rect x="580" y="1676" width="330" height="24" fill="#f8fafc"/>
+<text x="590" y="1692.5" class="tag"></text>
+<text x="638" y="1692.5" class="col">full_name *</text>
+<text x="900" y="1692.5" class="type">VARCHAR(120)</text>
+<rect x="580" y="1700" width="330" height="24" fill="#ffffff"/>
+<text x="590" y="1716.5" class="tag">UQ</text>
+<text x="638" y="1716.5" class="col">phone *</text>
+<text x="900" y="1716.5" class="type">VARCHAR(25)</text>
+<rect x="580" y="1724" width="330" height="24" fill="#f8fafc"/>
+<text x="590" y="1740.5" class="tag">UQ</text>
+<text x="638" y="1740.5" class="col">email</text>
+<text x="900" y="1740.5" class="type">VARCHAR(254)</text>
+<rect x="580" y="1748" width="330" height="24" fill="#ffffff"/>
+<text x="590" y="1764.5" class="tag"></text>
+<text x="638" y="1764.5" class="col">skills</text>
+<text x="900" y="1764.5" class="type">TEXT</text>
+<rect x="580" y="1772" width="330" height="24" fill="#f8fafc"/>
+<text x="590" y="1788.5" class="tag"></text>
+<text x="638" y="1788.5" class="col">availability_status *</text>
+<text x="900" y="1788.5" class="type">VARCHAR(20)</text>
+<rect x="580" y="1796" width="330" height="24" fill="#ffffff"/>
+<text x="590" y="1812.5" class="tag"></text>
+<text x="638" y="1812.5" class="col">registered_at *</text>
+<text x="900" y="1812.5" class="type">TIMESTAMPTZ</text></g>
+<g><rect x="1030" y="1612" width="330" height="290" rx="8" fill="#fff" stroke="#94a3b8" stroke-width="1.4"/>
+<rect x="1030" y="1612" width="330" height="36" rx="8" fill="#101b2d"/><rect x="1030" y="1638" width="330" height="10" fill="#101b2d"/>
+<text x="1042" y="1636" class="tname">deliveries</text>
+<text x="1348" y="1636" class="tpk">PK (delivery_id)</text>
+<rect x="1030" y="1652" width="330" height="24" fill="#ffffff"/>
+<text x="1040" y="1668.5" class="tag">PK</text>
+<text x="1088" y="1668.5" class="colk" text-decoration="underline">delivery_id *</text>
+<text x="1350" y="1668.5" class="type">BIGINT</text>
+<rect x="1030" y="1676" width="330" height="24" fill="#f8fafc"/>
+<text x="1040" y="1692.5" class="tag">FK</text>
+<text x="1088" y="1692.5" class="col">allocation_id *</text>
+<text x="1350" y="1692.5" class="type">BIGINT</text>
+<rect x="1030" y="1700" width="330" height="24" fill="#ffffff"/>
+<text x="1040" y="1716.5" class="tag">FK</text>
+<text x="1088" y="1716.5" class="col">vehicle_id *</text>
+<text x="1350" y="1716.5" class="type">BIGINT</text>
+<rect x="1030" y="1724" width="330" height="24" fill="#f8fafc"/>
+<text x="1040" y="1740.5" class="tag">FK</text>
+<text x="1088" y="1740.5" class="col">driver_id *</text>
+<text x="1350" y="1740.5" class="type">BIGINT</text>
+<rect x="1030" y="1748" width="330" height="24" fill="#ffffff"/>
+<text x="1040" y="1764.5" class="tag">FK</text>
+<text x="1088" y="1764.5" class="col">source_location_id *</text>
+<text x="1350" y="1764.5" class="type">BIGINT</text>
+<rect x="1030" y="1772" width="330" height="24" fill="#f8fafc"/>
+<text x="1040" y="1788.5" class="tag">FK</text>
+<text x="1088" y="1788.5" class="col">destination_location_id *</text>
+<text x="1350" y="1788.5" class="type">BIGINT</text>
+<rect x="1030" y="1796" width="330" height="24" fill="#ffffff"/>
+<text x="1040" y="1812.5" class="tag"></text>
+<text x="1088" y="1812.5" class="col">departure_time</text>
+<text x="1350" y="1812.5" class="type">TIMESTAMPTZ</text>
+<rect x="1030" y="1820" width="330" height="24" fill="#f8fafc"/>
+<text x="1040" y="1836.5" class="tag"></text>
+<text x="1088" y="1836.5" class="col">expected_arrival</text>
+<text x="1350" y="1836.5" class="type">TIMESTAMPTZ</text>
+<rect x="1030" y="1844" width="330" height="24" fill="#ffffff"/>
+<text x="1040" y="1860.5" class="tag"></text>
+<text x="1088" y="1860.5" class="col">actual_arrival</text>
+<text x="1350" y="1860.5" class="type">TIMESTAMPTZ</text>
+<rect x="1030" y="1868" width="330" height="24" fill="#f8fafc"/>
+<text x="1040" y="1884.5" class="tag"></text>
+<text x="1088" y="1884.5" class="col">status *</text>
+<text x="1350" y="1884.5" class="type">VARCHAR(20)</text></g>
+<g><rect x="1480" y="1612" width="330" height="122" rx="8" fill="#fff" stroke="#94a3b8" stroke-width="1.4"/>
+<rect x="1480" y="1612" width="330" height="36" rx="8" fill="#101b2d"/><rect x="1480" y="1638" width="330" height="10" fill="#101b2d"/>
+<text x="1492" y="1636" class="tname">delivery_volunteers</text>
+<text x="1798" y="1636" class="tpk">PK (delivery_id, volunteer_id)</text>
+<rect x="1480" y="1652" width="330" height="24" fill="#ffffff"/>
+<text x="1490" y="1668.5" class="tag">PK FK</text>
+<text x="1538" y="1668.5" class="colk" text-decoration="underline">delivery_id *</text>
+<text x="1800" y="1668.5" class="type">BIGINT</text>
+<rect x="1480" y="1676" width="330" height="24" fill="#f8fafc"/>
+<text x="1490" y="1692.5" class="tag">PK FK</text>
+<text x="1538" y="1692.5" class="colk" text-decoration="underline">volunteer_id *</text>
+<text x="1800" y="1692.5" class="type">BIGINT</text>
+<rect x="1480" y="1700" width="330" height="24" fill="#ffffff"/>
+<text x="1490" y="1716.5" class="tag"></text>
+<text x="1538" y="1716.5" class="col">assigned_role *</text>
+<text x="1800" y="1716.5" class="type">VARCHAR(60)</text></g>
+<text x="60" y="2028" class="legh">All foreign keys (referential actions)</text>
+<text x="60" y="2062" class="fkl">app_users(role_id) → roles(role_id)  ON DELETE RESTRICT</text>
+<text x="1410" y="2062" class="fkl">audit_logs(user_id) → app_users(user_id)  ON DELETE RESTRICT</text>
+<text x="60" y="2084" class="fkl">disasters(created_by) → app_users(user_id)  ON DELETE RESTRICT</text>
+<text x="1410" y="2084" class="fkl">disaster_locations(disaster_id) → disasters(disaster_id)  ON DELETE CASCADE</text>
+<text x="60" y="2106" class="fkl">disaster_locations(location_id) → locations(location_id)  ON DELETE RESTRICT</text>
+<text x="1410" y="2106" class="fkl">vehicles(current_location_id) → locations(location_id)  ON DELETE SET NULL</text>
+<text x="60" y="2128" class="fkl">inventory_movements(warehouse_id, resource_id) → inventory(warehouse_id, resource_id)  ON DELETE NO ACTION</text>
+<text x="1410" y="2128" class="fkl">relief_camps(location_id) → locations(location_id)  ON DELETE RESTRICT</text>
+<text x="60" y="2150" class="fkl">relief_camps(manager_id) → app_users(user_id)  ON DELETE SET NULL</text>
+<text x="1410" y="2150" class="fkl">resources(category_id) → resource_categories(category_id)  ON DELETE RESTRICT</text>
+<text x="60" y="2172" class="fkl">warehouses(location_id) → locations(location_id)  ON DELETE RESTRICT</text>
+<text x="1410" y="2172" class="fkl">warehouses(manager_id) → app_users(user_id)  ON DELETE SET NULL</text>
+<text x="60" y="2194" class="fkl">sessions(user_id) → app_users(user_id)  ON DELETE CASCADE</text>
+<text x="1410" y="2194" class="fkl">inventory(warehouse_id) → warehouses(warehouse_id)  ON DELETE RESTRICT</text>
+<text x="60" y="2216" class="fkl">inventory(resource_id) → resources(resource_id)  ON DELETE RESTRICT</text>
+<text x="1410" y="2216" class="fkl">resource_requests(camp_id) → relief_camps(camp_id)  ON DELETE RESTRICT</text>
+<text x="60" y="2238" class="fkl">resource_requests(disaster_id) → disasters(disaster_id)  ON DELETE RESTRICT</text>
+<text x="1410" y="2238" class="fkl">resource_requests(requested_by) → app_users(user_id)  ON DELETE RESTRICT</text>
+<text x="60" y="2260" class="fkl">request_items(request_id) → resource_requests(request_id)  ON DELETE CASCADE</text>
+<text x="1410" y="2260" class="fkl">request_items(resource_id) → resources(resource_id)  ON DELETE RESTRICT</text>
+<text x="60" y="2282" class="fkl">allocations(request_id) → resource_requests(request_id)  ON DELETE RESTRICT</text>
+<text x="1410" y="2282" class="fkl">allocations(allocated_by) → app_users(user_id)  ON DELETE RESTRICT</text>
+<text x="60" y="2304" class="fkl">allocation_items(allocation_id, request_id) → allocations(allocation_id, request_id)  ON DELETE CASCADE</text>
+<text x="1410" y="2304" class="fkl">allocation_items(request_id, resource_id) → request_items(request_id, resource_id)  ON DELETE RESTRICT</text>
+<text x="60" y="2326" class="fkl">allocation_items(warehouse_id, resource_id) → inventory(warehouse_id, resource_id)  ON DELETE RESTRICT</text>
+<text x="1410" y="2326" class="fkl">deliveries(allocation_id) → allocations(allocation_id)  ON DELETE RESTRICT</text>
+<text x="60" y="2348" class="fkl">deliveries(vehicle_id) → vehicles(vehicle_id)  ON DELETE RESTRICT</text>
+<text x="1410" y="2348" class="fkl">deliveries(driver_id) → app_users(user_id)  ON DELETE RESTRICT</text>
+<text x="60" y="2370" class="fkl">deliveries(source_location_id) → locations(location_id)  ON DELETE RESTRICT</text>
+<text x="1410" y="2370" class="fkl">deliveries(destination_location_id) → locations(location_id)  ON DELETE RESTRICT</text>
+<text x="60" y="2392" class="fkl">delivery_volunteers(delivery_id) → deliveries(delivery_id)  ON DELETE CASCADE</text>
+<text x="1410" y="2392" class="fkl">delivery_volunteers(volunteer_id) → volunteers(volunteer_id)  ON DELETE CASCADE</text>
+<text x="60" y="2414" class="fkl">disasters(event_location_id) → locations(location_id)  ON DELETE NO ACTION</text>
+<text x="1410" y="2414" class="fkl">integration_sync_runs(triggered_by) → app_users(user_id)  ON DELETE SET NULL</text>
+</svg>
