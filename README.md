@@ -5,14 +5,18 @@ Disaster relief and resource allocation platform, built as a DBMS course project
 | | |
 |---|---|
 | Web app | Next.js 15 (App Router), React 19, TypeScript, Zod, motion, recharts, Leaflet |
-| Source of truth | PostgreSQL 16: constraints, triggers, views, functions, procedures, row locks |
+| Source of truth | PostgreSQL 16: constraints, triggers, views, functions, procedures, row locks, database roles + row-level security |
 | Documents | MongoDB 7: incident reports, JSON-Schema validation, text index, aggregation |
 | Key-value (optional) | Redis 7: dashboard cache + rate limits, with in-memory fallback |
 | Graph (optional) | Neo4j 5: a projection of the response network, queried with Cypher |
-| Vectors (optional) | PostgreSQL + pgvector: similarity search over incidents, requests, disasters |
+| Vectors (optional) | PostgreSQL + pgvector (HNSW, cosine): semantic search with local all-MiniLM-L6-v2 embeddings (384-d, no API key) |
 | Lab sandbox | Separate `reliefflow_lab` database, least-privilege `rf_lab` role, every run rolled back |
 
 **Viva pack:** ER diagram ([draw.io](docs/viva/ReliefFlow-ER-Diagram.drawio), [PDF](docs/viva/ReliefFlow-ER-Diagram.drawio.pdf)) · Relational schema ([draw.io](docs/viva/ReliefFlow-Relational-Schema.drawio), [PDF](docs/viva/ReliefFlow-Relational-Schema.drawio.pdf)) · [Project & viva guide](docs/viva/ReliefFlow-Viva-Guide.pdf) (regenerate with `npm run viva:diagrams` and `npm run viva:guide`)
+
+**Course submission:** [Project report (PDF)](docs/report/ReliefFlow-Project-Report.pdf) · [Team explanation & presentation guide (PDF)](docs/report/ReliefFlow-Team-Explanation.pdf) · runnable [MongoDB commands](db/mongodb/incident_commands.mongosh.js) · [pgvector commands](db/vector/pgvector_commands.sql) (regenerate with `npm run report:assets`, `npm run report:shots` and `npm run report:build`)
+
+**Team:** SUJAL Y (relational database, transactions, security, workflow APIs) · SUJAN H (MongoDB, vector search, Redis, Neo4j, Next.js interface, testing)
 
 Documentation: [Architecture](docs/ARCHITECTURE.md) · [Database design](docs/DATABASE_DESIGN.md) · [API](docs/API_DOCUMENTATION.md) · [Syllabus mapping](docs/DBMS_SYLLABUS_MAPPING.md) · [Testing report](docs/TESTING_REPORT.md)
 
@@ -24,7 +28,7 @@ Requirements: Node.js 20.9+ and Docker Desktop (or your own PostgreSQL 16 and Mo
 docker compose up -d                       # PostgreSQL + MongoDB (existing volumes are reused)
 docker compose --profile optional up -d --no-deps redis neo4j vectordb   # optional services
 npm.cmd ci
-npm.cmd run db:migrate                     # incremental migrations 005-007, each applied once
+npm.cmd run db:migrate                     # incremental migrations 005-008, each applied once
 npm.cmd run mongo:indexes                  # validator + indexes, existing documents kept
 npm.cmd run lab:setup                      # builds the isolated lab database from a sanitised snapshot
 npm.cmd run dev                            # http://localhost:3000
@@ -52,7 +56,8 @@ NEO4J_URI=bolt://localhost:7687
 NEO4J_USER=neo4j
 NEO4J_PASSWORD=reliefflow-graph-dev
 VECTOR_DATABASE_URL=postgresql://postgres:reliefflow-vector-dev@localhost:5433/reliefflow_vectors
-# VOYAGE_API_KEY=...  or  OPENAI_API_KEY=...   (semantic embeddings; otherwise a labelled lexical fallback is used)
+# VOYAGE_API_KEY=...  or  OPENAI_API_KEY=...   (optional hosted embeddings; by default the local MiniLM model is
+#                                                downloaded once to .cache/models; EMBEDDING_PROVIDER=lexical forces the offline fallback)
 # LAB_DATABASE_URL=... (override the derived lab connection)
 ```
 
@@ -96,9 +101,9 @@ npm.cmd run start                          # set COOKIE_SECURE=true behind HTTPS
 ```powershell
 npm.cmd run lint
 npx.cmd tsc --noEmit
-npm.cmd test                               # 25 unit tests (no database needed)
+npm.cmd test                               # 27 unit tests (no database needed)
 npm.cmd run build
-npm.cmd run test:integration               # 28 end-to-end checks incl. Playwright (needs a build, PostgreSQL, MongoDB, Chrome)
+npm.cmd run test:integration               # 30 end-to-end checks incl. RBAC/RLS and Playwright (needs a build, PostgreSQL, MongoDB, Chrome)
 npm.cmd run test:services                  # live Redis / Neo4j / pgvector checks (skips unconfigured services)
 ```
 
@@ -113,13 +118,15 @@ The integration suite creates a fresh `reliefflow_test_<timestamp>` database (Po
 | Field officer | View operations, raise requests, report incidents, admit/discharge at camps |
 | Driver | Own deliveries only (dispatch, delay, deliver) and the read-only lab |
 
-Every rule is enforced by the API (and the database where possible); hidden buttons are a convenience, not the protection.
+Every rule is enforced twice: by the API, and by PostgreSQL itself. Each API transaction runs `SET LOCAL ROLE rf_admin | rf_coordinator | rf_field_officer | rf_driver` (migration 008), so table and column GRANTs and the row-level-security policy on `deliveries` apply (a driver's queries only ever see their own deliveries). See `/lab/security`. Hidden buttons are a convenience, not the protection.
 
 ## Project layout
 
 ```
-db/postgres/          001 schema · 002 seed · 003/004 coursework scripts · 005-007 incremental migrations
-db/mongodb/           incident JSON Schema validator
+db/postgres/          001 schema · 002 seed · 003/004 coursework scripts · 005-008 incremental migrations (008: roles, RLS, data dictionary)
+db/mongodb/           incident JSON Schema validator · incident_commands.mongosh.js (all MongoDB commands, scratch DB)
+db/vector/            pgvector_commands.sql (vector concepts + the real document_vectors table)
+docs/report/          project report and team explanation (Markdown sources, HTML, PDF, generated assets)
 scripts/              migrate, admin, mongo indexes, lab setup, demo data, integration + service tests
 src/lib/              api (auth, errors, transactions), validation, cache, graph, vector, embeddings,
                       normalization (FD engine), lab/ (sandbox, demos, concurrency, mongo lab, SQL guard)

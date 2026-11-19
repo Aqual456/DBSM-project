@@ -1,0 +1,13 @@
+{
+  "tables": 25,
+  "columns": 151,
+  "fks": 34,
+  "checks": 42,
+  "views": 5,
+  "indexes": 65,
+  "triggers": 16,
+  "functions": 13,
+  "procedures": 1,
+  "policies": 4,
+  "db_roles": 4
+}

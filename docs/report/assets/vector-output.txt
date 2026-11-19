@@ -1,0 +1,64 @@
+CREATE EXTENSION
+DROP SCHEMA
+CREATE SCHEMA
+CREATE TABLE
+INSERT 0 4
+CREATE INDEX
+        title        | cosine_distance | cosine_similarity | l2_distance 
+---------------------+-----------------+-------------------+-------------
+ water contamination |          0.0089 |            0.9911 |      0.1225
+ diarrhoea outbreak  |          0.0098 |            0.9902 |      0.1225
+ need blankets       |          0.6610 |            0.3390 |      1.0368
+(3 rows)
+
+ dims | norm |  added  
+------+------+---------
+    3 |    5 | [2,3,4]
+(1 row)
+
+DROP SCHEMA
+                      Table "public.document_vectors"
+  Column   |           Type           | Collation | Nullable |   Default   
+-----------+--------------------------+-----------+----------+-------------
+ source    | text                     |           | not null | 
+ source_id | text                     |           | not null | 
+ provider  | text                     |           | not null | 
+ dims      | integer                  |           | not null | 
+ title     | text                     |           | not null | 
+ content   | text                     |           | not null | 
+ metadata  | jsonb                    |           | not null | '{}'::jsonb
+ embedding | vector                   |           | not null | 
+ synced_at | timestamp with time zone |           | not null | now()
+Indexes:
+    "document_vectors_pkey" PRIMARY KEY, btree (source, source_id, provider)
+    "dv_hnsw_lexical_hash" hnsw ((embedding::vector(256)) vector_cosine_ops) WHERE provider = 'lexical-hash'::text
+    "dv_hnsw_minilm" hnsw ((embedding::vector(384)) vector_cosine_ops) WHERE provider = 'minilm'::text
+Check constraints:
+    "document_vectors_dims_check" CHECK (dims > 0)
+    "document_vectors_source_check" CHECK (source = ANY (ARRAY['incident'::text, 'disaster'::text, 'request'::text]))
+
+   provider   |  source  | vectors | dims 
+--------------+----------+---------+------
+ lexical-hash | disaster |      10 |  256
+ lexical-hash | incident |      20 |  256
+ lexical-hash | request  |      14 |  256
+ minilm       | disaster |      10 |  384
+ minilm       | incident |      20 |  384
+ minilm       | request  |      14 |  384
+(6 rows)
+
+       indexname       |                                                                            indexdef                                                                            
+-----------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+ document_vectors_pkey | CREATE UNIQUE INDEX document_vectors_pkey ON public.document_vectors USING btree (source, source_id, provider)
+ dv_hnsw_lexical_hash  | CREATE INDEX dv_hnsw_lexical_hash ON public.document_vectors USING hnsw (((embedding)::vector(256)) vector_cosine_ops) WHERE (provider = 'lexical-hash'::text)
+ dv_hnsw_minilm        | CREATE INDEX dv_hnsw_minilm ON public.document_vectors USING hnsw (((embedding)::vector(384)) vector_cosine_ops) WHERE (provider = 'minilm'::text)
+(3 rows)
+
+  source  |                title                | cosine_similarity 
+----------+-------------------------------------+-------------------
+ incident | DAMAGE incident — Aluva Riverside   |            1.0000
+ incident | SAFETY incident — Puri Coastal Belt |            0.4507
+ disaster | Kerala Monsoon Floods               |            0.4339
+ disaster | Joshimath Land Subsidence           |            0.4148
+ incident | DAMAGE incident — Puri Coastal Belt |            0.4118
+(5 rows)

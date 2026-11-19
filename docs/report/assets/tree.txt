@@ -1,0 +1,227 @@
+DBSM-project/
+├── .vscode/
+│   ├── extensions.json
+│   ├── launch.json
+│   └── tasks.json
+├── db/
+│   ├── mongodb/
+│   │   ├── incident_commands.mongosh.js
+│   │   ├── incident_report.schema.json
+│   │   └── validator.json
+│   ├── postgres/
+│   │   ├── 001_schema.sql
+│   │   ├── 002_seed.sql
+│   │   ├── 003_sql_demonstrations.sql
+│   │   ├── 004_operational_demo.sql
+│   │   ├── 005_integrity_security.sql
+│   │   ├── 006_allocation_history.sql
+│   │   ├── 007_dbms_engineering.sql
+│   │   └── 008_rbac_dictionary.sql
+│   └── vector/
+│       └── pgvector_commands.sql
+├── docs/
+│   ├── diagrams/
+│   │   ├── diagram-manifest.json
+│   │   ├── ReliefFlow-ER-Diagram-New.drawio
+│   │   ├── ReliefFlow-ER-Diagram.drawio
+│   │   ├── ReliefFlow-Relational-Schema-New.drawio
+│   │   └── ReliefFlow-Relational-Schema.drawio
+│   ├── screenshots/
+│   │   ├── command-center.png
+│   │   ├── concurrency-lab.png
+│   │   ├── er-explorer.png
+│   │   ├── mobile-inventory.png
+│   │   └── request-workflow.png
+│   ├── viva/
+│   │   ├── ReliefFlow-ER-Diagram.drawio
+│   │   ├── ReliefFlow-ER-Diagram.drawio.pdf
+│   │   ├── ReliefFlow-ER-Diagram.drawio.png
+│   │   ├── ReliefFlow-ER-Diagram.pdf
+│   │   ├── ReliefFlow-ER-Diagram.png
+│   │   ├── ReliefFlow-ER-Diagram.svg
+│   │   ├── ReliefFlow-Relational-Schema.drawio
+│   │   ├── ReliefFlow-Relational-Schema.drawio.pdf
+│   │   ├── ReliefFlow-Relational-Schema.drawio.png
+│   │   ├── ReliefFlow-Relational-Schema.pdf
+│   │   ├── ReliefFlow-Relational-Schema.png
+│   │   ├── ReliefFlow-Relational-Schema.svg
+│   │   ├── ReliefFlow-Viva-Guide.html
+│   │   ├── ReliefFlow-Viva-Guide.md
+│   │   ├── ReliefFlow-Viva-Guide.pdf
+│   │   └── schema-snapshot.json
+│   ├── API_DOCUMENTATION.md
+│   ├── ARCHITECTURE.md
+│   ├── BUILD_PLAN.md
+│   ├── dashboard-desktop.png
+│   ├── DATABASE_DESIGN.md
+│   ├── DBMS_SYLLABUS_MAPPING.md
+│   ├── dependency-audit.json
+│   ├── FEATURE_AUDIT.md
+│   ├── production-dependency-audit.json
+│   ├── schema-metadata.json
+│   ├── services-test-results.json
+│   ├── test-results.json
+│   ├── TESTING_REPORT.md
+│   └── VERIFICATION.md
+├── scripts/
+│   ├── build-viva-guide.ts
+│   ├── clean-build.ps1
+│   ├── create-admin.ts
+│   ├── create-mongo-indexes.ts
+│   ├── demo-data.ts
+│   ├── generate-database-diagrams.py
+│   ├── generate-viva-diagrams.ts
+│   ├── integration-test.ts
+│   ├── lab-setup.ts
+│   ├── migrate.ts
+│   ├── prepare-build.mjs
+│   ├── rasterize-database-diagrams.mjs
+│   ├── render-database-diagrams.mjs
+│   ├── reset-password.ts
+│   └── services-test.ts
+├── src/
+│   ├── app/
+│   │   ├── analytics/
+│   │   │   └── page.tsx
+│   │   ├── api/
+│   │   │   ├── auth/
+│   │   │   │   └── route.ts
+│   │   │   ├── dashboard/
+│   │   │   │   └── route.ts
+│   │   │   ├── disasters/
+│   │   │   │   └── route.ts
+│   │   │   ├── graph/
+│   │   │   │   └── route.ts
+│   │   │   ├── health/
+│   │   │   │   └── route.ts
+│   │   │   ├── incidents/
+│   │   │   │   └── route.ts
+│   │   │   ├── intelligence/
+│   │   │   │   └── route.ts
+│   │   │   ├── lab/
+│   │   │   │   ├── cache/
+│   │   │   │   │   └── route.ts
+│   │   │   │   ├── concurrency/
+│   │   │   │   │   └── route.ts
+│   │   │   │   ├── demos/
+│   │   │   │   │   └── route.ts
+│   │   │   │   ├── er/
+│   │   │   │   │   └── route.ts
+│   │   │   │   ├── mongo/
+│   │   │   │   │   └── route.ts
+│   │   │   │   ├── rbac/
+│   │   │   │   │   └── route.ts
+│   │   │   │   ├── setup/
+│   │   │   │   │   └── route.ts
+│   │   │   │   ├── sql/
+│   │   │   │   │   └── route.ts
+│   │   │   │   └── trace/
+│   │   │   │       └── route.ts
+│   │   │   ├── map/
+│   │   │   │   └── route.ts
+│   │   │   ├── operations/
+│   │   │   │   └── route.ts
+│   │   │   ├── request-options/
+│   │   │   │   └── route.ts
+│   │   │   ├── requests/
+│   │   │   │   └── route.ts
+│   │   │   └── vector/
+│   │   │       └── route.ts
+│   │   ├── disasters/
+│   │   │   └── page.tsx
+│   │   ├── incidents/
+│   │   │   └── page.tsx
+│   │   ├── intelligence/
+│   │   │   └── page.tsx
+│   │   ├── lab/
+│   │   │   ├── advanced/
+│   │   │   │   └── page.tsx
+│   │   │   ├── algebra/
+│   │   │   │   └── page.tsx
+│   │   │   ├── concepts/
+│   │   │   │   └── page.tsx
+│   │   │   ├── er/
+│   │   │   │   └── page.tsx
+│   │   │   ├── graph/
+│   │   │   │   └── page.tsx
+│   │   │   ├── integration/
+│   │   │   │   └── page.tsx
+│   │   │   ├── keyvalue/
+│   │   │   │   └── page.tsx
+│   │   │   ├── normalization/
+│   │   │   │   └── page.tsx
+│   │   │   ├── nosql/
+│   │   │   │   └── page.tsx
+│   │   │   ├── optimization/
+│   │   │   │   └── page.tsx
+│   │   │   ├── security/
+│   │   │   │   └── page.tsx
+│   │   │   ├── sql/
+│   │   │   │   └── page.tsx
+│   │   │   ├── transactions/
+│   │   │   │   └── page.tsx
+│   │   │   ├── vector/
+│   │   │   │   └── page.tsx
+│   │   │   └── page.tsx
+│   │   ├── login/
+│   │   │   └── page.tsx
+│   │   ├── manage/
+│   │   │   └── [module]/
+│   │   │       └── page.tsx
+│   │   ├── map/
+│   │   │   └── page.tsx
+│   │   ├── requests/
+│   │   │   └── page.tsx
+│   │   ├── globals.css
+│   │   ├── layout.tsx
+│   │   └── page.tsx
+│   ├── components/
+│   │   ├── charts/
+│   │   │   └── Charts.tsx
+│   │   ├── lab/
+│   │   │   ├── ForceGraph.tsx
+│   │   │   ├── LabKit.tsx
+│   │   │   └── Playground.tsx
+│   │   ├── map/
+│   │   │   └── OpsMap.tsx
+│   │   ├── shell/
+│   │   │   └── AppShell.tsx
+│   │   ├── ui/
+│   │   │   ├── DataTable.tsx
+│   │   │   ├── overlays.tsx
+│   │   │   └── primitives.tsx
+│   │   └── Management.tsx
+│   └── lib/
+│       ├── lab/
+│       │   ├── concurrency.ts
+│       │   ├── demos.ts
+│       │   ├── mongoLab.ts
+│       │   ├── sandbox.ts
+│       │   ├── setup.ts
+│       │   └── sqlGuard.ts
+│       ├── api.ts
+│       ├── cache.ts
+│       ├── client.ts
+│       ├── embeddings.ts
+│       ├── graph.ts
+│       ├── logger.ts
+│       ├── mongodb.ts
+│       ├── normalization.ts
+│       ├── postgres.ts
+│       ├── validation.ts
+│       └── vector.ts
+├── tests/
+│   ├── business.test.ts
+│   ├── normalization.test.ts
+│   ├── origin.test.ts
+│   ├── sqlGuard.test.ts
+│   └── validation.test.ts
+├── .env.example
+├── .gitignore
+├── docker-compose.yml
+├── eslint.config.mjs
+├── next.config.ts
+├── package-lock.json
+├── package.json
+├── README.md
+└── tsconfig.json

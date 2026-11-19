@@ -1,0 +1,184 @@
+{ ok: 1, dropped: 'reliefflow_commands_demo' }
+== 1. CREATE collection with JSON-Schema validation ==
+
+| | | | | | | | | | | | | | | | | | | | | | { ok: 1 }
+
+
+== 2. INDEXES: compound, status, weighted text ==
+
+disasterId_1_createdAt_-1
+reportType_1_severity_1
+status_1_createdAt_-1
+incident_text
+[
+  '_id_',
+  'disasterId_1_createdAt_-1',
+  'reportType_1_severity_1',
+  'status_1_createdAt_-1',
+  'incident_text'
+]
+
+
+== 3. INSERT (create) ==
+
+
+| | | | {
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('6afefe5bb40d08a8e8cc57bf'),
+    '1': ObjectId('6afefe5bb40d08a8e8cc57c0'),
+    '2': ObjectId('6afefe5bb40d08a8e8cc57c1')
+  }
+}
+count: 3
+
+
+== 4. VALIDATION rejects a bad document ==
+
+| | | | rejected: 121 Document failed validation
+
+
+== 5. READ: filter + projection + sort ==
+
+[
+  {
+    reportType: 'MEDICAL',
+    severity: 'CRITICAL',
+    location: {
+      label: 'Aluva Government School Camp'
+    }
+  },
+  {
+    reportType: 'DAMAGE',
+    severity: 'HIGH',
+    location: {
+      label: 'Aluva Riverside'
+    }
+  }
+]
+
+
+== 6. TEXT SEARCH with relevance score ==
+
+[
+  {
+    description: 'Cluster of acute diarrhoea among children at the school camp.',
+    score: 6.157142857142857
+  }
+]
+
+
+== 7. UPDATE: $set on an embedded field + $push into an embedded array ==
+
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+
+
+== 8. AGGREGATION pipelines ==
+
+[
+  {
+    _id: 'HIGH',
+    n: 2
+  },
+  {
+    _id: 'CRITICAL',
+    n: 1
+  }
+]
+
+[
+  {
+    _id: 'children',
+    n: 1
+  },
+  {
+    _id: 'embankment',
+    n: 1
+  },
+  {
+    _id: 'overcrowding',
+    n: 1
+  },
+  {
+    _id: 'tents',
+    n: 1
+  },
+  {
+    _id: 'waterborne',
+    n: 1
+  }
+]
+
+[
+  {
+    byType: [
+      {
+        _id: 'DAMAGE',
+        n: 1
+      },
+      {
+        _id: 'SUPPLY',
+        n: 1
+      },
+      {
+        _id: 'MEDICAL',
+        n: 1
+      }
+    ],
+    byStatus: [
+      {
+        _id: 'OPEN',
+        n: 1
+      },
+      {
+        _id: 'MONITORING',
+        n: 2
+      }
+    ],
+    total: [
+      {
+        n: 3
+      }
+    ]
+  }
+]
+
+{ acknowledged: true, insertedIds: { '0': 11, '1': 12 } }
+[
+  {
+    incidents: 2,
+    disaster: 'Kerala Monsoon Floods'
+  },
+  {
+    incidents: 1,
+    disaster: 'Assam Brahmaputra Flooding'
+  }
+]
+
+
+== 9. QUERY PLAN: index scan vs collection scan ==
+
+
+with index : FETCH <- IXSCAN(reportType_1_severity_1)
+
+forced scan: COLLSCAN
+
+
+== 10. DELETE ==
+
+{
+  acknowledged: true,
+  deletedCount: 1
+}
+
+count after delete: 2
+
+
+{ ok: 1, dropped: 'reliefflow_commands_demo' }
+scratch database dropped — done
