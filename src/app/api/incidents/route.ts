@@ -1,5 +1,5 @@
 import { ObjectId, type Filter, type Document } from "mongodb";
-import { endpoint, actor, HttpError, staff, body, paging } from "@/lib/api";
+import { endpoint, actor, HttpError, staff, managers, body, paging } from "@/lib/api";
 import { getMongoDb } from "@/lib/mongodb";
 import { pool } from "@/lib/postgres";
 import { incidentSchema, incidentUpdateSchema, id } from "@/lib/validation";
@@ -105,4 +105,14 @@ export const PATCH = endpoint(async (req) => {
     .findOneAndUpdate({ _id: new ObjectId(d.id) }, update, { returnDocument: "after" });
   if (!r) throw new HttpError(404, "Incident not found", "NOT_FOUND");
   return r;
+});
+
+/** Delete (managers only): completes CRUD on the MongoDB document collection. */
+export const DELETE = endpoint(async (req) => {
+  await actor(req, managers);
+  const idParam = req.nextUrl.searchParams.get("id") ?? "";
+  if (!/^[a-f0-9]{24}$/.test(idParam)) throw new HttpError(400, "Invalid incident id", "VALIDATION_ERROR");
+  const r = await (await getMongoDb()).collection("incident_reports").deleteOne({ _id: new ObjectId(idParam) });
+  if (!r.deletedCount) throw new HttpError(404, "Incident not found", "NOT_FOUND");
+  return { deleted: true };
 });

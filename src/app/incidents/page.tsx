@@ -1,10 +1,11 @@
 "use client";
 import { useState } from "react";
-import { FileWarning, MessageSquarePlus, Plus, RefreshCw, Search, Sparkles, ChevronLeft, ChevronRight } from "lucide-react";
+import { FileWarning, MessageSquarePlus, Plus, RefreshCw, Search, Sparkles, ChevronLeft, ChevronRight, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { api, useApi, fmtDate, fmtRelative, titleCase } from "@/lib/client";
 import { Alert, Badge, Button, Card, EmptyState, ErrorState, PageHeader, SkeletonRows } from "@/components/ui/primitives";
-import { Modal, useToast } from "@/components/ui/overlays";
+import { Modal, useConfirm, useToast } from "@/components/ui/overlays";
+import { useMe, isManager } from "@/components/shell/AppShell";
 
 type Incident = {
   _id: string; disasterId: number; disasterName: string | null; reportType: string; severity: string; status: string; description: string;
@@ -145,7 +146,7 @@ export default function IncidentsPage() {
         {creating && <CreateIncident onDone={() => { setCreating(false); void reload(); }} onCancel={() => setCreating(false)} />}
       </Modal>
       <Modal open={Boolean(open)} onClose={() => setOpen(null)} title="Incident report" drawer>
-        {open && <IncidentDetail incident={open} onChanged={(i) => { setOpen(i); void reload(); }} />}
+        {open && <IncidentDetail incident={open} onChanged={(i) => { setOpen(i); void reload(); }} onDeleted={() => { setOpen(null); void reload(); }} />}
       </Modal>
     </>
   );
@@ -231,8 +232,10 @@ function CreateIncident({ onDone, onCancel }: { onDone: () => void; onCancel: ()
   );
 }
 
-function IncidentDetail({ incident, onChanged }: { incident: Incident; onChanged: (i: Incident) => void }) {
+function IncidentDetail({ incident, onChanged, onDeleted }: { incident: Incident; onChanged: (i: Incident) => void; onDeleted: () => void }) {
   const toast = useToast();
+  const confirm = useConfirm();
+  const me = useMe();
   const [note, setNote] = useState("");
   const [busy, setBusy] = useState(false);
   const patch = async (body: Record<string, unknown>, msg: string) => {
@@ -286,6 +289,27 @@ function IncidentDetail({ incident, onChanged }: { incident: Incident; onChanged
           <Button type="submit" icon={<MessageSquarePlus size={14} />} disabled={note.trim().length < 3} loading={busy}>Add</Button>
         </form>
       </Card>
+      {isManager(me) && (
+        <div>
+          <Button
+            variant="danger"
+            icon={<Trash2 size={14} />}
+            disabled={busy}
+            onClick={async () => {
+              if (!(await confirm({ title: "Delete this incident report?", text: "The MongoDB document is removed permanently (deleteOne). This cannot be undone.", danger: true, confirmLabel: "Delete" }))) return;
+              try {
+                await api(`/api/incidents?id=${incident._id}`, { method: "DELETE" });
+                toast("success", "Incident deleted");
+                onDeleted();
+              } catch (e) {
+                toast("error", e instanceof Error ? e.message : "Delete failed");
+              }
+            }}
+          >
+            Delete report
+          </Button>
+        </div>
+      )}
       <details>
         <summary className="small muted" style={{ cursor: "pointer" }}>Raw document</summary>
         <pre className="code" style={{ whiteSpace: "pre-wrap", marginTop: 8 }}>{JSON.stringify(incident, null, 2)}</pre>
