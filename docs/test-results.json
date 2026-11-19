@@ -1,5 +1,5 @@
 {
-  "database": "reliefflow_test_1794951246599",
+  "database": "reliefflow_test_1795096264232",
   "results": [
     {
       "test": "Administrator provisioning creates a usable account and preserves working credentials",
@@ -95,6 +95,14 @@
     },
     {
       "test": "Read models: request pipeline, intelligence recommendations, map, ER introspection",
+      "status": "PASS"
+    },
+    {
+      "test": "Database-level RBAC: PostgreSQL roles, column privileges and row-level security",
+      "status": "PASS"
+    },
+    {
+      "test": "MongoDB CRUD completed in the app: delete (managers only)",
       "status": "PASS"
     },
     {
