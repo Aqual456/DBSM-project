@@ -280,7 +280,7 @@ function chenSvg(model: Awaited<ReturnType<typeof catalog>>) {
     return s;
   });
   const rels = relationships.map((r) => {
-    const hw = Math.max(70, r.label.length * 7.4 + 34), hh = 34;
+    const hw = Math.max(78, r.label.length * 8.6 + 38), hh = 38;
     const pts = `${r.x},${r.y - hh} ${r.x + hw},${r.y} ${r.x},${r.y + hh} ${r.x - hw},${r.y}`;
     let s = `<polygon points="${pts}" class="rel${r.external ? " ext" : ""}"/>`;
     if (r.identifying) s += `<polygon points="${r.x},${r.y - hh + 7} ${r.x + hw - 12},${r.y} ${r.x},${r.y + hh - 7} ${r.x - hw + 12},${r.y}" class="rel" fill="none"/>`;
@@ -463,28 +463,42 @@ class Mx {
   edgeLabel(edgeId: string, value: string, x: number, style: string, offset: [number, number] = [0, 0]) {
     this.cells.push(`<mxCell id="${this.id("l")}" value="${xa(value)}" style="${style}" vertex="1" connectable="0" parent="${edgeId}"><mxGeometry x="${x}" relative="1" as="geometry"><mxPoint x="${offset[0]}" y="${offset[1]}" as="offset"/></mxGeometry></mxCell>`);
   }
+  /**
+   * One A3 landscape sheet: draw.io's page format is A3 (1654 x 1169 units, landscape) and pageScale
+   * enlarges that page until the whole diagram fits on it, so File > Print / Export PDF gives exactly
+   * one A3 page. Top-level shapes and edge waypoints are shifted so the content is centred on the sheet.
+   */
   file(name: string, w: number, h: number) {
-    return `<mxfile host="ReliefFlow generator" type="device"><diagram id="${name.replace(/\W/g, "")}" name="${xa(name)}"><mxGraphModel dx="1600" dy="1000" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="${w}" pageHeight="${h}" math="0" shadow="0" background="#ffffff"><root><mxCell id="0"/><mxCell id="1" parent="0"/>${this.cells.join("")}</root></mxGraphModel></diagram></mxfile>`;
+    const scale = +Math.max((w + 2 * A3_MARGIN) / A3.w, (h + 2 * A3_MARGIN) / A3.h).toFixed(4);
+    const ox = Math.round((A3.w * scale - w) / 2), oy = Math.round((A3.h * scale - h) / 2);
+    const shift = (c: string) =>
+      c
+        .replace(/^(<mxCell [^>]*parent="1"[^>]*><mxGeometry )x="(-?\d+)" y="(-?\d+)"/, (_m, pre, x, y) => `${pre}x="${+x + ox}" y="${+y + oy}"`)
+        .replace(/<mxPoint x="(-?[\d.]+)" y="(-?[\d.]+)"\/>/g, (_m, x, y) => `<mxPoint x="${+x + ox}" y="${+y + oy}"/>`);
+    const xml = `<mxfile host="ReliefFlow generator" type="device"><diagram id="${name.replace(/\W/g, "")}" name="${xa(name)}"><mxGraphModel dx="1600" dy="1000" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="${scale}" pageWidth="${A3.w}" pageHeight="${A3.h}" math="0" shadow="0" background="#ffffff"><root><mxCell id="0"/><mxCell id="1" parent="0"/>${this.cells.map(shift).join("")}</root></mxGraphModel></diagram></mxfile>`;
+    return { xml, pageW: Math.round(A3.w * scale), pageH: Math.round(A3.h * scale) };
   }
 }
+const A3 = { w: 1654, h: 1169 }; // draw.io's A3 page format, landscape (420 x 297 mm)
+const A3_MARGIN = 50; // diagram units kept free on every side of the sheet
 const FONT = "fontFamily=Segoe UI;";
 const TXT = `text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;${FONT}`;
 
 function chenDrawio(model: Awaited<ReturnType<typeof catalog>>) {
   const W = 4400, H = 3520;
   const g = new Mx();
-  const entW = (e: Ent) => Math.max(150, e.label.length * 10 + 40);
-  const EH = 50;
-  g.vertex("title", "ReliefFlow — Entity–Relationship Diagram (entire database)", `${TXT}fontSize=34;fontStyle=1;fontColor=#0f1e3d;`, 40, 30, 1600, 50);
-  g.vertex("sub", `Chen notation · generated from the live PostgreSQL catalog: ${model.tables.length} tables, ${model.fks.length} foreign keys (every relationship checked against a real FK) · plus the MongoDB incident document`, `${TXT}fontSize=17;fontColor=#475569;`, 40, 80, 2400, 34);
+  const entW = (e: Ent) => Math.max(160, e.label.length * 12.5 + 44);
+  const EH = 56;
+  g.vertex("title", "ReliefFlow — Entity–Relationship Diagram (entire database)", `${TXT}fontSize=44;fontStyle=1;fontColor=#0f1e3d;`, 40, 30, 1600, 50);
+  g.vertex("sub", `Chen notation · generated from the live PostgreSQL catalog: ${model.tables.length} tables, ${model.fks.length} foreign keys (every relationship checked against a real FK) · plus the MongoDB incident document`, `${TXT}fontSize=21;fontColor=#475569;`, 40, 86, 3200, 34);
   g.vertex("sysbox", "Stand-alone system tables (no relationships)", `rounded=1;arcSize=2;html=1;dashed=1;dashPattern=6 6;fillColor=none;strokeColor=#cbd5e1;align=left;verticalAlign=top;spacingLeft=20;spacingTop=12;fontStyle=1;fontSize=17;fontColor=#0f1e3d;${FONT}`, 2950, 2980, 1410, 500);
   // relationships (diamonds)
   const relId = (r: Rel) => `r_${r.id}`;
   for (const r of relationships) {
     const hw = Math.max(70, r.label.length * 7.4 + 34), hh = 34;
     const style = r.external
-      ? `rhombus;whiteSpace=wrap;html=1;fillColor=#f8f5ff;strokeColor=#6d4fd8;dashed=1;fontStyle=1;fontSize=12;fontColor=#7c2d12;strokeWidth=2;${FONT}`
-      : `rhombus;whiteSpace=wrap;html=1;fillColor=#fff7e6;strokeColor=#b45309;fontStyle=1;fontSize=12;fontColor=#7c2d12;strokeWidth=2;${FONT}`;
+      ? `rhombus;whiteSpace=wrap;html=1;fillColor=#f8f5ff;strokeColor=#6d4fd8;dashed=1;fontStyle=1;fontSize=14;fontColor=#7c2d12;strokeWidth=2;${FONT}`
+      : `rhombus;whiteSpace=wrap;html=1;fillColor=#fff7e6;strokeColor=#b45309;fontStyle=1;fontSize=14;fontColor=#7c2d12;strokeWidth=2;${FONT}`;
     g.vertex(relId(r), r.label, style, r.x - hw, r.y - hh, hw * 2, hh * 2);
     if (r.identifying) g.vertex(g.id("inner"), "", `rhombus;html=1;fillColor=none;strokeColor=#b45309;strokeWidth=1.5;connectable=0;`, r.x - hw + 12, r.y - hh + 7, hw * 2 - 24, hh * 2 - 14);
     if (r.note) g.vertex(g.id("note"), r.note, `${TXT}align=center;fontSize=11;fontStyle=2;fontColor=#6d4fd8;`, r.x - 120, r.y + hh + 2, 240, 20);
@@ -492,7 +506,7 @@ function chenDrawio(model: Awaited<ReturnType<typeof catalog>>) {
   // entities
   for (const e of entities) {
     const w = entW(e);
-    const base = `whiteSpace=wrap;html=1;fontStyle=1;fontSize=16;fontColor=#0f1e3d;strokeWidth=2;${FONT}`;
+    const base = `whiteSpace=wrap;html=1;fontStyle=1;fontSize=20;fontColor=#0f1e3d;strokeWidth=2;${FONT}`;
     const style = e.external
       ? `rounded=0;dashed=1;fillColor=#f3f0ff;strokeColor=#6d4fd8;${base}`
       : e.weak
@@ -509,11 +523,11 @@ function chenDrawio(model: Awaited<ReturnType<typeof catalog>>) {
         ? `shape=link;html=1;endArrow=none;startArrow=none;edgeStyle=none;strokeColor=${color};strokeWidth=1.5;width=4;${r.external ? "dashed=1;" : ""}`
         : `html=1;endArrow=none;startArrow=none;edgeStyle=none;strokeColor=${color};strokeWidth=1.6;${r.external ? "dashed=1;dashPattern=8 5;" : ""}`;
       const eid = g.edge(g.id("re"), relId(r), `e_${end.e}`, style, end.via ?? []);
-      g.edgeLabel(eid, end.card, 0.78, `edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=17;fontStyle=1;fontColor=#dc2626;labelBackgroundColor=#ffffff;${FONT}`, [0, -14]);
+      g.edgeLabel(eid, end.card, 0.78, `edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=22;fontStyle=1;fontColor=#dc2626;labelBackgroundColor=#ffffff;${FONT}`, [0, -16]);
     }
     for (const a of r.attrs ?? []) {
-      const rx = Math.max(38, a.name.length * 3.9 + 16), ry = 17;
-      const aid = g.vertex(g.id("ra"), a.name, `ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#64748b;fontSize=12.5;fontColor=#172033;${FONT}`, r.x + a.dx - rx, r.y + a.dy - ry, rx * 2, ry * 2);
+      const rx = Math.max(44, a.name.length * 4.6 + 18), ry = 19;
+      const aid = g.vertex(g.id("ra"), a.name, `ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#64748b;fontSize=14.5;fontColor=#172033;${FONT}`, r.x + a.dx - rx, r.y + a.dy - ry, rx * 2, ry * 2);
       g.edge(g.id("rae"), aid, relId(r), `html=1;endArrow=none;edgeStyle=none;strokeColor=#64748b;`);
     }
   }
@@ -525,9 +539,10 @@ function chenDrawio(model: Awaited<ReturnType<typeof catalog>>) {
       "whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#64748b;fontColor=#172033;",
       a.attr.key ? "fontStyle=4;" : "",
       a.attr.derived ? "dashed=1;dashPattern=5 4;" : "",
-      `fontSize=${a.small ? 11 : 12.5};${FONT}`,
+      `fontSize=${a.small ? 12.5 : 14.5};${FONT}`,
     ].join("");
-    g.vertex(`at_${a.key}`, a.attr.partial ? label : a.attr.name, style, a.cx - a.rx, a.cy - a.ry, a.rx * 2, a.ry * 2);
+    const rx = a.rx * 1.15, ry = a.ry * 1.15; // 15% larger than the SVG layout, for print
+    g.vertex(`at_${a.key}`, a.attr.partial ? label : a.attr.name, style, a.cx - rx, a.cy - ry, rx * 2, ry * 2);
   }
   for (const a of erAttrs) {
     const target = a.parentKey ? `at_${a.parentKey}` : `e_${a.owner}`;
@@ -559,17 +574,17 @@ function chenDrawio(model: Awaited<ReturnType<typeof catalog>>) {
     g.vertex(g.id("lt"), text, `${TXT}fontSize=14;fontColor=#334155;`, lx + 680, ly + y - 14, 380, 28);
   }
   g.vertex(g.id("lt"), "1 / N / M = cardinality beside each entity. Foreign-key columns are not drawn as attributes: in Chen notation they are the relationships. AFFECTS and CREWED BY are M:N relationships that become the tables disaster_locations and delivery_volunteers.", `${TXT}fontSize=14;fontColor=#334155;verticalAlign=top;`, lx + 560, ly + 215, 500, 160);
-  return { xml: g.file("ER Diagram", W, H), W, H };
+  return g.file("ER Diagram", W, H);
 }
 
 function schemaDrawio(model: Awaited<ReturnType<typeof catalog>>) {
   const g = new Mx();
-  const TW = 340, ROWH = 26, HEAD = 34, GAPX = 150, GAPY = 90;
+  const TW = 370, ROWH = 27, HEAD = 38, GAPX = 120, GAPY = 62;
   const colsOf = (t: string) => model.cols.filter((c) => c.table === t).sort((a, b) => a.pos - b.pos);
-  g.vertex("title", "ReliefFlow — Relational Schema (entire PostgreSQL database)", `${TXT}fontSize=34;fontStyle=1;fontColor=#0f1e3d;`, 60, 30, 1600, 50);
-  g.vertex("sub", `${model.tables.length} tables · ${model.cols.length} columns · ${model.fks.length} foreign keys · PK underlined · * = NOT NULL · UQ = unique (alternate key) · crow's foot = many, bar = one, circle = optional`, `${TXT}fontSize=17;fontColor=#475569;`, 60, 80, 2600, 34);
+  g.vertex("title", "ReliefFlow — Relational Schema (entire PostgreSQL database)", `${TXT}fontSize=40;fontStyle=1;fontColor=#0f1e3d;`, 60, 24, 2000, 56);
+  g.vertex("sub", `${model.tables.length} tables · ${model.cols.length} columns · ${model.fks.length} foreign keys · PK underlined · * = NOT NULL · UQ = unique (alternate key) · crow's foot = many, bar = one, circle = optional`, `${TXT}fontSize=19;fontColor=#475569;`, 60, 80, 2900, 34);
   const rowId = new Map<string, string>();
-  let y = 150;
+  let y = 136;
   layout.forEach((row) => {
     let maxH = 0;
     row.forEach((t, i) => {
@@ -577,7 +592,7 @@ function schemaDrawio(model: Awaited<ReturnType<typeof catalog>>) {
       const h = HEAD + cols.length * ROWH;
       const x = 60 + i * (TW + GAPX);
       const tid = `t_${t}`;
-      g.vertex(tid, t, `shape=table;startSize=${HEAD};container=1;collapsible=0;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=left;spacingLeft=10;resizeLast=1;html=1;whiteSpace=wrap;fillColor=#101b2d;fontColor=#ffffff;strokeColor=#94a3b8;swimlaneFillColor=#ffffff;fontSize=15;${FONT}`, x, y, TW, h);
+      g.vertex(tid, t, `shape=table;startSize=${HEAD};container=1;collapsible=0;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=left;spacingLeft=10;resizeLast=1;html=1;whiteSpace=wrap;fillColor=#101b2d;fontColor=#ffffff;strokeColor=#94a3b8;swimlaneFillColor=#ffffff;fontSize=17;${FONT}`, x, y, TW, h);
       const keys = model.pk[t] ?? [];
       const fkCols = new Set(model.fks.filter((f) => f.child === t).flatMap((f) => f.cols));
       const uniq = new Set((model.uq[t] ?? []).filter((u) => u.length === 1).map((u) => u[0]));
@@ -588,9 +603,9 @@ function schemaDrawio(model: Awaited<ReturnType<typeof catalog>>) {
         g.vertex(rid, "", `shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=${j % 2 ? "#f8fafc" : "#ffffff"};collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;top=0;left=0;right=0;bottom=${isPk && !keys.includes(cols[j + 1]?.name ?? "") ? 1 : 0};strokeColor=#cbd5e1;html=1;`, 0, HEAD + j * ROWH, TW, ROWH, tid);
         const tag = [isPk ? "PK" : "", fkCols.has(c.name) ? "FK" : "", uniq.has(c.name) ? "UQ" : ""].filter(Boolean).join(",");
         const cell = `shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;overflow=hidden;whiteSpace=wrap;html=1;${FONT}`;
-        g.vertex(`${rid}_k`, tag, `${cell}fontStyle=1;fontSize=10;fontColor=#2563eb;align=center;`, 0, 0, 50, ROWH, rid);
-        g.vertex(`${rid}_n`, `${c.name}${c.nullable ? "" : " *"}`, `${cell}align=left;spacingLeft=6;fontSize=12.5;${isPk ? "fontStyle=5;fontColor=#b45309;" : "fontColor=#172033;"}`, 50, 0, 175, ROWH, rid);
-        g.vertex(`${rid}_t`, `${c.type}${c.generated ? " (gen)" : ""}`, `${cell}align=right;spacingRight=8;fontSize=10.5;fontColor=#64748b;fontFamily=Consolas;`, 225, 0, TW - 225, ROWH, rid);
+        g.vertex(`${rid}_k`, tag, `${cell}fontStyle=1;fontSize=11.5;fontColor=#2563eb;align=center;`, 0, 0, 52, ROWH, rid);
+        g.vertex(`${rid}_n`, `${c.name}${c.nullable ? "" : " *"}`, `${cell}align=left;spacingLeft=6;fontSize=14.5;${isPk ? "fontStyle=5;fontColor=#b45309;" : "fontColor=#172033;"}`, 52, 0, 200, ROWH, rid);
+        g.vertex(`${rid}_t`, `${c.type}${c.generated ? " (gen)" : ""}`, `${cell}align=right;spacingRight=8;fontSize=12;fontColor=#64748b;fontFamily=Consolas;`, 252, 0, TW - 252, ROWH, rid);
       });
       maxH = Math.max(maxH, h);
     });
@@ -607,21 +622,23 @@ function schemaDrawio(model: Awaited<ReturnType<typeof catalog>>) {
     if (label) g.edgeLabel(eid, label, 0, `edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=10;fontColor=${palette[i % palette.length]};labelBackgroundColor=#ffffff;${FONT}`, [0, -10]);
   });
   // referential actions list
-  g.vertex("fkh", "All foreign keys (referential actions)", `${TXT}fontSize=17;fontStyle=1;fontColor=#0f1e3d;`, 60, y + 10, 800, 30);
-  const half = Math.ceil(model.fks.length / 2);
-  [model.fks.slice(0, half), model.fks.slice(half)].forEach((list, col) => {
+  const W = 60 + 6 * TW + 5 * GAPX + 60;
+  g.vertex("fkh", "All foreign keys (ON DELETE action)", `${TXT}fontSize=19;fontStyle=1;fontColor=#0f1e3d;`, 60, y - 20, 800, 30);
+  const per = Math.ceil(model.fks.length / 3), colW = (W - 120) / 3, LINE = 21;
+  [0, 1, 2].forEach((col) => {
+    const list = model.fks.slice(col * per, (col + 1) * per);
     g.vertex(
       g.id("fkl"),
-      list.map((f) => xa(`${f.child}(${f.cols.join(", ")}) → ${f.parent}(${f.refs.join(", ")})  ON DELETE ${f.onDelete}`)).join("<br>"),
-      `${TXT}fontSize=13;fontColor=#334155;fontFamily=Consolas;verticalAlign=top;`,
-      60 + col * 1400,
-      y + 50,
-      1380,
-      half * 22 + 10,
+      list.map((f) => xa(`${f.child}(${f.cols.join(", ")}) → ${f.parent}(${f.refs.join(", ")}) ${f.onDelete}`)).join("<br>"),
+      `${TXT}fontSize=12.5;fontColor=#334155;fontFamily=Consolas;verticalAlign=top;`,
+      60 + col * colW,
+      y + 16,
+      colW - 20,
+      per * LINE + 10,
     );
   });
-  const W = 60 + 6 * (TW + GAPX), H = y + 70 + half * 22;
-  return { xml: g.file("Relational Schema", W, H), W, H };
+  const H = y + 30 + per * LINE + 20;
+  return g.file("Relational Schema", W, H);
 }
 
 /** Render a .drawio file to PNG + PDF with the official draw.io viewer library (client-side rendering). */
@@ -642,13 +659,29 @@ async function renderDrawio(xml: string, w: number, h: number, pngFile: string, 
       const r = s.getBoundingClientRect();
       return { x: r.x, y: r.y, w: Math.ceil(r.width), h: Math.ceil(r.height) };
     });
-    await page.setViewportSize({ width: Math.max(box.w, w) + 40, height: Math.max(box.h, h) + 40 });
-    await page.screenshot({ path: pngFile, clip: { x: box.x, y: box.y, width: box.w, height: box.h }, timeout: 180000 });
-    // PDF from the rendered image (vector PDF of the viewer page is unreliable at this size)
-    const { readFileSync } = await import("fs");
-    const png = readFileSync(pngFile).toString("base64");
-    await page.setContent(`<!doctype html><html><head><style>html,body{margin:0}@page{size:${box.w}px ${box.h}px;margin:0}img{display:block;width:${box.w}px;height:${box.h}px}</style></head><body><img src="data:image/png;base64,${png}"></body></html>`);
-    await page.pdf({ path: pdfFile, width: `${box.w}px`, height: `${box.h}px`, printBackground: true, pageRanges: "1" });
+    void box;
+    // Take the viewer's (vector) SVG and place it on one A3 landscape sheet, scaled like the draw.io page.
+    const svg = await page.evaluate(() => {
+      const s = document.querySelector(".mxgraph svg") as SVGSVGElement;
+      // drawing extent = the viewer's min-width/min-height (getBBox is inflated by hidden helper nodes)
+      const bb = { width: parseFloat(s.style.minWidth), height: parseFloat(s.style.minHeight) };
+      const c = s.cloneNode(true) as SVGSVGElement;
+      c.setAttribute("viewBox", `0 0 ${bb.width} ${bb.height}`);
+      c.removeAttribute("style");
+      c.setAttribute("width", "100%");
+      c.setAttribute("height", "100%");
+      return { html: c.outerHTML, w: bb.width, h: bb.height };
+    });
+    const sheetW = 1587, sheetH = 1123; // A3 landscape (420 x 297 mm) in CSS px
+    const fit = Math.min(sheetW / w, sheetH / h); // w x h = the draw.io A3 page in diagram units
+    const sheet = `<!doctype html><html><head><meta charset="utf-8"><style>@page{size:420mm 297mm;margin:0}html,body{margin:0;background:#fff}
+      .sheet{width:${sheetW}px;height:${sheetH}px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+      .sheet>div{width:${svg.w * fit}px;height:${svg.h * fit}px}svg{display:block}</style></head><body><div class="sheet"><div>${svg.html}</div></div></body></html>`;
+    const p2 = await browser.newPage({ viewport: { width: sheetW, height: sheetH }, deviceScaleFactor: 3 });
+    await p2.setContent(sheet, { waitUntil: "load" });
+    await p2.waitForTimeout(500);
+    await p2.screenshot({ path: pngFile, timeout: 180000 }); // 4761 x 3369 px, about 290 dpi on A3
+    await p2.pdf({ path: pdfFile, width: "420mm", height: "297mm", printBackground: true, pageRanges: "1" });
   } finally {
     await browser.close();
   }
@@ -710,8 +743,8 @@ async function main() {
   writeFileSync(erFile, erD.xml);
   writeFileSync(rsFile, rsD.xml);
   if (!process.env.SKIP_DRAWIO_RENDER) {
-    await renderDrawio(erD.xml, erD.W, erD.H, erFile.replace(".drawio", ".drawio.png"), erFile.replace(".drawio", ".drawio.pdf"));
-    await renderDrawio(rsD.xml, rsD.W, rsD.H, rsFile.replace(".drawio", ".drawio.png"), rsFile.replace(".drawio", ".drawio.pdf"));
+    await renderDrawio(erD.xml, erD.pageW, erD.pageH, erFile.replace(".drawio", ".drawio.png"), erFile.replace(".drawio", ".drawio.pdf"));
+    await renderDrawio(rsD.xml, rsD.pageW, rsD.pageH, rsFile.replace(".drawio", ".drawio.png"), rsFile.replace(".drawio", ".drawio.pdf"));
   }
   console.log(`ER: ${entities.length} entities, ${relationships.length} relationships · schema: ${model.tables.length} tables, ${model.cols.length} columns, ${model.fks.length} FKs (all covered)`);
 }

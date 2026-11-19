@@ -12,7 +12,7 @@ Disaster relief and resource allocation platform, built as a DBMS course project
 | Vectors (optional) | PostgreSQL + pgvector (HNSW, cosine): semantic search with local all-MiniLM-L6-v2 embeddings (384-d, no API key) |
 | Lab sandbox | Separate `reliefflow_lab` database, least-privilege `rf_lab` role, every run rolled back |
 
-**Viva pack:** ER diagram ([draw.io](docs/viva/ReliefFlow-ER-Diagram.drawio), [PDF](docs/viva/ReliefFlow-ER-Diagram.drawio.pdf)) · Relational schema ([draw.io](docs/viva/ReliefFlow-Relational-Schema.drawio), [PDF](docs/viva/ReliefFlow-Relational-Schema.drawio.pdf)) · [Project & viva guide](docs/viva/ReliefFlow-Viva-Guide.pdf) (regenerate with `npm run viva:diagrams` and `npm run viva:guide`)
+**Viva pack (print-ready, one A3 landscape sheet each):** ER diagram ([draw.io](docs/viva/ReliefFlow-ER-Diagram.drawio), [A3 PDF](docs/viva/ReliefFlow-ER-Diagram.drawio.pdf)) · Relational schema ([draw.io](docs/viva/ReliefFlow-Relational-Schema.drawio), [A3 PDF](docs/viva/ReliefFlow-Relational-Schema.drawio.pdf)) · [Project & viva guide](docs/viva/ReliefFlow-Viva-Guide.pdf) (regenerate with `npm run viva:diagrams` and `npm run viva:guide`)
 
 **Course submission:** [Project report (PDF)](docs/report/ReliefFlow-Project-Report.pdf) · [Team explanation & presentation guide (PDF)](docs/report/ReliefFlow-Team-Explanation.pdf) · runnable [MongoDB commands](db/mongodb/incident_commands.mongosh.js) · [pgvector commands](db/vector/pgvector_commands.sql) (regenerate with `npm run report:assets`, `npm run report:shots` and `npm run report:build`)
 
