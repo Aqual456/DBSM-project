@@ -7,7 +7,7 @@
 <tr><td>SUJAL Y</td><td>PES1UG24CS475</td></tr>
 <tr><td>SUJAN H</td><td>PES1UG24CS477</td></tr>
 </tbody></table>
-<div class="tp-meta">Generated from the live PostgreSQL catalog on 19 November 2026</div>
+<div class="tp-meta">Generated from the live PostgreSQL catalog on 20 November 2026</div>
 </div>
 
 # ReliefFlow — The Database, Explained
@@ -182,9 +182,8 @@ DDL (Data Definition Language) is the part of SQL that defines structure: `CREAT
 | File | What it does |
 |---|---|
 | `001_schema.sql` | Base schema: the 18 core tables with primary keys, foreign keys, CHECK constraints, the first indexes and the allocation triggers. |
-| `002_seed.sql` | Reference data: the four roles and starter categories (INSERT). |
+| `002_seed.sql` | Reference data (INSERT, re-runnable): the four roles, a placeholder administrator and the 21-item relief catalogue based on the Sphere humanitarian standards. Scenario data is loaded by npm run db:seed (scripts/seed-standard.ts). |
 | `003_sql_demonstrations.sql` | Coursework examples of DDL/DML/queries (run manually; not part of the live schema). |
-| `004_operational_demo.sql` | Optional demo data (INSERT only, safe to re-run). |
 | `005_integrity_security.sql` | Hardening: sessions, login_attempts, audit_logs, inventory_movements; stricter CHECKs (NOT VALID), the reworked validation trigger and stock ledger trigger. |
 | `006_allocation_history.sql` | Makes allocation history immutable and adds the allocation state-machine trigger with exact-once stock restoration. |
 | `007_dbms_engineering.sql` | Foreign-key indexes, partial unique indexes against double booking, delivery triggers, the five views, functions and procedure, field-level audit (data_change_log), full-text search columns, integration_sync_runs and schema_migrations. |

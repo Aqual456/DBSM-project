@@ -420,10 +420,10 @@ Collection `incident_reports`. One incident looks like:
   "reportType": "MEDICAL",
   "severity": "CRITICAL",
   "description": "Cluster of acute diarrhoea among children…",
-  "location": { "label": "Aluva Government School Camp", "latitude": 10.1, "longitude": 76.3 },
+  "location": { "label": "Paravur Government School Camp", "latitude": 10.15, "longitude": 76.23 },
   "tags": ["waterborne", "children"],
   "status": "OPEN",
-  "updates": [ { "note": "Field team dispatched", "by": 6, "byName": "Ananya Rao", "at": ISODate("…") } ],
+  "updates": [ { "note": "Field team dispatched", "by": 6, "byName": "Priya Raghavan", "at": ISODate("…") } ],
   "createdAt": ISODate("…"), "updatedAt": ISODate("…")
 }
 ```
@@ -625,7 +625,7 @@ If something is asked that you can demo, demo it rather than describe it.
 | Apply migrations | `npm run db:migrate` |
 | MongoDB validator and indexes | `npm run mongo:indexes` |
 | Build lab sandbox | `npm run lab:setup` |
-| Demo data (additive) | `npm run db:demo` |
+| Standard sample data (additive) | `npm run db:seed` |
 | Run the app | `npm run dev` → http://localhost:3000 |
 | Unit tests | `npm test` |
 | Integration tests | `npm run build` then `npm run test:integration` |

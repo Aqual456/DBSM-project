@@ -45,7 +45,7 @@
 <div class="tp-meta">Section: ________ · Faculty: ____________________ · Repository: github.com/Aqual456/DBSM-project</div>
 </div>
 <h1 id="reliefflow-project-report-1">ReliefFlow — Project Report</h1>
-<nav class="toc"><strong>Contents</strong><a href="#1-abstract-2">1. Abstract</a><a href="#2-objectives-8">2. Objectives</a><a href="#3-problem-statement-and-scope-10">3. Problem statement and scope</a><a href="#4-functional-requirements-17">4. Functional requirements</a><a href="#5-technology-stack-and-justification-21">5. Technology stack and justification</a><a href="#6-system-architecture-24">6. System architecture</a><a href="#7-database-design-27">7. Database design</a><a href="#8-data-dictionary-49">8. Data dictionary</a><a href="#9-sql-implementation-ddl-126">9. SQL implementation (DDL)</a><a href="#10-database-operations-dml-130">10. Database operations (DML)</a><a href="#11-important-queries-with-live-results-236">11. Important queries (with live results)</a><a href="#12-advanced-database-features-305">12. Advanced database features</a><a href="#13-nosql-implementation-mongodb-commands-308">13. NoSQL implementation (MongoDB commands)</a><a href="#14-vector-database-implementation-pgvector-commands-313">14. Vector database implementation (pgvector commands)</a><a href="#15-database-application-integration-326">15. Database–application integration</a><a href="#16-authentication-and-authorisation-329">16. Authentication and authorisation</a><a href="#17-data-validation-and-integrity-333">17. Data validation and integrity</a><a href="#18-next-js-project-tree-337">18. Next.js project tree</a><a href="#19-application-screenshots-339">19. Application screenshots</a><a href="#20-testing-results-367">20. Testing results</a><a href="#21-evaluation-rubric-completion-status-371">21. Evaluation rubric — completion status</a><a href="#22-team-contribution-373">22. Team contribution</a><a href="#23-git-and-github-376">23. Git and GitHub</a><a href="#24-conclusion-378">24. Conclusion</a><a href="#appendix-a-how-to-run-384">Appendix A — How to run</a></nav>
+<nav class="toc"><strong>Contents</strong><a href="#1-abstract-2">1. Abstract</a><a href="#2-objectives-8">2. Objectives</a><a href="#3-problem-statement-and-scope-10">3. Problem statement and scope</a><a href="#4-functional-requirements-17">4. Functional requirements</a><a href="#5-technology-stack-and-justification-21">5. Technology stack and justification</a><a href="#6-system-architecture-24">6. System architecture</a><a href="#7-database-design-27">7. Database design</a><a href="#8-data-dictionary-49">8. Data dictionary</a><a href="#9-sql-implementation-ddl-126">9. SQL implementation (DDL)</a><a href="#10-database-operations-dml-130">10. Database operations (DML)</a><a href="#11-important-queries-with-live-results-236">11. Important queries (with live results)</a><a href="#12-advanced-database-features-306">12. Advanced database features</a><a href="#13-nosql-implementation-mongodb-commands-309">13. NoSQL implementation (MongoDB commands)</a><a href="#14-vector-database-implementation-pgvector-commands-314">14. Vector database implementation (pgvector commands)</a><a href="#15-database-application-integration-327">15. Database–application integration</a><a href="#16-authentication-and-authorisation-330">16. Authentication and authorisation</a><a href="#17-data-validation-and-integrity-334">17. Data validation and integrity</a><a href="#18-next-js-project-tree-338">18. Next.js project tree</a><a href="#19-application-screenshots-340">19. Application screenshots</a><a href="#20-testing-results-368">20. Testing results</a><a href="#21-evaluation-rubric-completion-status-372">21. Evaluation rubric — completion status</a><a href="#22-team-contribution-374">22. Team contribution</a><a href="#23-git-and-github-377">23. Git and GitHub</a><a href="#24-conclusion-379">24. Conclusion</a><a href="#appendix-a-how-to-run-385">Appendix A — How to run</a></nav>
 <h2 id="1-abstract-2">1. Abstract</h2>
 <p>When a disaster strikes, relief work is usually coordinated through phone calls and spreadsheets. Requests are duplicated, two coordinators promise the same last truck of water, and nobody knows what reached which camp. <strong>ReliefFlow</strong> replaces this with a single transactional platform.</p>
 <p>Relief camps raise resource requests; coordinators approve them, allocate stock from warehouses and plan deliveries; drivers report progress; field officers file incident reports. Every step is protected by the database itself:</p>
@@ -99,14 +99,14 @@
 <pre class="lang-json"><code>{ "_id": ObjectId, "disasterId": 11, "reportedBy": 7, "reporterName": "…",
   "reportType": "MEDICAL", "severity": "CRITICAL", "status": "OPEN",
   "description": "Cluster of acute diarrhoea among children…",
-  "location": { "label": "Aluva Government School Camp", "latitude": 10.1, "longitude": 76.35 },
+  "location": { "label": "Paravur Government School Camp", "latitude": 10.1517, "longitude": 76.229 },
   "tags": ["waterborne", "children"],
   "updates": [ { "note": "Medical team dispatched", "by": 6, "byName": "…", "at": ISODate } ],
   "createdAt": ISODate, "updatedAt": ISODate }</code></pre>
 <p>The model:</p>
 <ul><li><strong>Embedded:</strong> <code>location</code> and <code>updates</code>, read together with the report.</li><li><strong>Referenced:</strong> <code>disasterId</code> and <code>reportedBy</code>, validated against PostgreSQL before every insert.</li><li><strong>Indexes:</strong> {disasterId, createdAt}, {reportType, severity}, {status, createdAt}, and a weighted text index (description × 5, tags × 3, location × 1).</li><li><strong>Validation:</strong> <code>$jsonSchema</code> with required fields, enums and lengths.</li></ul>
 <h3 id="7-6-vector-data-model-pgvector-47">7.6 Vector data model (pgvector)</h3>
-<table><thead><tr><th>Question (requirement §8)</th><th>ReliefFlow answer</th></tr></thead><tbody><tr><td>What data becomes embeddings?</td><td>Incident descriptions with their tags and location, resource-request summaries (camp, items, remarks) and disaster descriptions: 44 documents in the demo data.</td></tr><tr><td>Which model?</td><td><strong>sentence-transformers all-MiniLM-L6-v2</strong>, run locally through Transformers.js / ONNX Runtime: mean pooling, L2-normalised, <strong>384 dimensions</strong>. No API key is needed and no text leaves the machine. Voyage AI or OpenAI is used instead if a key is configured; a labelled lexical fallback covers offline use.</td></tr><tr><td>How are vectors stored?</td><td>Table <code>document_vectors(source, source_id, provider, dims, title, content, metadata JSONB, embedding vector, synced_at)</code>, PK (source, source_id, provider), in a separate PostgreSQL + pgvector database.</td></tr><tr><td>Index</td><td>Partial expression <strong>HNSW</strong> index <code>((embedding::vector(384)) vector_cosine_ops) WHERE provider = 'minilm'</code></td></tr><tr><td>Similarity metric</td><td><strong>Cosine similarity</strong> = 1 − cosine distance (<code>&lt;=&gt;</code> operator).</td></tr><tr><td>Retrieval strategy</td><td>The query text is embedded with the same model, then <code>ORDER BY embedding &lt;=&gt; query LIMIT k</code> (k-nearest neighbours), optionally filtered by source. Results are shown beside MongoDB keyword results. Synchronisation is explicit (Re-embed button) and recorded in <code>integration_sync_runs</code>.</td></tr></tbody></table>
+<table><thead><tr><th>Question (requirement §8)</th><th>ReliefFlow answer</th></tr></thead><tbody><tr><td>What data becomes embeddings?</td><td>Incident descriptions with their tags and location, resource-request summaries (camp, items, remarks) and disaster descriptions: 40 documents in the sample data.</td></tr><tr><td>Which model?</td><td><strong>sentence-transformers all-MiniLM-L6-v2</strong>, run locally through Transformers.js / ONNX Runtime: mean pooling, L2-normalised, <strong>384 dimensions</strong>. No API key is needed and no text leaves the machine. Voyage AI or OpenAI is used instead if a key is configured; a labelled lexical fallback covers offline use.</td></tr><tr><td>How are vectors stored?</td><td>Table <code>document_vectors(source, source_id, provider, dims, title, content, metadata JSONB, embedding vector, synced_at)</code>, PK (source, source_id, provider), in a separate PostgreSQL + pgvector database.</td></tr><tr><td>Index</td><td>Partial expression <strong>HNSW</strong> index <code>((embedding::vector(384)) vector_cosine_ops) WHERE provider = 'minilm'</code></td></tr><tr><td>Similarity metric</td><td><strong>Cosine similarity</strong> = 1 − cosine distance (<code>&lt;=&gt;</code> operator).</td></tr><tr><td>Retrieval strategy</td><td>The query text is embedded with the same model, then <code>ORDER BY embedding &lt;=&gt; query LIMIT k</code> (k-nearest neighbours), optionally filtered by source. Results are shown beside MongoDB keyword results. Synchronisation is explicit (Re-embed button) and recorded in <code>integration_sync_runs</code>.</td></tr></tbody></table>
 <h2 id="8-data-dictionary-49">8. Data dictionary</h2>
 <p>The data dictionary is stored <strong>inside PostgreSQL</strong> as table and column comments (<code>COMMENT ON</code>, migration 008) and is read straight from the catalog.</p>
 <h4 id="allocation-items-51">allocation_items</h4>
@@ -248,13 +248,13 @@ DELETE FROM resource_categories WHERE category_id = $1;</code></pre>
 <pre class="lang-sql"><code>INSERT INTO locations(location_name, location_type, address, latitude, longitude)
 VALUES ('Lab Test Ward', 'WARD', 'Sandbox only', 12.90, 77.60)
 RETURNING location_id, location_name;</code></pre>
-<table><thead><tr><th>location_id</th><th>location_name</th></tr></thead><tbody><tr><td>24</td><td>Lab Test Ward</td></tr></tbody></table>
+<table><thead><tr><th>location_id</th><th>location_name</th></tr></thead><tbody><tr><td>16</td><td>Lab Test Ward</td></tr></tbody></table>
 <pre class="lang-sql"><code>UPDATE locations SET address = 'Sandbox only (edited)'
 WHERE location_name = 'Lab Test Ward'
 RETURNING location_id, address;</code></pre>
-<table><thead><tr><th>location_id</th><th>address</th></tr></thead><tbody><tr><td>24</td><td>Sandbox only (edited)</td></tr></tbody></table>
+<table><thead><tr><th>location_id</th><th>address</th></tr></thead><tbody><tr><td>16</td><td>Sandbox only (edited)</td></tr></tbody></table>
 <pre class="lang-sql"><code>DELETE FROM locations WHERE location_name = 'Lab Test Ward' RETURNING location_id;</code></pre>
-<table><thead><tr><th>location_id</th></tr></thead><tbody><tr><td>24</td></tr></tbody></table>
+<table><thead><tr><th>location_id</th></tr></thead><tbody><tr><td>16</td></tr></tbody></table>
 <pre class="lang-sql"><code>SELECT count(*) AS remaining_lab_rows FROM locations WHERE location_name = 'Lab Test Ward';</code></pre>
 <table><thead><tr><th>remaining_lab_rows</th></tr></thead><tbody><tr><td>0</td></tr></tbody></table>
 <p>_All statements above ran in the lab sandbox inside one transaction that was rolled back._</p>
@@ -267,9 +267,9 @@ SELECT (SELECT min(warehouse_id) FROM warehouses WHERE status = 'ACTIVE'), (SELE
 ON CONFLICT (warehouse_id, resource_id)
 DO UPDATE SET quantity_available = inventory.quantity_available + EXCLUDED.quantity_available, last_updated = now()
 RETURNING warehouse_id, resource_id, quantity_available;</code></pre>
-<table><thead><tr><th>warehouse_id</th><th>resource_id</th><th>quantity_available</th></tr></thead><tbody><tr><td>1</td><td>1</td><td>1050.000</td></tr></tbody></table>
+<table><thead><tr><th>warehouse_id</th><th>resource_id</th><th>quantity_available</th></tr></thead><tbody><tr><td>1</td><td>1</td><td>250.000</td></tr></tbody></table>
 <pre class="lang-sql"><code>SELECT movement_id, warehouse_id, resource_id, delta, reason FROM inventory_movements ORDER BY movement_id DESC LIMIT 1;</code></pre>
-<table><thead><tr><th>movement_id</th><th>warehouse_id</th><th>resource_id</th><th>delta</th><th>reason</th></tr></thead><tbody><tr><td>44</td><td>1</td><td>1</td><td>250.000</td><td>Donation received (lab)</td></tr></tbody></table>
+<table><thead><tr><th>movement_id</th><th>warehouse_id</th><th>resource_id</th><th>delta</th><th>reason</th></tr></thead><tbody><tr><td>79</td><td>1</td><td>1</td><td>250.000</td><td>Donation received (lab)</td></tr></tbody></table>
 <p>_All statements above ran in the lab sandbox inside one transaction that was rolled back._</p>
 <h3 id="create-alter-drop-154">CREATE · ALTER · DROP</h3>
 <p>DDL defines structure. A table is created, altered (new column + CHECK constraint), used, and dropped — PostgreSQL DDL is transactional, so even this is rolled back.</p>
@@ -325,7 +325,7 @@ RETURNING warehouse_id, resource_id, quantity_available;</code></pre>
 <pre class="lang-sql"><code>EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON)
 SELECT movement_id, delta, created_at FROM bench_movements
 WHERE resource_id = 7 AND created_at &gt;= timestamptz '2026-06-01';</code></pre>
-<p>→ plan: <strong>Gather → Seq Scan</strong>, execution <strong>15.62 ms</strong> (measured)</p>
+<p>→ plan: <strong>Gather → Seq Scan</strong>, execution <strong>19.28 ms</strong> (measured)</p>
 <pre class="lang-sql"><code>CREATE INDEX bench_mv_resource_created ON bench_movements(resource_id, created_at);</code></pre>
 <p>→ CREATE</p>
 <pre class="lang-sql"><code>ANALYZE bench_movements;</code></pre>
@@ -333,7 +333,7 @@ WHERE resource_id = 7 AND created_at &gt;= timestamptz '2026-06-01';</code></pre
 <pre class="lang-sql"><code>EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON)
 SELECT movement_id, delta, created_at FROM bench_movements
 WHERE resource_id = 7 AND created_at &gt;= timestamptz '2026-06-01';</code></pre>
-<p>→ plan: <strong>Bitmap Heap Scan → Bitmap Index Scan</strong>, execution <strong>1.02 ms</strong> (measured)</p>
+<p>→ plan: <strong>Bitmap Heap Scan → Bitmap Index Scan</strong>, execution <strong>1.28 ms</strong> (measured)</p>
 <p>_All statements above ran in the lab sandbox inside one transaction that was rolled back._</p>
 <h3 id="atomicity-allocation-fails-halfway-nothing-persists-211">Atomicity: allocation fails halfway → nothing persists</h3>
 <p>A two-line allocation: line 1 is valid and deducts stock; line 2 asks for more than exists and the trigger raises an error. The transaction is aborted — and after ROLLBACK, line 1's deduction is gone too.</p>
@@ -344,20 +344,20 @@ WHERE rr.status IN ('PENDING','APPROVED','PARTIALLY_FULFILLED')
 ORDER BY rr.priority_score DESC LIMIT 1;</code></pre>
 <p>→ SELECT (1 row(s))</p>
 <pre class="lang-sql"><code>UPDATE resource_requests SET status = 'APPROVED' WHERE request_id = (SELECT request_id FROM ctx) AND status = 'PENDING';</code></pre>
-<p>→ UPDATE (1 row(s))</p>
+<p>→ UPDATE (0 row(s))</p>
 <pre class="lang-sql"><code>SELECT sum(quantity_available) AS total_stock_before FROM inventory;</code></pre>
-<table><thead><tr><th>total_stock_before</th></tr></thead><tbody><tr><td>63460.000</td></tr></tbody></table>
+<table><thead><tr><th>total_stock_before</th></tr></thead><tbody><tr><td>221826.000</td></tr></tbody></table>
 <pre class="lang-sql"><code>SAVEPOINT allocation_attempt;</code></pre>
 <p>→ SAVEPOINT</p>
 <pre class="lang-sql"><code>INSERT INTO allocations(request_id, allocated_by) SELECT request_id, (SELECT min(user_id) FROM app_users) FROM ctx RETURNING allocation_id;</code></pre>
-<table><thead><tr><th>allocation_id</th></tr></thead><tbody><tr><td>12</td></tr></tbody></table>
+<table><thead><tr><th>allocation_id</th></tr></thead><tbody><tr><td>11</td></tr></tbody></table>
 <pre class="lang-sql"><code>INSERT INTO allocation_items(allocation_id, request_id, resource_id, warehouse_id, quantity_allocated)
 SELECT (SELECT max(allocation_id) FROM allocations), f.request_id, f.resource_id, i.warehouse_id, 1
 FROM v_request_fulfillment f JOIN inventory i ON i.resource_id = f.resource_id JOIN warehouses w ON w.warehouse_id = i.warehouse_id AND w.status = 'ACTIVE'
 WHERE f.request_id = (SELECT request_id FROM ctx) AND f.quantity_remaining &gt;= 1 AND i.quantity_available &gt;= 1 LIMIT 1 RETURNING 'line 1 OK' AS line, quantity_allocated;</code></pre>
 <table><thead><tr><th>line</th><th>quantity_allocated</th></tr></thead><tbody><tr><td>line 1 OK</td><td>1.000</td></tr></tbody></table>
 <pre class="lang-sql"><code>SELECT sum(quantity_available) AS total_stock_after_line_1 FROM inventory;</code></pre>
-<table><thead><tr><th>total_stock_after_line_1</th></tr></thead><tbody><tr><td>63459.000</td></tr></tbody></table>
+<table><thead><tr><th>total_stock_after_line_1</th></tr></thead><tbody><tr><td>221825.000</td></tr></tbody></table>
 <pre class="lang-sql"><code>INSERT INTO allocation_items(allocation_id, request_id, resource_id, warehouse_id, quantity_allocated)
 SELECT (SELECT max(allocation_id) FROM allocations), f.request_id, f.resource_id, i.warehouse_id, i.quantity_available + 99999
 FROM v_request_fulfillment f JOIN inventory i ON i.resource_id = f.resource_id
@@ -368,7 +368,7 @@ WHERE f.request_id = (SELECT request_id FROM ctx) AND NOT EXISTS (SELECT 1 FROM 
 <pre class="lang-sql"><code>ROLLBACK TO SAVEPOINT allocation_attempt;</code></pre>
 <p>→ ROLLBACK</p>
 <pre class="lang-sql"><code>SELECT sum(quantity_available) AS total_stock_after_rollback FROM inventory;</code></pre>
-<table><thead><tr><th>total_stock_after_rollback</th></tr></thead><tbody><tr><td>63460.000</td></tr></tbody></table>
+<table><thead><tr><th>total_stock_after_rollback</th></tr></thead><tbody><tr><td>221826.000</td></tr></tbody></table>
 <p>_All statements above ran in the lab sandbox inside one transaction that was rolled back._</p>
 <h2 id="11-important-queries-with-live-results-236">11. Important queries (with live results)</h2>
 <h3 id="requests-per-camp-join-group-by-having-order-by-aggregates-237">Requests per camp (JOIN · GROUP BY · HAVING · ORDER BY · aggregates)</h3>
@@ -384,7 +384,7 @@ GROUP BY c.camp_name
 HAVING count(DISTINCT rr.request_id) &gt; 1
 ORDER BY units_requested DESC;</code></pre>
 <p><strong>Result (live database):</strong></p>
-<table><thead><tr><th>camp_name</th><th>requests</th><th>units_requested</th><th>avg_priority</th></tr></thead><tbody><tr><td>Aluva Government School Camp</td><td>2</td><td>6560.000</td><td>88.8</td></tr><tr><td>Puri Cyclone Shelter No. 4</td><td>2</td><td>4640.000</td><td>94.4</td></tr><tr><td>Joshimath Gurudwara Shelter</td><td>2</td><td>1000.000</td><td>62.5</td></tr><tr><td>Central Flood Relief Camp</td><td>2</td><td>940.000</td><td>91.3</td></tr></tbody></table>
+<table><thead><tr><th>camp_name</th><th>requests</th><th>units_requested</th><th>avg_priority</th></tr></thead><tbody><tr><td>Gopalpur Cyclone Shelter</td><td>2</td><td>21100.000</td><td>97.0</td></tr><tr><td>Paravur Government School Camp</td><td>2</td><td>15850.000</td><td>85.5</td></tr><tr><td>Silapathar Higher Secondary School Camp</td><td>2</td><td>9266.000</td><td>80.6</td></tr><tr><td>Kochi Regional Sports Centre Shelter</td><td>2</td><td>2764.000</td><td>70.0</td></tr><tr><td>Nichar Community Hall Shelter</td><td>2</td><td>1002.000</td><td>63.2</td></tr></tbody></table>
 <h3 id="stock-by-category-count-sum-avg-min-max-242">Stock by category (COUNT · SUM · AVG · MIN · MAX)</h3>
 <p>Aggregate functions over inventory joined to its catalogue.</p>
 <pre class="lang-sql"><code>SELECT cat.category_name, count(*) AS stock_lines, sum(i.quantity_available) AS total_units,
@@ -392,7 +392,7 @@ ORDER BY units_requested DESC;</code></pre>
 FROM inventory i JOIN resources r USING (resource_id) JOIN resource_categories cat USING (category_id)
 GROUP BY cat.category_name ORDER BY total_units DESC;</code></pre>
 <p><strong>Result (live database):</strong></p>
-<table><thead><tr><th>category_name</th><th>stock_lines</th><th>total_units</th><th>avg_units</th><th>min_units</th><th>max_units</th></tr></thead><tbody><tr><td>FOOD</td><td>8</td><td>26180.000</td><td>3272.5</td><td>80.000</td><td>9000.000</td></tr><tr><td>WATER</td><td>7</td><td>19540.000</td><td>2791.4</td><td>120.000</td><td>6600.000</td></tr><tr><td>MEDICAL</td><td>8</td><td>9360.000</td><td>1170.0</td><td>40.000</td><td>4000.000</td></tr><tr><td>SHELTER</td><td>9</td><td>6040.000</td><td>671.1</td><td>120.000</td><td>1400.000</td></tr><tr><td>HYGIENE</td><td>2</td><td>1600.000</td><td>800.0</td><td>700.000</td><td>900.000</td></tr><tr><td>ENERGY</td><td>2</td><td>740.000</td><td>370.0</td><td>90.000</td><td>650.000</td></tr></tbody></table>
+<table><thead><tr><th>category_name</th><th>stock_lines</th><th>total_units</th><th>avg_units</th><th>min_units</th><th>max_units</th></tr></thead><tbody><tr><td>WATER</td><td>9</td><td>109894.000</td><td>12210.4</td><td>1200.000</td><td>35000.000</td></tr><tr><td>FOOD</td><td>15</td><td>62380.000</td><td>4158.7</td><td>150.000</td><td>15000.000</td></tr><tr><td>MEDICAL</td><td>9</td><td>20432.000</td><td>2270.2</td><td>12.000</td><td>6500.000</td></tr><tr><td>SHELTER</td><td>14</td><td>15056.000</td><td>1075.4</td><td>70.000</td><td>3828.000</td></tr><tr><td>HYGIENE</td><td>7</td><td>12000.000</td><td>1714.3</td><td>600.000</td><td>4000.000</td></tr><tr><td>ENERGY</td><td>2</td><td>2064.000</td><td>1032.0</td><td>150.000</td><td>1914.000</td></tr></tbody></table>
 <h3 id="resources-whose-total-stock-is-below-the-average-nested-subquery-247">Resources whose total stock is below the average (nested subquery)</h3>
 <p>The inner query computes the average once; the outer query compares each resource with it.</p>
 <pre class="lang-sql"><code>SELECT r.resource_name, r.unit, sum(i.quantity_available) AS total_stock
@@ -402,8 +402,9 @@ HAVING sum(i.quantity_available) &lt;
        (SELECT avg(t) FROM (SELECT sum(quantity_available) AS t FROM inventory GROUP BY resource_id) x)
 ORDER BY total_stock;</code></pre>
 <p><strong>Result (live database):</strong></p>
-<table><thead><tr><th>resource_name</th><th>unit</th><th>total_stock</th></tr></thead><tbody><tr><td>Insulin Vials</td><td>vial</td><td>40.000</td></tr><tr><td>Infant Formula</td><td>tin</td><td>80.000</td></tr><tr><td>Family Tent</td><td>unit</td><td>240.000</td></tr><tr><td>Solar Lantern</td><td>unit</td><td>740.000</td></tr><tr><td>First Aid Kit</td><td>kit</td><td>1320.000</td></tr><tr><td>Hygiene Kit</td><td>kit</td><td>1600.000</td></tr><tr><td>Tarpaulin Sheet</td><td>piece</td><td>2300.000</td></tr><tr><td>Water Purification Tablets</td><td>strip</td><td>3000.000</td></tr><tr><td>Blanket</td><td>piece</td><td>3500.000</td></tr></tbody></table>
-<h3 id="camps-that-requested-more-than-1-000-units-correlated-subquery-252">Camps that requested more than 1,000 units (correlated subquery)</h3>
+<table><thead><tr><th>resource_name</th><th>unit</th><th>total_stock</th></tr></thead><tbody><tr><td>Essential Medicines Kit</td><td>kit</td><td>12.000</td></tr><tr><td>Insulin Vials</td><td>vial</td><td>40.000</td></tr><tr><td>Infant Formula</td><td>tin</td><td>150.000</td></tr><tr><td>Family Tent</td><td>unit</td><td>488.000</td></tr><tr><td>First Aid Kit</td><td>kit</td><td>880.000</td></tr><tr><td>Sleeping Mat</td><td>piece</td><td>1860.000</td></tr><tr><td>Menstrual Hygiene Pack</td><td>pack</td><td>2000.000</td></tr><tr><td>Solar Lantern</td><td>unit</td><td>2064.000</td></tr><tr><td>Cooking Oil</td><td>litre</td><td>2570.000</td></tr><tr><td>Family Hygiene Kit</td><td>kit</td><td>3000.000</td></tr></tbody></table>
+<p>_7 more rows not shown_</p>
+<h3 id="camps-that-requested-more-than-1-000-units-correlated-subquery-253">Camps that requested more than 1,000 units (correlated subquery)</h3>
 <p>The subquery refers to the outer row (c.camp_id) and is evaluated per camp.</p>
 <pre class="lang-sql"><code>SELECT c.camp_name,
        (SELECT sum(ri.quantity_requested) FROM resource_requests rr JOIN request_items ri USING (request_id)
@@ -413,8 +414,8 @@ WHERE (SELECT COALESCE(sum(ri.quantity_requested), 0) FROM resource_requests rr 
         WHERE rr.camp_id = c.camp_id) &gt; 1000
 ORDER BY units_requested DESC;</code></pre>
 <p><strong>Result (live database):</strong></p>
-<table><thead><tr><th>camp_name</th><th>units_requested</th></tr></thead><tbody><tr><td>Aluva Government School Camp</td><td>6560.000</td></tr><tr><td>Puri Cyclone Shelter No. 4</td><td>4640.000</td></tr><tr><td>Guwahati Stadium Shelter</td><td>4500.000</td></tr><tr><td>Mysuru Cooling Centre</td><td>2700.000</td></tr></tbody></table>
-<h3 id="warehouses-that-stock-every-medical-resource-relational-division-with-not-exists-257">Warehouses that stock every MEDICAL resource (relational division with NOT EXISTS)</h3>
+<table><thead><tr><th>camp_name</th><th>units_requested</th></tr></thead><tbody><tr><td>Gopalpur Cyclone Shelter</td><td>21100.000</td></tr><tr><td>Paravur Government School Camp</td><td>15850.000</td></tr><tr><td>Silapathar Higher Secondary School Camp</td><td>9266.000</td></tr><tr><td>Nagpur Civil Lines Cooling Centre</td><td>6000.000</td></tr><tr><td>Velachery Corporation School Shelter</td><td>2880.000</td></tr><tr><td>Kochi Regional Sports Centre Shelter</td><td>2764.000</td></tr><tr><td>Nichar Community Hall Shelter</td><td>1002.000</td></tr></tbody></table>
+<h3 id="warehouses-that-stock-every-medical-resource-relational-division-with-not-exists-258">Warehouses that stock every MEDICAL resource (relational division with NOT EXISTS)</h3>
 <p>Double negation: there is no medical resource that the warehouse does not stock.</p>
 <pre class="lang-sql"><code>SELECT w.warehouse_name
 FROM warehouses w
@@ -424,8 +425,8 @@ WHERE NOT EXISTS (
     AND NOT EXISTS (SELECT 1 FROM inventory i
                     WHERE i.warehouse_id = w.warehouse_id AND i.resource_id = r.resource_id AND i.quantity_available &gt; 0));</code></pre>
 <p><strong>Result (live database):</strong></p>
-<table><thead><tr><th>warehouse_name</th></tr></thead><tbody><tr><td>Bhubaneswar State Warehouse</td></tr></tbody></table>
-<h3 id="days-until-drinking-water-runs-out-recursive-cte-262">Days until drinking water runs out (recursive CTE)</h3>
+<p>_(no rows)_</p>
+<h3 id="days-until-drinking-water-runs-out-recursive-cte-263">Days until drinking water runs out (recursive CTE)</h3>
 <p>WITH RECURSIVE: the anchor row is today's stock; each recursive step subtracts one day's consumption.</p>
 <pre class="lang-sql"><code>WITH RECURSIVE burn(day, remaining, daily) AS (
   SELECT 0,
@@ -436,9 +437,9 @@ WHERE NOT EXISTS (
 )
 SELECT day, round(remaining, 0) AS litres_left FROM burn ORDER BY day;</code></pre>
 <p><strong>Result (live database):</strong></p>
-<table><thead><tr><th>day</th><th>litres_left</th></tr></thead><tbody><tr><td>0</td><td>16540</td></tr><tr><td>1</td><td>15601</td></tr><tr><td>2</td><td>14661</td></tr><tr><td>3</td><td>13722</td></tr><tr><td>4</td><td>12782</td></tr><tr><td>5</td><td>11843</td></tr><tr><td>6</td><td>10904</td></tr><tr><td>7</td><td>9964</td></tr><tr><td>8</td><td>9025</td></tr><tr><td>9</td><td>8085</td></tr></tbody></table>
-<p>_8 more rows not shown_</p>
-<h3 id="ranking-requests-by-priority-window-functions-268">Ranking requests by priority (window functions)</h3>
+<table><thead><tr><th>day</th><th>litres_left</th></tr></thead><tbody><tr><td>0</td><td>98900</td></tr><tr><td>1</td><td>98024</td></tr><tr><td>2</td><td>97148</td></tr><tr><td>3</td><td>96272</td></tr><tr><td>4</td><td>95396</td></tr><tr><td>5</td><td>94520</td></tr><tr><td>6</td><td>93644</td></tr><tr><td>7</td><td>92768</td></tr><tr><td>8</td><td>91892</td></tr><tr><td>9</td><td>91016</td></tr></tbody></table>
+<p>_21 more rows not shown_</p>
+<h3 id="ranking-requests-by-priority-window-functions-269">Ranking requests by priority (window functions)</h3>
 <p>RANK / DENSE_RANK / ROW_NUMBER keep every row, unlike GROUP BY.</p>
 <pre class="lang-sql"><code>SELECT request_id, priority_level, priority_score,
        RANK() OVER (ORDER BY priority_score DESC) AS rank,
@@ -446,51 +447,51 @@ SELECT day, round(remaining, 0) AS litres_left FROM burn ORDER BY day;</code></p
        count(*) OVER (PARTITION BY priority_level) AS in_same_level
 FROM resource_requests ORDER BY priority_score DESC;</code></pre>
 <p><strong>Result (live database):</strong></p>
-<table><thead><tr><th>request_id</th><th>priority_level</th><th>priority_score</th><th>rank</th><th>dense_rank</th><th>in_same_level</th></tr></thead><tbody><tr><td>9</td><td>CRITICAL</td><td>98.00</td><td>1</td><td>1</td><td>5</td></tr><tr><td>4</td><td>CRITICAL</td><td>96.00</td><td>2</td><td>2</td><td>5</td></tr><tr><td>1</td><td>CRITICAL</td><td>95.00</td><td>3</td><td>3</td><td>5</td></tr><tr><td>7</td><td>CRITICAL</td><td>94.00</td><td>4</td><td>4</td><td>5</td></tr><tr><td>10</td><td>CRITICAL</td><td>92.00</td><td>5</td><td>5</td><td>5</td></tr><tr><td>5</td><td>HIGH</td><td>82.00</td><td>6</td><td>6</td><td>7</td></tr><tr><td>2</td><td>HIGH</td><td>80.00</td><td>7</td><td>7</td><td>7</td></tr><tr><td>13</td><td>HIGH</td><td>80.00</td><td>7</td><td>7</td><td>7</td></tr><tr><td>6</td><td>HIGH</td><td>78.00</td><td>9</td><td>8</td><td>7</td></tr><tr><td>3</td><td>HIGH</td><td>75.00</td><td>10</td><td>9</td><td>7</td></tr></tbody></table>
+<table><thead><tr><th>request_id</th><th>priority_level</th><th>priority_score</th><th>rank</th><th>dense_rank</th><th>in_same_level</th></tr></thead><tbody><tr><td>5</td><td>CRITICAL</td><td>98.00</td><td>1</td><td>1</td><td>4</td></tr><tr><td>7</td><td>CRITICAL</td><td>96.00</td><td>2</td><td>2</td><td>4</td></tr><tr><td>1</td><td>CRITICAL</td><td>95.00</td><td>3</td><td>3</td><td>4</td></tr><tr><td>6</td><td>CRITICAL</td><td>92.00</td><td>4</td><td>4</td><td>4</td></tr><tr><td>8</td><td>HIGH</td><td>85.00</td><td>5</td><td>5</td><td>7</td></tr><tr><td>2</td><td>HIGH</td><td>82.00</td><td>6</td><td>6</td><td>7</td></tr><tr><td>10</td><td>HIGH</td><td>80.00</td><td>7</td><td>7</td><td>7</td></tr><tr><td>12</td><td>HIGH</td><td>79.00</td><td>8</td><td>8</td><td>7</td></tr><tr><td>13</td><td>HIGH</td><td>77.00</td><td>9</td><td>9</td><td>7</td></tr><tr><td>3</td><td>HIGH</td><td>76.00</td><td>10</td><td>10</td><td>7</td></tr></tbody></table>
 <p>_4 more rows not shown_</p>
-<h3 id="shortage-detection-view-v-resource-demand-274">Shortage detection (view v_resource_demand)</h3>
+<h3 id="shortage-detection-view-v-resource-demand-275">Shortage detection (view v_resource_demand)</h3>
 <p>A view stores the demand-vs-supply query once; the dashboard and intelligence pages read it.</p>
 <pre class="lang-sql"><code>SELECT resource_name, unit, outstanding_demand, available_stock, net_position
 FROM v_resource_demand ORDER BY net_position;</code></pre>
 <p><strong>Result (live database):</strong></p>
-<table><thead><tr><th>resource_name</th><th>unit</th><th>outstanding_demand</th><th>available_stock</th><th>net_position</th></tr></thead><tbody><tr><td>Insulin Vials</td><td>vial</td><td>60.000</td><td>40.000</td><td>-20.000</td></tr><tr><td>Infant Formula</td><td>tin</td><td>0</td><td>80.000</td><td>80.000</td></tr><tr><td>Family Tent</td><td>unit</td><td>0</td><td>240.000</td><td>240.000</td></tr><tr><td>Solar Lantern</td><td>unit</td><td>0</td><td>740.000</td><td>740.000</td></tr><tr><td>First Aid Kit</td><td>kit</td><td>160.000</td><td>1320.000</td><td>1160.000</td></tr><tr><td>Water Purification Tablets</td><td>strip</td><td>1500.000</td><td>3000.000</td><td>1500.000</td></tr><tr><td>Hygiene Kit</td><td>kit</td><td>0</td><td>1600.000</td><td>1600.000</td></tr><tr><td>Tarpaulin Sheet</td><td>piece</td><td>0</td><td>2300.000</td><td>2300.000</td></tr><tr><td>Blanket</td><td>piece</td><td>150.000</td><td>3500.000</td><td>3350.000</td></tr><tr><td>Food Packet</td><td>packet</td><td>850.000</td><td>5400.000</td><td>4550.000</td></tr></tbody></table>
-<p>_3 more rows not shown_</p>
-<h3 id="stored-functions-and-procedure-280">Stored functions and procedure</h3>
+<table><thead><tr><th>resource_name</th><th>unit</th><th>outstanding_demand</th><th>available_stock</th><th>net_position</th></tr></thead><tbody><tr><td>Insulin Vials</td><td>vial</td><td>60.000</td><td>40.000</td><td>-20.000</td></tr><tr><td>Essential Medicines Kit</td><td>kit</td><td>0</td><td>12.000</td><td>12.000</td></tr><tr><td>Infant Formula</td><td>tin</td><td>0</td><td>150.000</td><td>150.000</td></tr><tr><td>Family Tent</td><td>unit</td><td>0</td><td>488.000</td><td>488.000</td></tr><tr><td>First Aid Kit</td><td>kit</td><td>10.000</td><td>880.000</td><td>870.000</td></tr><tr><td>Menstrual Hygiene Pack</td><td>pack</td><td>300.000</td><td>2000.000</td><td>1700.000</td></tr><tr><td>Sleeping Mat</td><td>piece</td><td>0</td><td>1860.000</td><td>1860.000</td></tr><tr><td>Solar Lantern</td><td>unit</td><td>0</td><td>2064.000</td><td>2064.000</td></tr><tr><td>Cooking Oil</td><td>litre</td><td>0</td><td>2570.000</td><td>2570.000</td></tr><tr><td>Family Hygiene Kit</td><td>kit</td><td>224.000</td><td>3000.000</td><td>2776.000</td></tr></tbody></table>
+<p>_11 more rows not shown_</p>
+<h3 id="stored-functions-and-procedure-281">Stored functions and procedure</h3>
 <p>request_fulfillment_pct() and operational_summary() are SQL functions; refresh_request_status() is a procedure called by the API.</p>
 <pre class="lang-sql"><code>SELECT rr.request_id, rr.status, request_fulfillment_pct(rr.request_id) AS fulfilled_pct
 FROM resource_requests rr ORDER BY rr.request_id DESC LIMIT 6;</code></pre>
 <p><strong>Result (live database):</strong></p>
-<table><thead><tr><th>request_id</th><th>status</th><th>fulfilled_pct</th></tr></thead><tbody><tr><td>14</td><td>REJECTED</td><td>0.0</td></tr><tr><td>13</td><td>PENDING</td><td>0.0</td></tr><tr><td>12</td><td>PENDING</td><td>0.0</td></tr><tr><td>11</td><td>ALLOCATED</td><td>100.0</td></tr><tr><td>10</td><td>DELIVERED</td><td>100.0</td></tr><tr><td>9</td><td>PENDING</td><td>0.0</td></tr></tbody></table>
-<h3 id="operational-summary-set-returning-function-285">operational_summary() (set-returning function)</h3>
+<table><thead><tr><th>request_id</th><th>status</th><th>fulfilled_pct</th></tr></thead><tbody><tr><td>14</td><td>REJECTED</td><td>0.0</td></tr><tr><td>13</td><td>ALLOCATED</td><td>100.0</td></tr><tr><td>12</td><td>APPROVED</td><td>0.0</td></tr><tr><td>11</td><td>PENDING</td><td>0.0</td></tr><tr><td>10</td><td>DELIVERED</td><td>100.0</td></tr><tr><td>9</td><td>APPROVED</td><td>0.0</td></tr></tbody></table>
+<h3 id="operational-summary-set-returning-function-286">operational_summary() (set-returning function)</h3>
 <p>A function that returns a table of KPIs.</p>
 <pre class="lang-sql"><code>SELECT * FROM operational_summary();</code></pre>
 <p><strong>Result (live database):</strong></p>
-<table><thead><tr><th>metric</th><th>value</th></tr></thead><tbody><tr><td>active_disasters</td><td>10</td></tr><tr><td>affected_population</td><td>81300</td></tr><tr><td>open_camps</td><td>9</td></tr><tr><td>open_requests</td><td>7</td></tr><tr><td>low_stock_lines</td><td>6</td></tr><tr><td>active_deliveries</td><td>2</td></tr></tbody></table>
-<h3 id="full-text-search-on-disasters-tsvector-gin-index-290">Full-text search on disasters (tsvector + GIN index)</h3>
+<table><thead><tr><th>metric</th><th>value</th></tr></thead><tbody><tr><td>active_disasters</td><td>5</td></tr><tr><td>affected_population</td><td>156650</td></tr><tr><td>open_camps</td><td>8</td></tr><tr><td>open_requests</td><td>5</td></tr><tr><td>low_stock_lines</td><td>3</td></tr><tr><td>active_deliveries</td><td>2</td></tr></tbody></table>
+<h3 id="full-text-search-on-disasters-tsvector-gin-index-291">Full-text search on disasters (tsvector + GIN index)</h3>
 <p>websearch_to_tsquery supports OR and -exclusion; ts_rank orders by relevance.</p>
 <pre class="lang-sql"><code>SELECT disaster_name, round(ts_rank(search_vector, q)::numeric, 3) AS rank
 FROM disasters, websearch_to_tsquery('english', 'flood OR cyclone') q
 WHERE search_vector @@ q ORDER BY rank DESC;</code></pre>
 <p><strong>Result (live database):</strong></p>
-<table><thead><tr><th>disaster_name</th><th>rank</th></tr></thead><tbody><tr><td>Bengaluru Urban Flooding</td><td>0.341</td></tr><tr><td>Kerala Monsoon Floods</td><td>0.341</td></tr><tr><td>Cyclone Varsha Landfall</td><td>0.341</td></tr><tr><td>Test Cyclone Relief</td><td>0.334</td></tr><tr><td>Assam Brahmaputra Flooding</td><td>0.334</td></tr></tbody></table>
-<h3 id="trigger-written-stock-history-295">Trigger-written stock history</h3>
+<table><thead><tr><th>disaster_name</th><th>rank</th></tr></thead><tbody><tr><td>Cyclone Tara</td><td>0.345</td></tr><tr><td>Dhemaji Flash Floods</td><td>0.341</td></tr><tr><td>Chennai Urban Flooding</td><td>0.341</td></tr><tr><td>Periyar River Floods</td><td>0.334</td></tr></tbody></table>
+<h3 id="trigger-written-stock-history-296">Trigger-written stock history</h3>
 <p>inventory_history (AFTER UPDATE) writes every stock change with its reason; no API code inserts these rows.</p>
 <pre class="lang-sql"><code>SELECT m.movement_id, w.warehouse_name, r.resource_name, m.delta, m.reason
 FROM inventory_movements m JOIN warehouses w USING (warehouse_id) JOIN resources r USING (resource_id)
 WHERE m.reason LIKE 'Allocation #%' ORDER BY m.movement_id DESC LIMIT 6;</code></pre>
 <p><strong>Result (live database):</strong></p>
-<table><thead><tr><th>movement_id</th><th>warehouse_name</th><th>resource_name</th><th>delta</th><th>reason</th></tr></thead><tbody><tr><td>43</td><td>Guwahati Central Store</td><td>Family Tent</td><td>-60.000</td><td>Allocation #11</td></tr><tr><td>42</td><td>Thrissur Regional Depot</td><td>Blanket</td><td>-400.000</td><td>Allocation #10</td></tr><tr><td>41</td><td>Bhubaneswar State Warehouse</td><td>Solar Lantern</td><td>-600.000</td><td>Allocation #9</td></tr><tr><td>40</td><td>Bhubaneswar State Warehouse</td><td>Tarpaulin Sheet</td><td>-900.000</td><td>Allocation #9</td></tr><tr><td>39</td><td>Bhubaneswar State Warehouse</td><td>Rice</td><td>-3000.000</td><td>Allocation #9</td></tr><tr><td>38</td><td>Bhubaneswar State Warehouse</td><td>Solar Lantern</td><td>-150.000</td><td>Allocation #8</td></tr></tbody></table>
-<h3 id="row-level-audit-trail-trigger-log-row-change-300">Row-level audit trail (trigger log_row_change)</h3>
+<table><thead><tr><th>movement_id</th><th>warehouse_name</th><th>resource_name</th><th>delta</th><th>reason</th></tr></thead><tbody><tr><td>78</td><td>Ambattur Relief Warehouse</td><td>Blanket</td><td>-320.000</td><td>Allocation #10</td></tr><tr><td>77</td><td>Ambattur Relief Warehouse</td><td>Sleeping Mat</td><td>-320.000</td><td>Allocation #10</td></tr><tr><td>76</td><td>Ambattur Relief Warehouse</td><td>Ready-to-Eat Meal</td><td>-1920.000</td><td>Allocation #10</td></tr><tr><td>75</td><td>Rampur Bushahr Mountain Depot</td><td>Family Tent</td><td>-12.000</td><td>Allocation #9</td></tr><tr><td>74</td><td>Rampur Bushahr Mountain Depot</td><td>Blanket</td><td>-280.000</td><td>Allocation #9</td></tr><tr><td>73</td><td>Khordha Regional Relief Depot</td><td>Water Jerrycan 20 L</td><td>-206.000</td><td>Allocation #8</td></tr></tbody></table>
+<h3 id="row-level-audit-trail-trigger-log-row-change-301">Row-level audit trail (trigger log_row_change)</h3>
 <p>Field-level diffs captured automatically with the acting user.</p>
 <pre class="lang-sql"><code>SELECT l.change_id, l.table_name, l.operation, l.changed_fields, u.full_name AS changed_by
 FROM data_change_log l LEFT JOIN app_users u ON u.user_id = l.changed_by
 WHERE l.operation = 'UPDATE' ORDER BY l.change_id DESC LIMIT 5;</code></pre>
 <p><strong>Result (live database):</strong></p>
-<table><thead><tr><th>change_id</th><th>table_name</th><th>operation</th><th>changed_fields</th><th>changed_by</th></tr></thead><tbody><tr><td>110</td><td>resource_requests</td><td>UPDATE</td><td>{"status":{"to":"REJECTED","from":"PENDING"}}</td><td>Demo Admin</td></tr><tr><td>106</td><td>resource_requests</td><td>UPDATE</td><td>{"status":{"to":"ALLOCATED","from":"APPROVED"}}</td><td>Demo Admin</td></tr><tr><td>105</td><td>volunteers</td><td>UPDATE</td><td>{"availability_status":{"to":"AVAILABLE","from":"ASSIGNED"}}</td><td>Demo Admin</td></tr><tr><td>104</td><td>vehicles</td><td>UPDATE</td><td>{"status":{"to":"AVAILABLE","from":"IN_USE"},"current_location_id":{"to":20,"fro</td><td>Demo Admin</td></tr><tr><td>103</td><td>deliveries</td><td>UPDATE</td><td>{"status":{"to":"DELIVERED","from":"IN_TRANSIT"},"actual_arrival":{"to":"2026-11</td><td>Demo Admin</td></tr></tbody></table>
-<h2 id="12-advanced-database-features-305">12. Advanced database features</h2>
+<table><thead><tr><th>change_id</th><th>table_name</th><th>operation</th><th>changed_fields</th><th>changed_by</th></tr></thead><tbody><tr><td>140</td><td>disasters</td><td>UPDATE</td><td>{"status":{"to":"CONTAINED","from":"ACTIVE"}}</td><td>Demo Admin</td></tr><tr><td>139</td><td>resource_requests</td><td>UPDATE</td><td>{"status":{"to":"REJECTED","from":"PENDING"}}</td><td>Demo Admin</td></tr><tr><td>137</td><td>resource_requests</td><td>UPDATE</td><td>{"status":{"to":"ALLOCATED","from":"APPROVED"}}</td><td>Demo Admin</td></tr><tr><td>136</td><td>resource_requests</td><td>UPDATE</td><td>{"status":{"to":"APPROVED","from":"PENDING"}}</td><td>Demo Admin</td></tr><tr><td>134</td><td>resource_requests</td><td>UPDATE</td><td>{"status":{"to":"APPROVED","from":"PENDING"}}</td><td>Demo Admin</td></tr></tbody></table>
+<h2 id="12-advanced-database-features-306">12. Advanced database features</h2>
 <p>At least four SQL concepts and one NoSQL/vector concept are required; ReliefFlow implements all of the following.</p>
 <table><thead><tr><th>#</th><th>Feature</th><th>Where / how</th></tr></thead><tbody><tr><td>1</td><td><strong>Transactions</strong></td><td>Every multi-step operation runs in one transaction (<code>transaction()</code> in <code>src/lib/api.ts</code>). Locks are taken in a fixed order (request → lines → stock), SAVEPOINT is used in the demos, and the lab demonstrates ACID and isolation anomalies with two real sessions.</td></tr><tr><td>2</td><td><strong>Views</strong></td><td>5 views: <code>v_low_stock</code>, <code>v_request_fulfillment</code>, <code>v_warehouse_inventory_summary</code>, <code>v_resource_demand</code>, <code>v_disaster_response_summary</code>.</td></tr><tr><td>3</td><td><strong>Stored procedures / functions</strong></td><td>Procedure <code>refresh_request_status()</code> (<code>CALL</code>) is the single source of truth for request status. Functions: <code>resource_availability()</code>, <code>request_fulfillment_pct()</code>, <code>remaining_request_quantity()</code>, <code>operational_summary()</code> (set-returning) and <code>lock_request_parents()</code> (SECURITY DEFINER).</td></tr><tr><td>4</td><td><strong>Triggers</strong></td><td>16 attachments of 8 trigger functions: allocation validation, automatic stock deduction, stock-movement history, allocation and delivery state machines, vehicle-maintenance guard, duplicate-event guard, field-level audit log.</td></tr><tr><td>5</td><td><strong>Indexing</strong></td><td>65 indexes: FK indexes, composite, partial unique (one active delivery per vehicle, driver and allocation), GIN full-text, trigram, HNSW vector. Measured with EXPLAIN ANALYZE in the lab.</td></tr><tr><td>6</td><td><strong>Full-text search</strong></td><td>Generated <code>tsvector</code> columns with GIN indexes, <code>websearch_to_tsquery</code> and <code>ts_rank</code>; MongoDB text index with textScore.</td></tr><tr><td>7</td><td><strong>Row-level security and DB roles</strong></td><td><code>rf_admin</code>, <code>rf_coordinator</code>, <code>rf_field_officer</code> and <code>rf_driver</code>, with table- and column-level GRANTs and 4 RLS policies; the API runs every transaction as the user's role.</td></tr><tr><td>8</td><td><strong>NoSQL aggregation</strong></td><td><code>$facet</code>, <code>$group</code>, <code>$unwind</code> and <code>$lookup</code> pipelines for incident analytics.</td></tr><tr><td>9</td><td><strong>Vector similarity search</strong></td><td>MiniLM embeddings in pgvector, cosine similarity, HNSW index.</td></tr><tr><td>10</td><td><strong>Concurrency control</strong></td><td>Row locks (<code>FOR UPDATE</code> / <code>FOR SHARE</code>), optimistic locking with <code>xmin</code>, deadlock prevention through lock ordering; 9 lab scenarios.</td></tr></tbody></table>
-<h2 id="13-nosql-implementation-mongodb-commands-308">13. NoSQL implementation (MongoDB commands)</h2>
+<h2 id="13-nosql-implementation-mongodb-commands-309">13. NoSQL implementation (MongoDB commands)</h2>
 <p><code>db/mongodb/incident_commands.mongosh.js</code> contains the same operations the application performs. It runs on a scratch database:</p>
 <pre class="lang-js"><code>db.createCollection("incident_reports", { validator: { $jsonSchema: { bsonType: "object",
   required: ["disasterId","reportedBy","reportType","description","location","severity","createdAt","updatedAt"],
@@ -538,9 +539,9 @@ incident_text
 | | | | {
   acknowledged: true,
   insertedIds: {
-    '0': ObjectId('6afefe5bb40d08a8e8cc57bf'),
-    '1': ObjectId('6afefe5bb40d08a8e8cc57c0'),
-    '2': ObjectId('6afefe5bb40d08a8e8cc57c1')
+    '0': ObjectId('6aff4c12d324147614b62228'),
+    '1': ObjectId('6aff4c12d324147614b62229'),
+    '2': ObjectId('6aff4c12d324147614b6222a')
   }
 }
 count: 3
@@ -646,12 +647,12 @@ count: 3
     ],
     byStatus: [
       {
-        _id: 'OPEN',
-        n: 1
-      },
-      {
         _id: 'MONITORING',
         n: 2
+      },
+      {
+        _id: 'OPEN',
+        n: 1
       }
     ],
     total: [
@@ -665,12 +666,12 @@ count: 3
 { acknowledged: true, insertedIds: { '0': 11, '1': 12 } }
 [
   {
-    incidents: 2,
-    disaster: 'Kerala Monsoon Floods'
-  },
-  {
     incidents: 1,
     disaster: 'Assam Brahmaputra Flooding'
+  },
+  {
+    incidents: 2,
+    disaster: 'Kerala Monsoon Floods'
   }
 ]
 
@@ -695,7 +696,7 @@ count after delete: 2
 
 { ok: 1, dropped: 'reliefflow_commands_demo' }
 scratch database dropped — done</code></pre>
-<h2 id="14-vector-database-implementation-pgvector-commands-313">14. Vector database implementation (pgvector commands)</h2>
+<h2 id="14-vector-database-implementation-pgvector-commands-314">14. Vector database implementation (pgvector commands)</h2>
 <p><code>db/vector/pgvector_commands.sql</code>:</p>
 <pre class="lang-sql"><code>CREATE EXTENSION IF NOT EXISTS vector;
 CREATE TABLE vector_demo.docs (id SERIAL PRIMARY KEY, title TEXT, embedding vector(3));
@@ -744,15 +745,12 @@ Check constraints:
     "document_vectors_dims_check" CHECK (dims &gt; 0)
     "document_vectors_source_check" CHECK (source = ANY (ARRAY['incident'::text, 'disaster'::text, 'request'::text]))
 
-   provider   |  source  | vectors | dims 
---------------+----------+---------+------
- lexical-hash | disaster |      10 |  256
- lexical-hash | incident |      20 |  256
- lexical-hash | request  |      14 |  256
- minilm       | disaster |      10 |  384
- minilm       | incident |      20 |  384
- minilm       | request  |      14 |  384
-(6 rows)
+ provider |  source  | vectors | dims 
+----------+----------+---------+------
+ minilm   | disaster |       6 |  384
+ minilm   | incident |      20 |  384
+ minilm   | request  |      14 |  384
+(3 rows)
 
        indexname       |                                                                            indexdef                                                                            
 -----------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -761,34 +759,34 @@ Check constraints:
  dv_hnsw_minilm        | CREATE INDEX dv_hnsw_minilm ON public.document_vectors USING hnsw (((embedding)::vector(384)) vector_cosine_ops) WHERE (provider = 'minilm'::text)
 (3 rows)
 
-  source  |                title                | cosine_similarity 
-----------+-------------------------------------+-------------------
- incident | DAMAGE incident — Aluva Riverside   |            1.0000
- incident | SAFETY incident — Puri Coastal Belt |            0.4507
- disaster | Kerala Monsoon Floods               |            0.4339
- disaster | Joshimath Land Subsidence           |            0.4148
- incident | DAMAGE incident — Puri Coastal Belt |            0.4118
+  source  |                         title                          | cosine_similarity 
+----------+--------------------------------------------------------+-------------------
+ incident | DAMAGE incident — Paravur Town                         |            1.0000
+ disaster | Periyar River Floods                                   |            0.4550
+ incident | SAFETY incident — Kochi Regional Sports Centre Shelter |            0.4365
+ disaster | Chennai Urban Flooding                                 |            0.4315
+ incident | DAMAGE incident — Velachery Ward                       |            0.4260
 (5 rows)</code></pre>
 <p>Semantic search results from the application (no API key; local model):</p>
-<p><strong>Query:</strong> "kids getting ill from dirty water" · provider all-MiniLM-L6-v2 (local, sentence-transformers) · 384 dimensions · search 16.2 ms</p>
-<table><thead><tr><th>cosine_similarity</th><th>source</th><th>document</th><th>text</th></tr></thead><tbody><tr><td>0.6295</td><td>incident</td><td>MEDICAL incident — Aluva Government School Camp</td><td>Cluster of acute diarrhoea among children at the school camp; suspecte</td></tr><tr><td>0.5031</td><td>incident</td><td>MEDICAL incident — Guwahati Stadium Shelter</td><td>Skin infections and fever reported among people wading through floodwa</td></tr><tr><td>0.4044</td><td>request</td><td>Request #4 — Aluva Government School Camp</td><td>Resource request from Aluva Government School Camp (CRITICAL) for Drin</td></tr></tbody></table>
-<p><strong>Query:</strong> "people sleeping in the cold without shelter" · provider all-MiniLM-L6-v2 (local, sentence-transformers) · 384 dimensions · search 13.9 ms</p>
-<table><thead><tr><th>cosine_similarity</th><th>source</th><th>document</th><th>text</th></tr></thead><tbody><tr><td>0.5821</td><td>incident</td><td>SAFETY incident — Joshimath Gurudwara Shelter</td><td>Night temperatures dropped near freezing; elderly residents at risk of</td></tr><tr><td>0.3946</td><td>request</td><td>Request #11 — Joshimath Gurudwara Shelter</td><td>Resource request from Joshimath Gurudwara Shelter (HIGH) for Family Te</td></tr><tr><td>0.3301</td><td>incident</td><td>MEDICAL incident — Mysuru Cooling Centre</td><td>Heat exhaustion cases among construction workers; cooling centre treat</td></tr></tbody></table>
-<p><strong>Query:</strong> "roads blocked so trucks cannot reach" · provider all-MiniLM-L6-v2 (local, sentence-transformers) · 384 dimensions · search 7.4 ms</p>
-<table><thead><tr><th>cosine_similarity</th><th>source</th><th>document</th><th>text</th></tr></thead><tbody><tr><td>0.4898</td><td>incident</td><td>SAFETY incident — Puri Coastal Belt</td><td>Uprooted trees blocking the highway to Puri; relief convoy delayed by</td></tr><tr><td>0.3789</td><td>incident</td><td>DAMAGE incident — Aluva Riverside</td><td>Embankment breach near Aluva bridge flooded three wards overnight; gro</td></tr><tr><td>0.2665</td><td>disaster</td><td>Joshimath Land Subsidence</td><td>Joshimath Land Subsidence. LANDSLIDE disaster, severity HIGH. Cracks i</td></tr></tbody></table>
+<p><strong>Query:</strong> "kids getting ill from dirty water" · provider all-MiniLM-L6-v2 (local, sentence-transformers) · 384 dimensions · search 42.6 ms</p>
+<table><thead><tr><th>cosine_similarity</th><th>source</th><th>document</th><th>text</th></tr></thead><tbody><tr><td>0.6439</td><td>incident</td><td>MEDICAL incident — Paravur Government School Camp</td><td>Cluster of acute diarrhoea among children at the school camp; drinking</td></tr><tr><td>0.5053</td><td>incident</td><td>MEDICAL incident — Silapathar Higher Secondary School Camp</td><td>Skin infections and fever reported among people who waded through floo</td></tr><tr><td>0.4306</td><td>incident</td><td>SUPPLY incident — Silapathar Higher Secondary School Camp</td><td>The piped water supply at the camp is contaminated; purification table</td></tr></tbody></table>
+<p><strong>Query:</strong> "people sleeping in the cold without shelter" · provider all-MiniLM-L6-v2 (local, sentence-transformers) · 384 dimensions · search 3.4 ms</p>
+<table><thead><tr><th>cosine_similarity</th><th>source</th><th>document</th><th>text</th></tr></thead><tbody><tr><td>0.5579</td><td>incident</td><td>SAFETY incident — Nichar Community Hall Shelter</td><td>Night temperatures fell close to freezing; elderly residents in the ha</td></tr><tr><td>0.4918</td><td>request</td><td>Request #10 — Nichar Community Hall Shelter</td><td>Resource request from Nichar Community Hall Shelter (HIGH) for Blanket</td></tr><tr><td>0.4461</td><td>request</td><td>Request #2 — Kochi Regional Sports Centre Shelter</td><td>Resource request from Kochi Regional Sports Centre Shelter (HIGH) for</td></tr></tbody></table>
+<p><strong>Query:</strong> "roads blocked so trucks cannot reach" · provider all-MiniLM-L6-v2 (local, sentence-transformers) · 384 dimensions · search 1.5 ms</p>
+<table><thead><tr><th>cosine_similarity</th><th>source</th><th>document</th><th>text</th></tr></thead><tbody><tr><td>0.5449</td><td>incident</td><td>SAFETY incident — Ganjam District</td><td>Uprooted trees are blocking the highway to Gopalpur; the relief convoy</td></tr><tr><td>0.3425</td><td>incident</td><td>DAMAGE incident — Paravur Town</td><td>Floodwater breached the bund near Paravur market overnight; three ward</td></tr><tr><td>0.2714</td><td>incident</td><td>DAMAGE incident — Silapathar Riverbank</td><td>Villages along the Jiadhal are cut off; boats are needed to reach fami</td></tr></tbody></table>
 <p>These results are retrieved <strong>by meaning</strong>: "kids getting ill from dirty water" ranks the diarrhoea report first although the two texts share no words.</p>
-<h2 id="15-database-application-integration-326">15. Database–application integration</h2>
+<h2 id="15-database-application-integration-327">15. Database–application integration</h2>
 <ol><li>A React page calls <code>fetch('/api/requests', { method: 'POST', body: JSON })</code>.</li><li><code>endpoint()</code> assigns a request id, logs the call and maps errors to safe status codes (400, 401, 403, 404, 409, 429, 503).</li><li><code>actor()</code> reads the httpOnly session cookie, hashes it (SHA-256), looks it up in <code>sessions ⋈ app_users ⋈ roles</code>, checks the required role and checks that write requests come from the same origin.</li><li>A strict Zod schema validates the body (types, ranges, unknown fields rejected).</li><li><code>transaction()</code> runs <code>BEGIN; SET LOCAL lock_timeout; SET LOCAL ROLE rf_&lt;role&gt;; set_config('reliefflow.user_id', …)</code>, then the parameterised SQL. Triggers and constraints run inside it, and it ends with COMMIT, or ROLLBACK on any error.</li><li>The JSON response is returned; writes also invalidate the Redis dashboard cache.</li></ol>
 <p>All credentials come from environment variables; <code>.env</code> and <code>.env.local</code> are git-ignored.</p>
-<h2 id="16-authentication-and-authorisation-329">16. Authentication and authorisation</h2>
+<h2 id="16-authentication-and-authorisation-330">16. Authentication and authorisation</h2>
 <table><thead><tr><th>Layer</th><th>Mechanism</th></tr></thead><tbody><tr><td>Authentication (backend)</td><td>bcrypt password hashes (cost 12). A random 256-bit session token is sent in an <strong>httpOnly, SameSite=Strict</strong> cookie, and only its SHA-256 hash is stored. Sessions expire after 8 h. Logins are throttled to 10 attempts per 15 minutes, with a constant-time dummy comparison. Sessions are revoked on logout, role change, deactivation and password reset.</td></tr><tr><td>Roles (4)</td><td>ADMIN, RELIEF_COORDINATOR, FIELD_OFFICER, DRIVER, stored in table <code>roles</code>.</td></tr><tr><td>API authorisation</td><td>Each route declares its allowed roles; drivers can act only on their own deliveries.</td></tr><tr><td><strong>Database authorisation</strong></td><td>PostgreSQL roles <code>rf_admin</code>, <code>rf_coordinator</code>, <code>rf_field_officer</code> and <code>rf_driver</code>. <strong>Table and column GRANTs</strong> mean, for example, that only rf_admin can read <code>password_hash</code> and field officers may update only <code>current_population</code> and <code>status</code> of camps. <strong>Row-level security</strong> on <code>deliveries</code> lets a driver see and update only their own rows. History tables are writable only through SECURITY DEFINER triggers.</td></tr><tr><td>CSRF</td><td>SameSite cookies, Origin / Sec-Fetch-Site checks, JSON content type required.</td></tr></tbody></table>
 <p>Evidence (queries executed against the live database):</p>
-<table><thead><tr><th>Executed as</th><th>Query</th><th>Result</th></tr></thead><tbody><tr><td>postgres (owner)</td><td><code>SELECT count(*) FROM deliveries</code></td><td>6 rows</td></tr><tr><td>rf_driver (user 11)</td><td><code>SELECT count(*) FROM deliveries</code></td><td>2 rows (own deliveries only)</td></tr><tr><td>rf_driver</td><td><code>SELECT password_hash FROM app_users</code></td><td>ERROR: permission denied for table app_users</td></tr></tbody></table>
-<h2 id="17-data-validation-and-integrity-333">17. Data validation and integrity</h2>
+<table><thead><tr><th>Executed as</th><th>Query</th><th>Result</th></tr></thead><tbody><tr><td>postgres (owner)</td><td><code>SELECT count(*) FROM deliveries</code></td><td>7 rows</td></tr><tr><td>rf_driver (user 22)</td><td><code>SELECT count(*) FROM deliveries</code></td><td>2 rows (own deliveries only)</td></tr><tr><td>rf_driver</td><td><code>SELECT password_hash FROM app_users</code></td><td>ERROR: permission denied for table app_users</td></tr></tbody></table>
+<h2 id="17-data-validation-and-integrity-334">17. Data validation and integrity</h2>
 <p>Validation is implemented <strong>at the database level</strong> and also at the API boundary:</p>
 <ul><li><strong>Database:</strong> NOT NULL, UNIQUE, CHECK (ranges, enumerations, formats, cross-column rules), and FOREIGN KEYs with chosen referential actions.</li><li><strong>Triggers:</strong> stock and demand validation, state machines, duplicate detection, immutable allocation history.</li><li><strong>Partial unique indexes:</strong> no double booking.</li><li><strong>Optimistic concurrency:</strong> <code>xmin</code> row versions and <code>expected_quantity</code> checks.</li><li><strong>API:</strong> strict Zod schemas give clear messages before the database is touched.</li></ul>
 <p>The integration tests prove that direct SQL which bypasses the API is still rejected (negative stock, occupancy over capacity, invalid delivery transitions, editing allocation history).</p>
-<h2 id="18-next-js-project-tree-337">18. Next.js project tree</h2>
+<h2 id="18-next-js-project-tree-338">18. Next.js project tree</h2>
 <pre class="lang-text"><code>DBSM-project/
 ├── .vscode/
 │   ├── extensions.json
@@ -1016,7 +1014,7 @@ Check constraints:
 ├── package.json
 ├── README.md
 └── tsconfig.json</code></pre>
-<h2 id="19-application-screenshots-339">19. Application screenshots</h2>
+<h2 id="19-application-screenshots-340">19. Application screenshots</h2>
 <figure><img src="assets/shots/01-command-center.png" alt="Command Center"/><figcaption>Command Center</figcaption></figure>
 <p><em>Command Center: live KPIs, demand vs availability, severity, trends and shortages.</em></p>
 <figure><img src="assets/shots/02-request-pipeline.png" alt="Request pipeline"/><figcaption>Request pipeline</figcaption></figure>
@@ -1037,34 +1035,34 @@ Check constraints:
 <p><em>Two real sessions: row lock, wait, and CHECK-protected stock.</em></p>
 <figure><img src="assets/shots/10-optimisation.png" alt="Query optimisation"/><figcaption>Query optimisation</figcaption></figure>
 <p><em>EXPLAIN ANALYZE plan trees with measured timings.</em></p>
-<h3 id="code-screenshots-360">Code screenshots</h3>
+<h3 id="code-screenshots-361">Code screenshots</h3>
 <figure><img src="assets/shots/code-01-transaction.png" alt="Transaction with database role"/><figcaption>Transaction with database role</figcaption></figure>
 <figure><img src="assets/shots/code-02-rls.png" alt="Row-level security policy"/><figcaption>Row-level security policy</figcaption></figure>
 <figure><img src="assets/shots/code-03-trigger.png" alt="Allocation validation trigger"/><figcaption>Allocation validation trigger</figcaption></figure>
 <figure><img src="assets/shots/code-04-procedure.png" alt="Stored procedure"/><figcaption>Stored procedure</figcaption></figure>
 <figure><img src="assets/shots/code-05-mongo.png" alt="MongoDB incidents API"/><figcaption>MongoDB incidents API</figcaption></figure>
 <figure><img src="assets/shots/code-06-embeddings.png" alt="Semantic embeddings"/><figcaption>Semantic embeddings</figcaption></figure>
-<h2 id="20-testing-results-367">20. Testing results</h2>
+<h2 id="20-testing-results-368">20. Testing results</h2>
 <table><thead><tr><th>Suite</th><th>Command</th><th>Result</th></tr></thead><tbody><tr><td>Unit</td><td><code>npm test</code></td><td><strong>27 / 27</strong> passed (validation, state machines, normalisation engine, SQL guard, origin check, embeddings)</td></tr><tr><td>Integration (end-to-end)</td><td><code>npm run test:integration</code></td><td><strong>30 / 30</strong> checks passed on fresh PostgreSQL and MongoDB databases, including a Playwright browser run over every screen</td></tr><tr><td>Live services</td><td><code>npm run test:services</code></td><td><strong>4 / 4</strong> passed (Redis, Neo4j sync, Neo4j failure and retry, pgvector)</td></tr><tr><td>Static checks</td><td><code>npm run lint</code>, <code>npx tsc --noEmit</code>, <code>npm run build</code></td><td>clean, clean, successful</td></tr></tbody></table>
 <p>Selected test cases:</p>
 <ul><li>allocation exceeding stock or demand is rejected (409), and a multi-line allocation with one bad line rolls back completely;</li><li>two concurrent allocations of the same stock: exactly one succeeds;</li><li>12 concurrent camp admissions are all counted (no lost update);</li><li>concurrent double booking of one vehicle: exactly one succeeds;</li><li>cancelling an allocation twice, or after dispatch, is rejected, and stock is restored exactly once;</li><li>invalid delivery transitions are rejected by the database trigger;</li><li>a deactivated user's session is rejected, and role changes revoke sessions;</li><li>malformed JSON, wrong content type, unknown fields and invalid ids return 400;</li><li>cross-site requests return 403;</li><li><strong>RLS</strong>: as <code>rf_driver</code>, only own deliveries are visible and updates to others' rows affect 0 rows; reading <code>password_hash</code> is denied;</li><li>MongoDB create, read, update and delete (delete limited to managers);</li><li>invalid documents are rejected by the validator;</li><li>lab statements are always rolled back, and the playground rejects multi-statement input and dangerous functions.</li></ul>
-<h2 id="21-evaluation-rubric-completion-status-371">21. Evaluation rubric — completion status</h2>
+<h2 id="21-evaluation-rubric-completion-status-372">21. Evaluation rubric — completion status</h2>
 <table><thead><tr><th>Criterion</th><th>Marks</th><th>Status</th><th>Evidence</th></tr></thead><tbody><tr><td>ER diagram</td><td>2</td><td>✅ Complete</td><td>§7.1, <code>docs/viva/ReliefFlow-ER-Diagram.drawio</code></td></tr><tr><td>Relational schema with keys, relationships and constraints</td><td>3</td><td>✅ Complete</td><td>§7.2–7.4, data dictionary §8</td></tr><tr><td>SQL implementation: DDL with constraints</td><td>4</td><td>✅ Complete</td><td>§9, <code>db/postgres/001,005–008</code></td></tr><tr><td>NoSQL / vector database creation</td><td>4</td><td>✅ Complete</td><td>§7.5–7.6, §13–14</td></tr><tr><td>Technology justification</td><td>1</td><td>✅ Complete</td><td>§5</td></tr><tr><td>DML operations</td><td>4</td><td>✅ Complete</td><td>§10</td></tr><tr><td>Nested / correlated / recursive queries and joins</td><td>4</td><td>✅ Complete</td><td>§11</td></tr><tr><td>Advanced SQL (procedure / function, trigger, CTE)</td><td>6</td><td>✅ Complete</td><td>§11–12</td></tr><tr><td>NoSQL / vector feature, CRUD</td><td>7</td><td>✅ Complete</td><td>§13–14, Incidents page (create, read, update, delete), semantic search</td></tr><tr><td>Next.js interface</td><td>3</td><td>✅ Complete</td><td>§19</td></tr><tr><td>Backend / API and database integration</td><td>2</td><td>✅ Complete</td><td>§15</td></tr><tr><td>Authentication (front end) + ≥ 2 roles + RBAC in database</td><td>4</td><td>✅ Complete</td><td>§16 (4 roles, PostgreSQL GRANTs and RLS)</td></tr><tr><td>Documentation, Git / GitHub</td><td>2</td><td>✅ Complete</td><td>this report, README, GitHub repository</td></tr><tr><td>Originality, individual contribution, modification / viva</td><td>4</td><td>Presented live</td><td>§22 and the team explanation document</td></tr></tbody></table>
-<h2 id="22-team-contribution-373">22. Team contribution</h2>
+<h2 id="22-team-contribution-374">22. Team contribution</h2>
 <table><thead><tr><th>Area</th><th>SUJAL Y</th><th>SUJAN H</th></tr></thead><tbody><tr><td>Database</td><td>PostgreSQL design: ER model, relational schema, DDL, constraints, indexes, views, triggers, functions and procedure, transactions and concurrency, DB-level RBAC with RLS, data dictionary</td><td>MongoDB data model, validation, indexes, aggregation; pgvector embeddings and semantic search; Redis cache; Neo4j graph projection</td></tr><tr><td>Application</td><td>Core API: authentication and sessions, requests, allocations, deliveries, camps, inventory, user administration; SQL, optimisation, normalisation, transactions and security lab pages</td><td>Next.js interface: design system, dashboard, map, management screens, incidents, intelligence, analytics; NoSQL, key-value, graph and vector lab pages</td></tr><tr><td>Quality</td><td>Database and integration tests</td><td>Browser (Playwright) tests, documentation, diagrams</td></tr></tbody></table>
 <p>Both members contribute to database and application work, as required. Details are in <em>ReliefFlow-Team-Explanation.pdf</em>.</p>
-<h2 id="23-git-and-github-376">23. Git and GitHub</h2>
+<h2 id="23-git-and-github-377">23. Git and GitHub</h2>
 <p>The source is maintained at <strong>github.com/Aqual456/DBSM-project</strong>, with a README covering setup and execution. Secrets (<code>.env</code>, <code>.env.local</code>), database backups and build output are excluded by <code>.gitignore</code>.</p>
-<h2 id="24-conclusion-378">24. Conclusion</h2>
+<h2 id="24-conclusion-379">24. Conclusion</h2>
 <p>ReliefFlow shows that the choice of database follows the data:</p>
 <ul><li><strong>relational</strong> for consistent, related, concurrently updated operations;</li><li><strong>document</strong> for evolving field reports;</li><li><strong>vector</strong> for meaning-based retrieval.</li></ul>
 <p>It enforces correctness and security <em>inside</em> the databases (constraints, triggers, procedures, row locks, roles and row-level security), so the application cannot violate them even by mistake.</p>
 <p>Future work:</p>
 <ul><li>real-time vehicle tracking;</li><li>SMS alerts to camps;</li><li>read replicas for analytics;</li><li>fine-tuned embeddings for regional languages.</li></ul>
-<h2 id="appendix-a-how-to-run-384">Appendix A — How to run</h2>
+<h2 id="appendix-a-how-to-run-385">Appendix A — How to run</h2>
 <pre class="lang-bash"><code>docker compose up -d
 docker compose --profile optional up -d --no-deps redis neo4j vectordb
 npm ci
-npm run db:migrate &amp;&amp; npm run mongo:indexes &amp;&amp; npm run db:demo &amp;&amp; npm run lab:setup
+npm run db:migrate &amp;&amp; npm run mongo:indexes &amp;&amp; npm run db:seed &amp;&amp; npm run lab:setup
 npm run dev          # http://localhost:3000
 npm test &amp;&amp; npm run build &amp;&amp; npm run test:integration &amp;&amp; npm run test:services</code></pre></body></html>

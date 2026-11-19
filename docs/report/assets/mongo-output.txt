@@ -25,9 +25,9 @@ incident_text
 | | | | {
   acknowledged: true,
   insertedIds: {
-    '0': ObjectId('6afefe5bb40d08a8e8cc57bf'),
-    '1': ObjectId('6afefe5bb40d08a8e8cc57c0'),
-    '2': ObjectId('6afefe5bb40d08a8e8cc57c1')
+    '0': ObjectId('6aff4c12d324147614b62228'),
+    '1': ObjectId('6aff4c12d324147614b62229'),
+    '2': ObjectId('6aff4c12d324147614b6222a')
   }
 }
 count: 3
@@ -133,12 +133,12 @@ count: 3
     ],
     byStatus: [
       {
-        _id: 'OPEN',
-        n: 1
-      },
-      {
         _id: 'MONITORING',
         n: 2
+      },
+      {
+        _id: 'OPEN',
+        n: 1
       }
     ],
     total: [
@@ -152,12 +152,12 @@ count: 3
 { acknowledged: true, insertedIds: { '0': 11, '1': 12 } }
 [
   {
-    incidents: 2,
-    disaster: 'Kerala Monsoon Floods'
-  },
-  {
     incidents: 1,
     disaster: 'Assam Brahmaputra Flooding'
+  },
+  {
+    incidents: 2,
+    disaster: 'Kerala Monsoon Floods'
   }
 ]
 

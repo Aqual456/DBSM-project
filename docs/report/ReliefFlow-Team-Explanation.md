@@ -362,7 +362,7 @@ The UI shows *why* each warehouse was suggested. Recommendations are advisory; s
 ```json
 { "disasterId": 11, "reportedBy": 7, "reportType": "MEDICAL", "severity": "CRITICAL", "status": "OPEN",
   "description": "Cluster of acute diarrhoea among children…",
-  "location": { "label": "Aluva Government School Camp", "latitude": 10.1, "longitude": 76.35 },
+  "location": { "label": "Paravur Government School Camp", "latitude": 10.1517, "longitude": 76.229 },
   "tags": ["waterborne", "children"],
   "updates": [ { "note": "Medical team dispatched", "by": 6, "at": "…" } ],
   "createdAt": "…", "updatedAt": "…" }
@@ -432,7 +432,7 @@ The questions the course requires, with our answers:
 * The partial HNSW index per provider (`WHERE provider = 'minilm'`) keeps vectors of different sizes apart.
 
 **Demo.** Open `/lab/vector` and type "kids getting ill from dirty water". Point out:
-* cosine 0.63 for the diarrhoea report;
+* cosine 0.64 for the diarrhoea report;
 * the query vector preview (first 12 of 384 numbers);
 * the timings;
 * the MongoDB keyword results on the right, which find "water" but miss the meaning.

@@ -11,7 +11,7 @@ RETURNING location_id, location_name;
 
 | location_id | location_name |
 | --- | --- |
-| 24 | Lab Test Ward |
+| 16 | Lab Test Ward |
 
 ```sql
 UPDATE locations SET address = 'Sandbox only (edited)'
@@ -22,7 +22,7 @@ RETURNING location_id, address;
 
 | location_id | address |
 | --- | --- |
-| 24 | Sandbox only (edited) |
+| 16 | Sandbox only (edited) |
 
 ```sql
 DELETE FROM locations WHERE location_name = 'Lab Test Ward' RETURNING location_id;
@@ -31,7 +31,7 @@ DELETE FROM locations WHERE location_name = 'Lab Test Ward' RETURNING location_i
 
 | location_id |
 | --- |
-| 24 |
+| 16 |
 
 ```sql
 SELECT count(*) AS remaining_lab_rows FROM locations WHERE location_name = 'Lab Test Ward';
@@ -68,7 +68,7 @@ RETURNING warehouse_id, resource_id, quantity_available;
 
 | warehouse_id | resource_id | quantity_available |
 | --- | --- | --- |
-| 1 | 1 | 1050.000 |
+| 1 | 1 | 250.000 |
 
 ```sql
 SELECT movement_id, warehouse_id, resource_id, delta, reason FROM inventory_movements ORDER BY movement_id DESC LIMIT 1;
@@ -77,7 +77,7 @@ SELECT movement_id, warehouse_id, resource_id, delta, reason FROM inventory_move
 
 | movement_id | warehouse_id | resource_id | delta | reason |
 | --- | --- | --- | --- | --- |
-| 44 | 1 | 1 | 250.000 | Donation received (lab) |
+| 79 | 1 | 1 | 250.000 | Donation received (lab) |
 
 _All statements above ran in the lab sandbox inside one transaction that was rolled back._
 
@@ -218,7 +218,7 @@ EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON)
 SELECT movement_id, delta, created_at FROM bench_movements
 WHERE resource_id = 7 AND created_at >= timestamptz '2026-06-01';
 ```
-→ plan: **Gather → Seq Scan**, execution **15.62 ms** (measured)
+→ plan: **Gather → Seq Scan**, execution **19.28 ms** (measured)
 
 ```sql
 CREATE INDEX bench_mv_resource_created ON bench_movements(resource_id, created_at);
@@ -235,7 +235,7 @@ EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON)
 SELECT movement_id, delta, created_at FROM bench_movements
 WHERE resource_id = 7 AND created_at >= timestamptz '2026-06-01';
 ```
-→ plan: **Bitmap Heap Scan → Bitmap Index Scan**, execution **1.02 ms** (measured)
+→ plan: **Bitmap Heap Scan → Bitmap Index Scan**, execution **1.28 ms** (measured)
 
 _All statements above ran in the lab sandbox inside one transaction that was rolled back._
 
@@ -255,7 +255,7 @@ ORDER BY rr.priority_score DESC LIMIT 1;
 ```sql
 UPDATE resource_requests SET status = 'APPROVED' WHERE request_id = (SELECT request_id FROM ctx) AND status = 'PENDING';
 ```
-→ UPDATE (1 row(s))
+→ UPDATE (0 row(s))
 
 ```sql
 SELECT sum(quantity_available) AS total_stock_before FROM inventory;
@@ -264,7 +264,7 @@ SELECT sum(quantity_available) AS total_stock_before FROM inventory;
 
 | total_stock_before |
 | --- |
-| 63460.000 |
+| 221826.000 |
 
 ```sql
 SAVEPOINT allocation_attempt;
@@ -278,7 +278,7 @@ INSERT INTO allocations(request_id, allocated_by) SELECT request_id, (SELECT min
 
 | allocation_id |
 | --- |
-| 12 |
+| 11 |
 
 ```sql
 INSERT INTO allocation_items(allocation_id, request_id, resource_id, warehouse_id, quantity_allocated)
@@ -299,7 +299,7 @@ SELECT sum(quantity_available) AS total_stock_after_line_1 FROM inventory;
 
 | total_stock_after_line_1 |
 | --- |
-| 63459.000 |
+| 221825.000 |
 
 ```sql
 INSERT INTO allocation_items(allocation_id, request_id, resource_id, warehouse_id, quantity_allocated)
@@ -326,6 +326,6 @@ SELECT sum(quantity_available) AS total_stock_after_rollback FROM inventory;
 
 | total_stock_after_rollback |
 | --- |
-| 63460.000 |
+| 221826.000 |
 
 _All statements above ran in the lab sandbox inside one transaction that was rolled back._

@@ -1,23 +1,23 @@
-**Query:** "kids getting ill from dirty water" · provider all-MiniLM-L6-v2 (local, sentence-transformers) · 384 dimensions · search 16.2 ms
+**Query:** "kids getting ill from dirty water" · provider all-MiniLM-L6-v2 (local, sentence-transformers) · 384 dimensions · search 42.6 ms
 
 | cosine_similarity | source | document | text |
 | --- | --- | --- | --- |
-| 0.6295 | incident | MEDICAL incident — Aluva Government School Camp | Cluster of acute diarrhoea among children at the school camp; suspecte |
-| 0.5031 | incident | MEDICAL incident — Guwahati Stadium Shelter | Skin infections and fever reported among people wading through floodwa |
-| 0.4044 | request | Request #4 — Aluva Government School Camp | Resource request from Aluva Government School Camp (CRITICAL) for Drin |
+| 0.6439 | incident | MEDICAL incident — Paravur Government School Camp | Cluster of acute diarrhoea among children at the school camp; drinking |
+| 0.5053 | incident | MEDICAL incident — Silapathar Higher Secondary School Camp | Skin infections and fever reported among people who waded through floo |
+| 0.4306 | incident | SUPPLY incident — Silapathar Higher Secondary School Camp | The piped water supply at the camp is contaminated; purification table |
 
-**Query:** "people sleeping in the cold without shelter" · provider all-MiniLM-L6-v2 (local, sentence-transformers) · 384 dimensions · search 13.9 ms
-
-| cosine_similarity | source | document | text |
-| --- | --- | --- | --- |
-| 0.5821 | incident | SAFETY incident — Joshimath Gurudwara Shelter | Night temperatures dropped near freezing; elderly residents at risk of |
-| 0.3946 | request | Request #11 — Joshimath Gurudwara Shelter | Resource request from Joshimath Gurudwara Shelter (HIGH) for Family Te |
-| 0.3301 | incident | MEDICAL incident — Mysuru Cooling Centre | Heat exhaustion cases among construction workers; cooling centre treat |
-
-**Query:** "roads blocked so trucks cannot reach" · provider all-MiniLM-L6-v2 (local, sentence-transformers) · 384 dimensions · search 7.4 ms
+**Query:** "people sleeping in the cold without shelter" · provider all-MiniLM-L6-v2 (local, sentence-transformers) · 384 dimensions · search 3.4 ms
 
 | cosine_similarity | source | document | text |
 | --- | --- | --- | --- |
-| 0.4898 | incident | SAFETY incident — Puri Coastal Belt | Uprooted trees blocking the highway to Puri; relief convoy delayed by  |
-| 0.3789 | incident | DAMAGE incident — Aluva Riverside | Embankment breach near Aluva bridge flooded three wards overnight; gro |
-| 0.2665 | disaster | Joshimath Land Subsidence | Joshimath Land Subsidence. LANDSLIDE disaster, severity HIGH. Cracks i |
+| 0.5579 | incident | SAFETY incident — Nichar Community Hall Shelter | Night temperatures fell close to freezing; elderly residents in the ha |
+| 0.4918 | request | Request #10 — Nichar Community Hall Shelter | Resource request from Nichar Community Hall Shelter (HIGH) for Blanket |
+| 0.4461 | request | Request #2 — Kochi Regional Sports Centre Shelter | Resource request from Kochi Regional Sports Centre Shelter (HIGH) for  |
+
+**Query:** "roads blocked so trucks cannot reach" · provider all-MiniLM-L6-v2 (local, sentence-transformers) · 384 dimensions · search 1.5 ms
+
+| cosine_similarity | source | document | text |
+| --- | --- | --- | --- |
+| 0.5449 | incident | SAFETY incident — Ganjam District | Uprooted trees are blocking the highway to Gopalpur; the relief convoy |
+| 0.3425 | incident | DAMAGE incident — Paravur Town | Floodwater breached the bund near Paravur market overnight; three ward |
+| 0.2714 | incident | DAMAGE incident — Silapathar Riverbank | Villages along the Jiadhal are cut off; boats are needed to reach fami |

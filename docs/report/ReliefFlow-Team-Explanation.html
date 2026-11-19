@@ -164,7 +164,7 @@ SET LOCAL ROLE rf_driver;                              -- with whose privileges<
 <p><strong>Document model.</strong></p>
 <pre class="lang-json"><code>{ "disasterId": 11, "reportedBy": 7, "reportType": "MEDICAL", "severity": "CRITICAL", "status": "OPEN",
   "description": "Cluster of acute diarrhoea among children…",
-  "location": { "label": "Aluva Government School Camp", "latitude": 10.1, "longitude": 76.35 },
+  "location": { "label": "Paravur Government School Camp", "latitude": 10.1517, "longitude": 76.229 },
   "tags": ["waterborne", "children"],
   "updates": [ { "note": "Medical team dispatched", "by": 6, "at": "…" } ],
   "createdAt": "…", "updatedAt": "…" }</code></pre>
@@ -190,7 +190,7 @@ SET LOCAL ROLE rf_driver;                              -- with whose privileges<
 <p><strong>Provider fallback:</strong></p>
 <ul><li>If a Voyage AI or OpenAI key is configured, that model is used instead.</li><li>If no model can load (for example offline on first run), a clearly labelled <em>lexical-hash</em> fallback keeps the feature working.</li><li>The partial HNSW index per provider (<code>WHERE provider = 'minilm'</code>) keeps vectors of different sizes apart.</li></ul>
 <p><strong>Demo.</strong> Open <code>/lab/vector</code> and type "kids getting ill from dirty water". Point out:</p>
-<ul><li>cosine 0.63 for the diarrhoea report;</li><li>the query vector preview (first 12 of 384 numbers);</li><li>the timings;</li><li>the MongoDB keyword results on the right, which find "water" but miss the meaning.</li></ul>
+<ul><li>cosine 0.64 for the diarrhoea report;</li><li>the query vector preview (first 12 of 384 numbers);</li><li>the timings;</li><li>the MongoDB keyword results on the right, which find "water" but miss the meaning.</li></ul>
 <p><strong>Viva questions.</strong></p>
 <ul><li><em>What is an embedding?</em> A list of numbers that represents the meaning of a text. Texts with similar meaning have vectors that point in similar directions.</li><li><em>Why HNSW and not exact search?</em> Exact search compares the query with every vector, O(n). HNSW navigates a layered proximity graph in roughly O(log n) with very high recall. With 44 vectors either is fast; the index shows how it scales.</li><li><em>Cosine vs Euclidean?</em> For normalised vectors they rank results the same way. Cosine is the convention for text because it ignores vector length.</li></ul>
 <h3 id="2-4-redis-key-value-and-neo4j-graph-137">2.4 Redis (key-value) and Neo4j (graph)</h3>

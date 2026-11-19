@@ -37,15 +37,12 @@ Check constraints:
     "document_vectors_dims_check" CHECK (dims > 0)
     "document_vectors_source_check" CHECK (source = ANY (ARRAY['incident'::text, 'disaster'::text, 'request'::text]))
 
-   provider   |  source  | vectors | dims 
---------------+----------+---------+------
- lexical-hash | disaster |      10 |  256
- lexical-hash | incident |      20 |  256
- lexical-hash | request  |      14 |  256
- minilm       | disaster |      10 |  384
- minilm       | incident |      20 |  384
- minilm       | request  |      14 |  384
-(6 rows)
+ provider |  source  | vectors | dims 
+----------+----------+---------+------
+ minilm   | disaster |       6 |  384
+ minilm   | incident |      20 |  384
+ minilm   | request  |      14 |  384
+(3 rows)
 
        indexname       |                                                                            indexdef                                                                            
 -----------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -54,11 +51,11 @@ Check constraints:
  dv_hnsw_minilm        | CREATE INDEX dv_hnsw_minilm ON public.document_vectors USING hnsw (((embedding)::vector(384)) vector_cosine_ops) WHERE (provider = 'minilm'::text)
 (3 rows)
 
-  source  |                title                | cosine_similarity 
-----------+-------------------------------------+-------------------
- incident | DAMAGE incident — Aluva Riverside   |            1.0000
- incident | SAFETY incident — Puri Coastal Belt |            0.4507
- disaster | Kerala Monsoon Floods               |            0.4339
- disaster | Joshimath Land Subsidence           |            0.4148
- incident | DAMAGE incident — Puri Coastal Belt |            0.4118
+  source  |                         title                          | cosine_similarity 
+----------+--------------------------------------------------------+-------------------
+ incident | DAMAGE incident — Paravur Town                         |            1.0000
+ disaster | Periyar River Floods                                   |            0.4550
+ incident | SAFETY incident — Kochi Regional Sports Centre Shelter |            0.4365
+ disaster | Chennai Urban Flooding                                 |            0.4315
+ incident | DAMAGE incident — Velachery Ward                       |            0.4260
 (5 rows)

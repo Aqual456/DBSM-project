@@ -175,7 +175,7 @@ Collection **`incident_reports`**, one document per field report:
 { "_id": ObjectId, "disasterId": 11, "reportedBy": 7, "reporterName": "…",
   "reportType": "MEDICAL", "severity": "CRITICAL", "status": "OPEN",
   "description": "Cluster of acute diarrhoea among children…",
-  "location": { "label": "Aluva Government School Camp", "latitude": 10.1, "longitude": 76.35 },
+  "location": { "label": "Paravur Government School Camp", "latitude": 10.1517, "longitude": 76.229 },
   "tags": ["waterborne", "children"],
   "updates": [ { "note": "Medical team dispatched", "by": 6, "byName": "…", "at": ISODate } ],
   "createdAt": ISODate, "updatedAt": ISODate }
@@ -191,7 +191,7 @@ The model:
 
 | Question (requirement §8) | ReliefFlow answer |
 |---|---|
-| What data becomes embeddings? | Incident descriptions with their tags and location, resource-request summaries (camp, items, remarks) and disaster descriptions: 44 documents in the demo data. |
+| What data becomes embeddings? | Incident descriptions with their tags and location, resource-request summaries (camp, items, remarks) and disaster descriptions: 40 documents in the sample data. |
 | Which model? | **sentence-transformers all-MiniLM-L6-v2**, run locally through Transformers.js / ONNX Runtime: mean pooling, L2-normalised, **384 dimensions**. No API key is needed and no text leaves the machine. Voyage AI or OpenAI is used instead if a key is configured; a labelled lexical fallback covers offline use. |
 | How are vectors stored? | Table `document_vectors(source, source_id, provider, dims, title, content, metadata JSONB, embedding vector, synced_at)`, PK (source, source_id, provider), in a separate PostgreSQL + pgvector database. |
 | Index | Partial expression **HNSW** index `((embedding::vector(384)) vector_cosine_ops) WHERE provider = 'minilm'` |
@@ -531,7 +531,7 @@ Future work:
 docker compose up -d
 docker compose --profile optional up -d --no-deps redis neo4j vectordb
 npm ci
-npm run db:migrate && npm run mongo:indexes && npm run db:demo && npm run lab:setup
+npm run db:migrate && npm run mongo:indexes && npm run db:seed && npm run lab:setup
 npm run dev          # http://localhost:3000
 npm test && npm run build && npm run test:integration && npm run test:services
 ```

@@ -19,10 +19,11 @@ ORDER BY units_requested DESC;
 
 | camp_name | requests | units_requested | avg_priority |
 | --- | --- | --- | --- |
-| Aluva Government School Camp | 2 | 6560.000 | 88.8 |
-| Puri Cyclone Shelter No. 4 | 2 | 4640.000 | 94.4 |
-| Joshimath Gurudwara Shelter | 2 | 1000.000 | 62.5 |
-| Central Flood Relief Camp | 2 | 940.000 | 91.3 |
+| Gopalpur Cyclone Shelter | 2 | 21100.000 | 97.0 |
+| Paravur Government School Camp | 2 | 15850.000 | 85.5 |
+| Silapathar Higher Secondary School Camp | 2 | 9266.000 | 80.6 |
+| Kochi Regional Sports Centre Shelter | 2 | 2764.000 | 70.0 |
+| Nichar Community Hall Shelter | 2 | 1002.000 | 63.2 |
 
 ### Stock by category (COUNT · SUM · AVG · MIN · MAX)
 
@@ -39,12 +40,12 @@ GROUP BY cat.category_name ORDER BY total_units DESC;
 
 | category_name | stock_lines | total_units | avg_units | min_units | max_units |
 | --- | --- | --- | --- | --- | --- |
-| FOOD | 8 | 26180.000 | 3272.5 | 80.000 | 9000.000 |
-| WATER | 7 | 19540.000 | 2791.4 | 120.000 | 6600.000 |
-| MEDICAL | 8 | 9360.000 | 1170.0 | 40.000 | 4000.000 |
-| SHELTER | 9 | 6040.000 | 671.1 | 120.000 | 1400.000 |
-| HYGIENE | 2 | 1600.000 | 800.0 | 700.000 | 900.000 |
-| ENERGY | 2 | 740.000 | 370.0 | 90.000 | 650.000 |
+| WATER | 9 | 109894.000 | 12210.4 | 1200.000 | 35000.000 |
+| FOOD | 15 | 62380.000 | 4158.7 | 150.000 | 15000.000 |
+| MEDICAL | 9 | 20432.000 | 2270.2 | 12.000 | 6500.000 |
+| SHELTER | 14 | 15056.000 | 1075.4 | 70.000 | 3828.000 |
+| HYGIENE | 7 | 12000.000 | 1714.3 | 600.000 | 4000.000 |
+| ENERGY | 2 | 2064.000 | 1032.0 | 150.000 | 1914.000 |
 
 ### Resources whose total stock is below the average (nested subquery)
 
@@ -63,15 +64,18 @@ ORDER BY total_stock;
 
 | resource_name | unit | total_stock |
 | --- | --- | --- |
+| Essential Medicines Kit | kit | 12.000 |
 | Insulin Vials | vial | 40.000 |
-| Infant Formula | tin | 80.000 |
-| Family Tent | unit | 240.000 |
-| Solar Lantern | unit | 740.000 |
-| First Aid Kit | kit | 1320.000 |
-| Hygiene Kit | kit | 1600.000 |
-| Tarpaulin Sheet | piece | 2300.000 |
-| Water Purification Tablets | strip | 3000.000 |
-| Blanket | piece | 3500.000 |
+| Infant Formula | tin | 150.000 |
+| Family Tent | unit | 488.000 |
+| First Aid Kit | kit | 880.000 |
+| Sleeping Mat | piece | 1860.000 |
+| Menstrual Hygiene Pack | pack | 2000.000 |
+| Solar Lantern | unit | 2064.000 |
+| Cooking Oil | litre | 2570.000 |
+| Family Hygiene Kit | kit | 3000.000 |
+
+_7 more rows not shown_
 
 ### Camps that requested more than 1,000 units (correlated subquery)
 
@@ -91,10 +95,13 @@ ORDER BY units_requested DESC;
 
 | camp_name | units_requested |
 | --- | --- |
-| Aluva Government School Camp | 6560.000 |
-| Puri Cyclone Shelter No. 4 | 4640.000 |
-| Guwahati Stadium Shelter | 4500.000 |
-| Mysuru Cooling Centre | 2700.000 |
+| Gopalpur Cyclone Shelter | 21100.000 |
+| Paravur Government School Camp | 15850.000 |
+| Silapathar Higher Secondary School Camp | 9266.000 |
+| Nagpur Civil Lines Cooling Centre | 6000.000 |
+| Velachery Corporation School Shelter | 2880.000 |
+| Kochi Regional Sports Centre Shelter | 2764.000 |
+| Nichar Community Hall Shelter | 1002.000 |
 
 ### Warehouses that stock every MEDICAL resource (relational division with NOT EXISTS)
 
@@ -112,9 +119,7 @@ WHERE NOT EXISTS (
 
 **Result (live database):**
 
-| warehouse_name |
-| --- |
-| Bhubaneswar State Warehouse |
+_(no rows)_
 
 ### Days until drinking water runs out (recursive CTE)
 
@@ -135,18 +140,18 @@ SELECT day, round(remaining, 0) AS litres_left FROM burn ORDER BY day;
 
 | day | litres_left |
 | --- | --- |
-| 0 | 16540 |
-| 1 | 15601 |
-| 2 | 14661 |
-| 3 | 13722 |
-| 4 | 12782 |
-| 5 | 11843 |
-| 6 | 10904 |
-| 7 | 9964 |
-| 8 | 9025 |
-| 9 | 8085 |
+| 0 | 98900 |
+| 1 | 98024 |
+| 2 | 97148 |
+| 3 | 96272 |
+| 4 | 95396 |
+| 5 | 94520 |
+| 6 | 93644 |
+| 7 | 92768 |
+| 8 | 91892 |
+| 9 | 91016 |
 
-_8 more rows not shown_
+_21 more rows not shown_
 
 ### Ranking requests by priority (window functions)
 
@@ -164,16 +169,16 @@ FROM resource_requests ORDER BY priority_score DESC;
 
 | request_id | priority_level | priority_score | rank | dense_rank | in_same_level |
 | --- | --- | --- | --- | --- | --- |
-| 9 | CRITICAL | 98.00 | 1 | 1 | 5 |
-| 4 | CRITICAL | 96.00 | 2 | 2 | 5 |
-| 1 | CRITICAL | 95.00 | 3 | 3 | 5 |
-| 7 | CRITICAL | 94.00 | 4 | 4 | 5 |
-| 10 | CRITICAL | 92.00 | 5 | 5 | 5 |
-| 5 | HIGH | 82.00 | 6 | 6 | 7 |
-| 2 | HIGH | 80.00 | 7 | 7 | 7 |
-| 13 | HIGH | 80.00 | 7 | 7 | 7 |
-| 6 | HIGH | 78.00 | 9 | 8 | 7 |
-| 3 | HIGH | 75.00 | 10 | 9 | 7 |
+| 5 | CRITICAL | 98.00 | 1 | 1 | 4 |
+| 7 | CRITICAL | 96.00 | 2 | 2 | 4 |
+| 1 | CRITICAL | 95.00 | 3 | 3 | 4 |
+| 6 | CRITICAL | 92.00 | 4 | 4 | 4 |
+| 8 | HIGH | 85.00 | 5 | 5 | 7 |
+| 2 | HIGH | 82.00 | 6 | 6 | 7 |
+| 10 | HIGH | 80.00 | 7 | 7 | 7 |
+| 12 | HIGH | 79.00 | 8 | 8 | 7 |
+| 13 | HIGH | 77.00 | 9 | 9 | 7 |
+| 3 | HIGH | 76.00 | 10 | 10 | 7 |
 
 _4 more rows not shown_
 
@@ -191,17 +196,17 @@ FROM v_resource_demand ORDER BY net_position;
 | resource_name | unit | outstanding_demand | available_stock | net_position |
 | --- | --- | --- | --- | --- |
 | Insulin Vials | vial | 60.000 | 40.000 | -20.000 |
-| Infant Formula | tin | 0 | 80.000 | 80.000 |
-| Family Tent | unit | 0 | 240.000 | 240.000 |
-| Solar Lantern | unit | 0 | 740.000 | 740.000 |
-| First Aid Kit | kit | 160.000 | 1320.000 | 1160.000 |
-| Water Purification Tablets | strip | 1500.000 | 3000.000 | 1500.000 |
-| Hygiene Kit | kit | 0 | 1600.000 | 1600.000 |
-| Tarpaulin Sheet | piece | 0 | 2300.000 | 2300.000 |
-| Blanket | piece | 150.000 | 3500.000 | 3350.000 |
-| Food Packet | packet | 850.000 | 5400.000 | 4550.000 |
+| Essential Medicines Kit | kit | 0 | 12.000 | 12.000 |
+| Infant Formula | tin | 0 | 150.000 | 150.000 |
+| Family Tent | unit | 0 | 488.000 | 488.000 |
+| First Aid Kit | kit | 10.000 | 880.000 | 870.000 |
+| Menstrual Hygiene Pack | pack | 300.000 | 2000.000 | 1700.000 |
+| Sleeping Mat | piece | 0 | 1860.000 | 1860.000 |
+| Solar Lantern | unit | 0 | 2064.000 | 2064.000 |
+| Cooking Oil | litre | 0 | 2570.000 | 2570.000 |
+| Family Hygiene Kit | kit | 224.000 | 3000.000 | 2776.000 |
 
-_3 more rows not shown_
+_11 more rows not shown_
 
 ### Stored functions and procedure
 
@@ -217,11 +222,11 @@ FROM resource_requests rr ORDER BY rr.request_id DESC LIMIT 6;
 | request_id | status | fulfilled_pct |
 | --- | --- | --- |
 | 14 | REJECTED | 0.0 |
-| 13 | PENDING | 0.0 |
-| 12 | PENDING | 0.0 |
-| 11 | ALLOCATED | 100.0 |
+| 13 | ALLOCATED | 100.0 |
+| 12 | APPROVED | 0.0 |
+| 11 | PENDING | 0.0 |
 | 10 | DELIVERED | 100.0 |
-| 9 | PENDING | 0.0 |
+| 9 | APPROVED | 0.0 |
 
 ### operational_summary() (set-returning function)
 
@@ -235,11 +240,11 @@ SELECT * FROM operational_summary();
 
 | metric | value |
 | --- | --- |
-| active_disasters | 10 |
-| affected_population | 81300 |
-| open_camps | 9 |
-| open_requests | 7 |
-| low_stock_lines | 6 |
+| active_disasters | 5 |
+| affected_population | 156650 |
+| open_camps | 8 |
+| open_requests | 5 |
+| low_stock_lines | 3 |
 | active_deliveries | 2 |
 
 ### Full-text search on disasters (tsvector + GIN index)
@@ -256,11 +261,10 @@ WHERE search_vector @@ q ORDER BY rank DESC;
 
 | disaster_name | rank |
 | --- | --- |
-| Bengaluru Urban Flooding | 0.341 |
-| Kerala Monsoon Floods | 0.341 |
-| Cyclone Varsha Landfall | 0.341 |
-| Test Cyclone Relief | 0.334 |
-| Assam Brahmaputra Flooding | 0.334 |
+| Cyclone Tara | 0.345 |
+| Dhemaji Flash Floods | 0.341 |
+| Chennai Urban Flooding | 0.341 |
+| Periyar River Floods | 0.334 |
 
 ### Trigger-written stock history
 
@@ -276,12 +280,12 @@ WHERE m.reason LIKE 'Allocation #%' ORDER BY m.movement_id DESC LIMIT 6;
 
 | movement_id | warehouse_name | resource_name | delta | reason |
 | --- | --- | --- | --- | --- |
-| 43 | Guwahati Central Store | Family Tent | -60.000 | Allocation #11 |
-| 42 | Thrissur Regional Depot | Blanket | -400.000 | Allocation #10 |
-| 41 | Bhubaneswar State Warehouse | Solar Lantern | -600.000 | Allocation #9 |
-| 40 | Bhubaneswar State Warehouse | Tarpaulin Sheet | -900.000 | Allocation #9 |
-| 39 | Bhubaneswar State Warehouse | Rice | -3000.000 | Allocation #9 |
-| 38 | Bhubaneswar State Warehouse | Solar Lantern | -150.000 | Allocation #8 |
+| 78 | Ambattur Relief Warehouse | Blanket | -320.000 | Allocation #10 |
+| 77 | Ambattur Relief Warehouse | Sleeping Mat | -320.000 | Allocation #10 |
+| 76 | Ambattur Relief Warehouse | Ready-to-Eat Meal | -1920.000 | Allocation #10 |
+| 75 | Rampur Bushahr Mountain Depot | Family Tent | -12.000 | Allocation #9 |
+| 74 | Rampur Bushahr Mountain Depot | Blanket | -280.000 | Allocation #9 |
+| 73 | Khordha Regional Relief Depot | Water Jerrycan 20 L | -206.000 | Allocation #8 |
 
 ### Row-level audit trail (trigger log_row_change)
 
@@ -297,8 +301,8 @@ WHERE l.operation = 'UPDATE' ORDER BY l.change_id DESC LIMIT 5;
 
 | change_id | table_name | operation | changed_fields | changed_by |
 | --- | --- | --- | --- | --- |
-| 110 | resource_requests | UPDATE | {"status":{"to":"REJECTED","from":"PENDING"}} | Demo Admin |
-| 106 | resource_requests | UPDATE | {"status":{"to":"ALLOCATED","from":"APPROVED"}} | Demo Admin |
-| 105 | volunteers | UPDATE | {"availability_status":{"to":"AVAILABLE","from":"ASSIGNED"}} | Demo Admin |
-| 104 | vehicles | UPDATE | {"status":{"to":"AVAILABLE","from":"IN_USE"},"current_location_id":{"to":20,"fro | Demo Admin |
-| 103 | deliveries | UPDATE | {"status":{"to":"DELIVERED","from":"IN_TRANSIT"},"actual_arrival":{"to":"2026-11 | Demo Admin |
+| 140 | disasters | UPDATE | {"status":{"to":"CONTAINED","from":"ACTIVE"}} | Demo Admin |
+| 139 | resource_requests | UPDATE | {"status":{"to":"REJECTED","from":"PENDING"}} | Demo Admin |
+| 137 | resource_requests | UPDATE | {"status":{"to":"ALLOCATED","from":"APPROVED"}} | Demo Admin |
+| 136 | resource_requests | UPDATE | {"status":{"to":"APPROVED","from":"PENDING"}} | Demo Admin |
+| 134 | resource_requests | UPDATE | {"status":{"to":"APPROVED","from":"PENDING"}} | Demo Admin |

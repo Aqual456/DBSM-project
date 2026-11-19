@@ -20,7 +20,7 @@ async function shot(page: Page, name: string, full = false) {
   console.log("saved", name);
 }
 async function visit(page: Page, route: string) {
-  await page.goto(base + route);
+  await page.goto(base + route, { timeout: 240000 });
   await page.waitForLoadState("networkidle").catch(() => undefined);
   await page.locator("h1").first().waitFor();
 }
@@ -75,6 +75,7 @@ async function main() {
     if (!password) { console.log("REPORT_PASSWORD not set: application screenshots skipped"); return; }
 
     const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+    page.setDefaultTimeout(120000); // a dev server compiles each page on first visit
     await page.goto(base + "/login");
     await page.getByLabel("Email", { exact: true }).fill(email);
     await page.getByLabel("Password", { exact: true }).fill(password);
