@@ -36,13 +36,15 @@ npm.cmd run dev                            # http://localhost:3000
 
 `db:migrate` records applied files in `schema_migrations`; it never drops or rewrites operational data. New constraints that legacy rows violate are added `NOT VALID`.
 
-### Optional: demo dataset
+### Standard sample data
 
 ```powershell
-npm.cmd run db:demo
+npm.cmd run db:seed
 ```
 
-Adds five disasters (Kerala, Assam, Odisha, Uttarakhand, Karnataka), ten locations with coordinates, camps, warehouses, stock, vehicles, volunteers, eleven requests across every lifecycle stage and twenty MongoDB incident reports. It **only inserts** clearly named rows (descriptions tagged `[ReliefFlow demo dataset]`, incidents with `source: "demo-dataset"`), goes through the real triggers, runs in one transaction, and does nothing if the dataset is already present. Demo staff accounts (`*@reliefflow.demo`) have no usable password; an admin can set one under **Administration → Users → Password**. Re-run `npm.cmd run lab:setup` afterwards so the lab sees the new rows.
+Loads the reference catalogue from `db/postgres/002_seed.sql` (roles and 21 relief items whose units and planning figures follow the Sphere humanitarian minimum standards) and a **fictional** present-day scenario set: six emergencies in real Indian districts (Periyar River Floods, Cyclone Tara, Dhemaji Flash Floods, Nichar Landslide, Vidarbha Heatwave, Chennai Urban Flooding), 15 locations with coordinates, 8 camps, 5 warehouses with stock, 8 vehicles, 12 volunteers, 14 requests covering every workflow stage (pending, approved, partially fulfilled, allocated, in transit, delivered, rejected) and 20 MongoDB incident reports. Quantities use Sphere figures (for example 7.5 L of drinking and cooking water and 0.4 kg of cereal per person per day). Every allocation and delivery goes through the real triggers. The script only inserts, runs in one transaction, does nothing if the sample data is already present, and then re-syncs the vector and graph stores. Sample staff accounts (`*@reliefflow.sample`) have no usable password; an admin can set one under **Administration → Users → Password**. Re-run `npm.cmd run lab:setup` afterwards so the lab sees the new rows.
+
+To start again from an empty operational database (destructive, take a backup first): `npm.cmd run db:clear-example-data -- --yes`, then `npm.cmd run db:seed`. It keeps roles and every non-sample user account.
 
 ### Configuration
 

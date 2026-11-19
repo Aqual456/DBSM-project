@@ -73,6 +73,8 @@ async function main() {
   await mongo.db(dbName).createCollection('incident_reports',{validator:JSON.parse(readFileSync('db/mongodb/validator.json','utf8')),validationLevel:'moderate',validationAction:'error'});
   for (const file of ["001_schema.sql","002_seed.sql"])
     await db.query(readFileSync(`db/postgres/${file}`, "utf8"));
+  // 002_seed.sql holds reference data only, so the fixtures bring their own locations.
+  await db.query("INSERT INTO locations(location_name,location_type,address,latitude,longitude) VALUES ('Test District','DISTRICT','Test fixtures',12.9716,77.5946),('Test Camp Area','CAMP_AREA','Test fixtures',13.1007,77.5963)");
   // Simulate duplicate records that predate migration; their status must remain editable.
   await db.query("INSERT INTO warehouses(location_id,warehouse_name,capacity) SELECT (SELECT location_id FROM locations LIMIT 1),'Legacy Depot',10 FROM generate_series(1,2)");
   await db.query("INSERT INTO disasters(disaster_name,disaster_type,severity,started_at,created_by) SELECT 'Legacy Event','FLOOD','HIGH','2020-01-01T00:00:00Z',(SELECT user_id FROM app_users LIMIT 1) FROM generate_series(1,2)");
