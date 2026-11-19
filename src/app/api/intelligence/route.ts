@@ -66,7 +66,7 @@ async function recommend(requestId: number) {
   });
   // Deliveries require one pickup location per allocation: suggest the best single source.
   const byLocation = new Map<number, { location_name: string; covered: number; lines: { resource_id: number; warehouse_id: number; quantity: number }[]; distance: number | null }>();
-  for (const r of recs)
+  for (const r of recs.filter((x) => x.remaining > 0)) // only lines still outstanding
     for (const c of r.candidates) {
       const cur = byLocation.get(c.location_id) ?? { location_name: c.location_name, covered: 0, lines: [], distance: c.distance_km };
       if (!cur.lines.some((x) => x.resource_id === r.resource_id)) {
