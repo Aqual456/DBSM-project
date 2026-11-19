@@ -1,0 +1,1240 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ReliefFlow — The Database, Explained</title><style>
+  @page { size: A4; margin: 15mm 13mm 17mm; }
+  :root { --ink:#172033; --muted:#55627a; --line:#dbe2ec; --accent:#2563eb; --teal:#0f9d8a; }
+  body { font-family: "Segoe UI", Arial, sans-serif; color: var(--ink); font-size: 10.3pt; line-height: 1.55; max-width: 1000px; margin: 0 auto; padding: 20px; background:#fff; }
+  h1 { font-size: 22pt; margin: 0 0 6px; color:#0f1e3d; letter-spacing:-.02em; }
+  h2 { font-size: 15pt; margin: 24px 0 8px; padding-top: 8px; border-top: 2px solid var(--accent); color:#0f1e3d; break-after: avoid; }
+  h3 { font-size: 12pt; margin: 16px 0 6px; color: var(--teal); break-after: avoid; }
+  h4 { font-size: 10.8pt; margin: 12px 0 4px; color: #0f1e3d; break-after: avoid; }
+  p { margin: 6px 0; } ul, ol { margin: 5px 0 6px 20px; padding: 0; } li { margin: 2px 0; } li > ul, li > ol { margin-top: 2px; }
+  code { font-family: Consolas, "Cascadia Code", monospace; font-size: 8.8pt; background: #f1f5f9; padding: 1px 4px; border-radius: 4px; }
+  pre { background: #0f1a2c; color: #e2e8f0; padding: 9px 12px; border-radius: 8px; white-space: pre-wrap; word-break: break-word; }
+  pre code { background: none; color: inherit; padding: 0; font-size: 8.2pt; line-height: 1.4; }
+  pre.lang-text { background: #f8fafc; color: #1e293b; border: 1px solid var(--line); }
+  table { width: 100%; border-collapse: collapse; margin: 8px 0 12px; font-size: 8.9pt; }
+  th { text-align: left; background: #eef3fb; color: #0f1e3d; font-weight: 650; }
+  th, td { border: 1px solid var(--line); padding: 4px 6px; vertical-align: top; word-break: break-word; }
+  tr { break-inside: avoid; }
+  blockquote { margin: 10px 0; padding: 9px 13px; background: #f0fdfa; border-left: 4px solid var(--teal); border-radius: 6px; }
+  figure { margin: 10px 0 14px; text-align: center; break-inside: avoid; }
+  figure img { max-width: 100%; max-height: 225mm; border: 1px solid var(--line); border-radius: 6px; }
+  figcaption { font-size: 8.8pt; color: var(--muted); margin-top: 4px; }
+  .pagebreak { break-after: page; }
+  .toc { columns: 2; font-size: 9.4pt; margin: 10px 0 0; padding: 12px 16px; background: #f8fafc; border: 1px solid var(--line); border-radius: 8px; }
+  .toc a { color: var(--ink); text-decoration: none; display: block; padding: 1px 0; }
+  .titlepage { min-height: 245mm; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; break-after: page; gap: 10px; }
+  .tp-uni { font-size: 26pt; font-weight: 700; color: #0f1e3d; } .tp-dept { font-size: 13pt; color: var(--muted); }
+  .tp-course { font-size: 12pt; margin-top: 18px; } .tp-code { font-size: 11pt; color: var(--muted); }
+  .tp-title { font-size: 38pt; font-weight: 800; color: var(--accent); margin-top: 36px; letter-spacing: -.02em; }
+  .tp-subtitle { font-size: 12.5pt; color: var(--ink); margin-bottom: 30px; }
+  .tp-team { width: 78%; font-size: 11pt; } .tp-team th, .tp-team td { padding: 8px 10px; text-align: left; }
+  .tp-meta { margin-top: 24px; font-size: 10.5pt; color: var(--muted); }
+  .owner { display: inline-block; font-size: 8.5pt; font-weight: 700; padding: 1px 8px; border-radius: 999px; color: #fff; }
+  .sujal { background: #2563eb; } .sujan { background: #0f9d8a; } .both { background: #7c3aed; }
+th, td { word-break: normal; overflow-wrap: break-word; }</style></head><body><div class="titlepage">
+<div class="tp-uni">PES University</div>
+<div class="tp-dept">Department of Computer Science and Engineering · DBMS Experiential Learning, Level 3</div>
+<div class="tp-title">ReliefFlow</div>
+<div class="tp-subtitle">The Database, Explained<br/>Every table, every relationship, the DDL that creates them, the DML that changes them, and every trigger, view, function and procedure</div>
+<table class="tp-team"><thead><tr><th>Member</th><th>SRN</th></tr></thead><tbody>
+<tr><td>SUJAL Y</td><td>PES1UG24CS475</td></tr>
+<tr><td>SUJAN H</td><td>PES1UG24CS477</td></tr>
+</tbody></table>
+<div class="tp-meta">Generated from the live PostgreSQL catalog on 19 November 2026</div>
+</div>
+<h1 id="reliefflow-the-database-explained-1">ReliefFlow — The Database, Explained</h1>
+<nav class="toc"><strong>Contents</strong><a href="#1-how-to-read-this-document-2">1. How to read this document</a><a href="#2-the-big-picture-7">2. The big picture</a><a href="#3-how-the-tables-are-related-14">3. How the tables are related</a><a href="#4-ddl-how-the-database-is-created-38">4. DDL — how the database is created</a><a href="#5-views-functions-procedure-indexes-and-security-418">5. Views, functions, procedure, indexes and security</a><a href="#6-triggers-every-one-explained-471">6. Triggers — every one explained</a><a href="#7-dml-how-the-data-is-changed-and-read-525">7. DML — how the data is changed and read</a><a href="#8-quick-glossary-558">8. Quick glossary</a></nav>
+<h2 id="1-how-to-read-this-document-2">1. How to read this document</h2>
+<p>This document explains the whole PostgreSQL database of ReliefFlow, one piece at a time.</p>
+<ul><li><strong>Section 2</strong> gives the big picture: what the database stores and how the tables are grouped.</li><li><strong>Section 3</strong> explains every <strong>relationship</strong> (foreign key): what it means in plain English, its cardinality, and what happens on delete.</li><li><strong>Section 4</strong> is the <strong>DDL</strong>: which files create the database, in what order, and then every table with its exact <code>CREATE TABLE</code> statement, columns, constraints, indexes and triggers.</li><li><strong>Section 5</strong> covers the other DDL objects: <strong>views, functions, the procedure, indexes, roles and row-level security</strong>.</li><li><strong>Section 6</strong> explains every <strong>trigger</strong>: when it fires, what it does step by step, and its source code.</li><li><strong>Section 7</strong> is the <strong>DML</strong>: which INSERT / UPDATE / DELETE / SELECT statements the application runs, table by table and as one complete workflow, including which triggers fire.</li></ul>
+<blockquote>Everything structural here (columns, types, constraints, indexes, trigger and function source) is read directly from the running database, so it is exactly what is installed, not a copy that can go out of date.</blockquote>
+<table><thead><tr><th>What</th><th>Count</th></tr></thead><tbody><tr><td>Tables</td><td>25</td></tr><tr><td>Columns</td><td>151</td></tr><tr><td>Primary keys / foreign keys</td><td>25 / 34</td></tr><tr><td>UNIQUE / CHECK constraints</td><td>9 / 42</td></tr><tr><td>Indexes</td><td>65</td></tr><tr><td>Views / functions / procedures</td><td>5 / 5 / 1</td></tr><tr><td>Trigger functions / trigger attachments</td><td>8 / 16</td></tr><tr><td>Database roles / row-level security policies</td><td>4 / 4</td></tr></tbody></table>
+<h2 id="2-the-big-picture-7">2. The big picture</h2>
+<p>ReliefFlow coordinates disaster relief. The data follows the real workflow:</p>
+<pre class="lang-text"><code>Disaster ──affects──▶ Locations ◀── Relief camp ──raises──▶ Resource request ──contains──▶ Request items
+                                                         │ PENDING → APPROVED
+                                                         ▼
+      Warehouse ──holds──▶ Inventory (stock line) ──▶ Allocation + allocation items   (stock deducted by trigger)
+                                                         ▼
+                    Vehicle + driver + volunteers ──▶ Delivery: PLANNED → IN_TRANSIT → DELIVERED
+                                                         ▼
+                         request status recomputed by the procedure refresh_request_status</code></pre>
+<p>The 25 tables fall into eight groups:</p>
+<table><thead><tr><th>Group</th><th>Tables</th><th>What it is for</th></tr></thead><tbody><tr><td><strong>Users and security</strong></td><td><code>roles</code>, <code>app_users</code>, <code>sessions</code>, <code>login_attempts</code></td><td>Who can sign in, with which role, and how sign-in is protected.</td></tr><tr><td><strong>Disasters and places</strong></td><td><code>locations</code>, <code>disasters</code>, <code>disaster_locations</code></td><td>The events being responded to and the places they affect.</td></tr><tr><td><strong>Shelters</strong></td><td><code>relief_camps</code></td><td>Relief camps that house affected people and raise requests.</td></tr><tr><td><strong>Stock</strong></td><td><code>resource_categories</code>, <code>resources</code>, <code>warehouses</code>, <code>inventory</code>, <code>inventory_movements</code></td><td>What relief items exist, where they are stored and how much is left.</td></tr><tr><td><strong>Requests</strong></td><td><code>resource_requests</code>, <code>request_items</code></td><td>What a camp asks for: one header row and one line per resource.</td></tr><tr><td><strong>Allocation</strong></td><td><code>allocations</code>, <code>allocation_items</code></td><td>Stock committed from warehouses to a request.</td></tr><tr><td><strong>Logistics</strong></td><td><code>vehicles</code>, <code>volunteers</code>, <code>deliveries</code>, <code>delivery_volunteers</code></td><td>Getting allocated stock to the camp: vehicles, drivers, volunteer crews.</td></tr><tr><td><strong>History and system</strong></td><td><code>audit_logs</code>, <code>data_change_log</code>, <code>integration_sync_runs</code>, <code>schema_migrations</code></td><td>Audit trails and bookkeeping tables.</td></tr></tbody></table>
+<p>Design rules used throughout:</p>
+<ul><li>Every table has a <strong>primary key</strong>; most use a surrogate key <code>GENERATED ALWAYS AS IDENTITY</code> (an auto-number the application cannot override).</li><li>Natural uniqueness is still enforced with <strong>UNIQUE</strong> (e-mail, vehicle number, category name, role name).</li><li>Rules the data must always obey are <strong>CHECK constraints</strong> inside the database (stock ≥ 0, occupancy ≤ capacity, status values, e-mail format), so no program can break them.</li><li>History is never deleted: users are deactivated, camps closed, requests cancelled. Foreign keys use <strong>RESTRICT</strong> to protect history and <strong>CASCADE</strong> only for detail rows owned by their parent.</li><li>The schema is in <strong>3NF/BCNF</strong>: each fact is stored once (a location's name lives only in <code>locations</code>, a resource's unit only in <code>resources</code>).</li></ul>
+<h2 id="3-how-the-tables-are-related-14">3. How the tables are related</h2>
+<p>There are 34 foreign keys. Each one is a relationship between a <strong>child</strong> table (which holds the foreign key column) and a <strong>parent</strong> table (whose primary key it refers to).</p>
+<p>How to read the cardinality:</p>
+<ul><li><strong>1 : N</strong> — one parent row can have many child rows; each child row points to one parent.</li><li><strong>mandatory</strong> — the FK column is NOT NULL, so every child row must have a parent (total participation in the ER diagram).</li><li><strong>optional</strong> — the FK column is nullable (partial participation).</li></ul>
+<h3 id="3-1-special-relationship-patterns-18">3.1 Special relationship patterns</h3>
+<ul><li><strong>Many-to-many (M:N)</strong> relationships become their own table with a composite primary key:<ul><li><code>disaster_locations</code> (Disaster AFFECTS Location) — also stores impact_level, affected_population, reported_at.</li><li><code>delivery_volunteers</code> (Delivery CREWED BY Volunteer) — also stores assigned_role.</li></ul></li><li><strong>Weak entities</strong> — rows identified through their owner:<ul><li><code>request_items</code> (PK request_id + resource_id): a request line has no meaning without its request.</li><li><code>inventory</code> (PK warehouse_id + resource_id): a stock line is "resource X in warehouse Y".</li></ul></li><li><strong>Composite foreign keys</strong> in <code>allocation_items</code>:<ul><li><code>(request_id, resource_id) → request_items</code>: you can only allocate a resource <strong>that the request asked for</strong>.</li><li><code>(warehouse_id, resource_id) → inventory</code>: you can only draw it <strong>from a warehouse that stocks that resource</strong>.</li><li><code>(allocation_id, request_id) → allocations</code>: the line's allocation must belong to the same request.</li><li>A single-column FK could not express any of these rules.</li></ul></li><li><strong>Several relationships to the same parent</strong>: <code>deliveries</code> refers to <code>locations</code> twice (source and destination); <code>app_users</code> is referenced by eight tables (who created, requested, allocated, drove, managed…).</li></ul>
+<h3 id="3-2-every-foreign-key-20">3.2 Every foreign key</h3>
+<h4 id="users-and-security-21">Users and security</h4>
+<table><thead><tr><th>Child (FK columns)</th><th>→ Parent</th><th>Cardinality</th><th>ON DELETE</th><th>Meaning</th></tr></thead><tbody><tr><td><code>app_users(role_id)</code></td><td><code>roles(role_id)</code></td><td>1 : N, mandatory</td><td>RESTRICT</td><td>Every app_users row must refer to one roles row; one roles row can have many app_users rows. ON DELETE RESTRICT: the parent row cannot be deleted while child rows refer to it.</td></tr><tr><td><code>sessions(user_id)</code></td><td><code>app_users(user_id)</code></td><td>1 : N, mandatory</td><td>CASCADE</td><td>Every sessions row must refer to one app_users row; one app_users row can have many sessions rows. ON DELETE CASCADE: deleting the parent row deletes these child rows too.</td></tr></tbody></table>
+<h4 id="disasters-and-places-23">Disasters and places</h4>
+<table><thead><tr><th>Child (FK columns)</th><th>→ Parent</th><th>Cardinality</th><th>ON DELETE</th><th>Meaning</th></tr></thead><tbody><tr><td><code>disasters(created_by)</code></td><td><code>app_users(user_id)</code></td><td>1 : N, mandatory</td><td>RESTRICT</td><td>Every disasters row must refer to one app_users row; one app_users row can have many disasters rows. ON DELETE RESTRICT: the parent row cannot be deleted while child rows refer to it.</td></tr><tr><td><code>disasters(event_location_id)</code></td><td><code>locations(location_id)</code></td><td>1 : N, optional</td><td>NO ACTION</td><td>A disasters row may refer to one locations row; one locations row can have many disasters rows. ON DELETE NO ACTION: the parent row cannot be deleted while child rows refer to it (checked at the end of the statement).</td></tr><tr><td><code>disaster_locations(disaster_id)</code></td><td><code>disasters(disaster_id)</code></td><td>1 : N, mandatory</td><td>CASCADE</td><td>Every disaster_locations row must refer to one disasters row; one disasters row can have many disaster_locations rows. ON DELETE CASCADE: deleting the parent row deletes these child rows too.</td></tr><tr><td><code>disaster_locations(location_id)</code></td><td><code>locations(location_id)</code></td><td>1 : N, mandatory</td><td>RESTRICT</td><td>Every disaster_locations row must refer to one locations row; one locations row can have many disaster_locations rows. ON DELETE RESTRICT: the parent row cannot be deleted while child rows refer to it.</td></tr></tbody></table>
+<h4 id="shelters-25">Shelters</h4>
+<table><thead><tr><th>Child (FK columns)</th><th>→ Parent</th><th>Cardinality</th><th>ON DELETE</th><th>Meaning</th></tr></thead><tbody><tr><td><code>relief_camps(location_id)</code></td><td><code>locations(location_id)</code></td><td>1 : N, mandatory</td><td>RESTRICT</td><td>Every relief_camps row must refer to one locations row; one locations row can have many relief_camps rows. ON DELETE RESTRICT: the parent row cannot be deleted while child rows refer to it.</td></tr><tr><td><code>relief_camps(manager_id)</code></td><td><code>app_users(user_id)</code></td><td>1 : N, optional</td><td>SET NULL</td><td>A relief_camps row may refer to one app_users row; one app_users row can have many relief_camps rows. ON DELETE SET NULL: deleting the parent row sets this reference to NULL (the child row stays).</td></tr></tbody></table>
+<h4 id="stock-27">Stock</h4>
+<table><thead><tr><th>Child (FK columns)</th><th>→ Parent</th><th>Cardinality</th><th>ON DELETE</th><th>Meaning</th></tr></thead><tbody><tr><td><code>resources(category_id)</code></td><td><code>resource_categories(category_id)</code></td><td>1 : N, mandatory</td><td>RESTRICT</td><td>Every resources row must refer to one resource_categories row; one resource_categories row can have many resources rows. ON DELETE RESTRICT: the parent row cannot be deleted while child rows refer to it.</td></tr><tr><td><code>warehouses(location_id)</code></td><td><code>locations(location_id)</code></td><td>1 : N, mandatory</td><td>RESTRICT</td><td>Every warehouses row must refer to one locations row; one locations row can have many warehouses rows. ON DELETE RESTRICT: the parent row cannot be deleted while child rows refer to it.</td></tr><tr><td><code>warehouses(manager_id)</code></td><td><code>app_users(user_id)</code></td><td>1 : N, optional</td><td>SET NULL</td><td>A warehouses row may refer to one app_users row; one app_users row can have many warehouses rows. ON DELETE SET NULL: deleting the parent row sets this reference to NULL (the child row stays).</td></tr><tr><td><code>inventory(resource_id)</code></td><td><code>resources(resource_id)</code></td><td>1 : N, mandatory</td><td>RESTRICT</td><td>Every inventory row must refer to one resources row; one resources row can have many inventory rows. ON DELETE RESTRICT: the parent row cannot be deleted while child rows refer to it.</td></tr><tr><td><code>inventory(warehouse_id)</code></td><td><code>warehouses(warehouse_id)</code></td><td>1 : N, mandatory</td><td>RESTRICT</td><td>Every inventory row must refer to one warehouses row; one warehouses row can have many inventory rows. ON DELETE RESTRICT: the parent row cannot be deleted while child rows refer to it.</td></tr><tr><td><code>inventory_movements(warehouse_id, resource_id)</code></td><td><code>inventory(warehouse_id, resource_id)</code></td><td>1 : N, mandatory</td><td>NO ACTION</td><td>Every inventory_movements row must refer to one inventory row; one inventory row can have many inventory_movements rows. ON DELETE NO ACTION: the parent row cannot be deleted while child rows refer to it (checked at the end of the statement).</td></tr></tbody></table>
+<h4 id="requests-29">Requests</h4>
+<table><thead><tr><th>Child (FK columns)</th><th>→ Parent</th><th>Cardinality</th><th>ON DELETE</th><th>Meaning</th></tr></thead><tbody><tr><td><code>resource_requests(camp_id)</code></td><td><code>relief_camps(camp_id)</code></td><td>1 : N, mandatory</td><td>RESTRICT</td><td>Every resource_requests row must refer to one relief_camps row; one relief_camps row can have many resource_requests rows. ON DELETE RESTRICT: the parent row cannot be deleted while child rows refer to it.</td></tr><tr><td><code>resource_requests(disaster_id)</code></td><td><code>disasters(disaster_id)</code></td><td>1 : N, mandatory</td><td>RESTRICT</td><td>Every resource_requests row must refer to one disasters row; one disasters row can have many resource_requests rows. ON DELETE RESTRICT: the parent row cannot be deleted while child rows refer to it.</td></tr><tr><td><code>resource_requests(requested_by)</code></td><td><code>app_users(user_id)</code></td><td>1 : N, mandatory</td><td>RESTRICT</td><td>Every resource_requests row must refer to one app_users row; one app_users row can have many resource_requests rows. ON DELETE RESTRICT: the parent row cannot be deleted while child rows refer to it.</td></tr><tr><td><code>request_items(request_id)</code></td><td><code>resource_requests(request_id)</code></td><td>1 : N, mandatory</td><td>CASCADE</td><td>Every request_items row must refer to one resource_requests row; one resource_requests row can have many request_items rows. ON DELETE CASCADE: deleting the parent row deletes these child rows too.</td></tr><tr><td><code>request_items(resource_id)</code></td><td><code>resources(resource_id)</code></td><td>1 : N, mandatory</td><td>RESTRICT</td><td>Every request_items row must refer to one resources row; one resources row can have many request_items rows. ON DELETE RESTRICT: the parent row cannot be deleted while child rows refer to it.</td></tr></tbody></table>
+<h4 id="allocation-31">Allocation</h4>
+<table><thead><tr><th>Child (FK columns)</th><th>→ Parent</th><th>Cardinality</th><th>ON DELETE</th><th>Meaning</th></tr></thead><tbody><tr><td><code>allocations(allocated_by)</code></td><td><code>app_users(user_id)</code></td><td>1 : N, mandatory</td><td>RESTRICT</td><td>Every allocations row must refer to one app_users row; one app_users row can have many allocations rows. ON DELETE RESTRICT: the parent row cannot be deleted while child rows refer to it.</td></tr><tr><td><code>allocations(request_id)</code></td><td><code>resource_requests(request_id)</code></td><td>1 : N, mandatory</td><td>RESTRICT</td><td>Every allocations row must refer to one resource_requests row; one resource_requests row can have many allocations rows. ON DELETE RESTRICT: the parent row cannot be deleted while child rows refer to it.</td></tr><tr><td><code>allocation_items(allocation_id, request_id)</code></td><td><code>allocations(allocation_id, request_id)</code></td><td>1 : N, mandatory</td><td>CASCADE</td><td>Every allocation_items row must refer to one allocations row; one allocations row can have many allocation_items rows. ON DELETE CASCADE: deleting the parent row deletes these child rows too.</td></tr><tr><td><code>allocation_items(request_id, resource_id)</code></td><td><code>request_items(request_id, resource_id)</code></td><td>1 : N, mandatory</td><td>RESTRICT</td><td>Every allocation_items row must refer to one request_items row; one request_items row can have many allocation_items rows. ON DELETE RESTRICT: the parent row cannot be deleted while child rows refer to it.</td></tr><tr><td><code>allocation_items(warehouse_id, resource_id)</code></td><td><code>inventory(warehouse_id, resource_id)</code></td><td>1 : N, mandatory</td><td>RESTRICT</td><td>Every allocation_items row must refer to one inventory row; one inventory row can have many allocation_items rows. ON DELETE RESTRICT: the parent row cannot be deleted while child rows refer to it.</td></tr></tbody></table>
+<h4 id="logistics-33">Logistics</h4>
+<table><thead><tr><th>Child (FK columns)</th><th>→ Parent</th><th>Cardinality</th><th>ON DELETE</th><th>Meaning</th></tr></thead><tbody><tr><td><code>vehicles(current_location_id)</code></td><td><code>locations(location_id)</code></td><td>1 : N, optional</td><td>SET NULL</td><td>A vehicles row may refer to one locations row; one locations row can have many vehicles rows. ON DELETE SET NULL: deleting the parent row sets this reference to NULL (the child row stays).</td></tr><tr><td><code>deliveries(allocation_id)</code></td><td><code>allocations(allocation_id)</code></td><td>1 : N, mandatory</td><td>RESTRICT</td><td>Every deliveries row must refer to one allocations row; one allocations row can have many deliveries rows. ON DELETE RESTRICT: the parent row cannot be deleted while child rows refer to it.</td></tr><tr><td><code>deliveries(destination_location_id)</code></td><td><code>locations(location_id)</code></td><td>1 : N, mandatory</td><td>RESTRICT</td><td>Every deliveries row must refer to one locations row; one locations row can have many deliveries rows. ON DELETE RESTRICT: the parent row cannot be deleted while child rows refer to it.</td></tr><tr><td><code>deliveries(driver_id)</code></td><td><code>app_users(user_id)</code></td><td>1 : N, mandatory</td><td>RESTRICT</td><td>Every deliveries row must refer to one app_users row; one app_users row can have many deliveries rows. ON DELETE RESTRICT: the parent row cannot be deleted while child rows refer to it.</td></tr><tr><td><code>deliveries(source_location_id)</code></td><td><code>locations(location_id)</code></td><td>1 : N, mandatory</td><td>RESTRICT</td><td>Every deliveries row must refer to one locations row; one locations row can have many deliveries rows. ON DELETE RESTRICT: the parent row cannot be deleted while child rows refer to it.</td></tr><tr><td><code>deliveries(vehicle_id)</code></td><td><code>vehicles(vehicle_id)</code></td><td>1 : N, mandatory</td><td>RESTRICT</td><td>Every deliveries row must refer to one vehicles row; one vehicles row can have many deliveries rows. ON DELETE RESTRICT: the parent row cannot be deleted while child rows refer to it.</td></tr><tr><td><code>delivery_volunteers(delivery_id)</code></td><td><code>deliveries(delivery_id)</code></td><td>1 : N, mandatory</td><td>CASCADE</td><td>Every delivery_volunteers row must refer to one deliveries row; one deliveries row can have many delivery_volunteers rows. ON DELETE CASCADE: deleting the parent row deletes these child rows too.</td></tr><tr><td><code>delivery_volunteers(volunteer_id)</code></td><td><code>volunteers(volunteer_id)</code></td><td>1 : N, mandatory</td><td>CASCADE</td><td>Every delivery_volunteers row must refer to one volunteers row; one volunteers row can have many delivery_volunteers rows. ON DELETE CASCADE: deleting the parent row deletes these child rows too.</td></tr></tbody></table>
+<h4 id="history-and-system-35">History and system</h4>
+<table><thead><tr><th>Child (FK columns)</th><th>→ Parent</th><th>Cardinality</th><th>ON DELETE</th><th>Meaning</th></tr></thead><tbody><tr><td><code>audit_logs(user_id)</code></td><td><code>app_users(user_id)</code></td><td>1 : N, optional</td><td>RESTRICT</td><td>A audit_logs row may refer to one app_users row; one app_users row can have many audit_logs rows. ON DELETE RESTRICT: the parent row cannot be deleted while child rows refer to it.</td></tr><tr><td><code>integration_sync_runs(triggered_by)</code></td><td><code>app_users(user_id)</code></td><td>1 : N, optional</td><td>SET NULL</td><td>A integration_sync_runs row may refer to one app_users row; one app_users row can have many integration_sync_runs rows. ON DELETE SET NULL: deleting the parent row sets this reference to NULL (the child row stays).</td></tr></tbody></table>
+<div class="pagebreak"></div>
+<h2 id="4-ddl-how-the-database-is-created-38">4. DDL — how the database is created</h2>
+<p>DDL (Data Definition Language) is the part of SQL that defines structure: <code>CREATE</code>, <code>ALTER</code>, <code>DROP</code>, <code>COMMENT</code>, <code>GRANT</code>. ReliefFlow's DDL lives in <code>db/postgres/</code>. The base schema is run once on a new database; after that, <strong>incremental migrations</strong> are applied by <code>npm run db:migrate</code> (<code>scripts/migrate.ts</code>), each exactly once, recorded in <code>schema_migrations</code>. They only add things (<code>CREATE … IF NOT EXISTS</code>, <code>ADD COLUMN IF NOT EXISTS</code>, <code>ADD CONSTRAINT … NOT VALID</code>), so existing data is never dropped or rewritten.</p>
+<table><thead><tr><th>File</th><th>What it does</th></tr></thead><tbody><tr><td><code>001_schema.sql</code></td><td>Base schema: the 18 core tables with primary keys, foreign keys, CHECK constraints, the first indexes and the allocation triggers.</td></tr><tr><td><code>002_seed.sql</code></td><td>Reference data: the four roles and starter categories (INSERT).</td></tr><tr><td><code>003_sql_demonstrations.sql</code></td><td>Coursework examples of DDL/DML/queries (run manually; not part of the live schema).</td></tr><tr><td><code>004_operational_demo.sql</code></td><td>Optional demo data (INSERT only, safe to re-run).</td></tr><tr><td><code>005_integrity_security.sql</code></td><td>Hardening: sessions, login_attempts, audit_logs, inventory_movements; stricter CHECKs (NOT VALID), the reworked validation trigger and stock ledger trigger.</td></tr><tr><td><code>006_allocation_history.sql</code></td><td>Makes allocation history immutable and adds the allocation state-machine trigger with exact-once stock restoration.</td></tr><tr><td><code>007_dbms_engineering.sql</code></td><td>Foreign-key indexes, partial unique indexes against double booking, delivery triggers, the five views, functions and procedure, field-level audit (data_change_log), full-text search columns, integration_sync_runs and schema_migrations.</td></tr><tr><td><code>008_rbac_dictionary.sql</code></td><td>Database roles rf_admin / rf_coordinator / rf_field_officer / rf_driver with table and column GRANTs, row-level security on deliveries, SECURITY DEFINER history triggers, extra format CHECKs and COMMENT ON for every table and column.</td></tr></tbody></table>
+<p>DDL techniques used, with an example of each:</p>
+<table><thead><tr><th>Technique</th><th>Example in ReliefFlow</th></tr></thead><tbody><tr><td><code>CREATE TABLE</code> with PK, FK, CHECK, UNIQUE, DEFAULT</td><td>every table below</td></tr><tr><td>Identity column</td><td><code>allocation_id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY</code></td></tr><tr><td>Generated (computed) column</td><td><code>search_vector tsvector GENERATED ALWAYS AS (to_tsvector(...)) STORED</code> on disasters and resource_requests</td></tr><tr><td><code>ALTER TABLE … ADD COLUMN IF NOT EXISTS</code></td><td>disasters.event_location_id, search_vector (migration 007)</td></tr><tr><td><code>ALTER TABLE … ADD CONSTRAINT … NOT VALID</code></td><td>format and consistency checks added to a live database without rejecting old rows (005, 008)</td></tr><tr><td><code>DROP … IF EXISTS</code> then re-create</td><td>triggers and constraints are re-created idempotently (<code>DROP TRIGGER IF EXISTS …; CREATE TRIGGER …</code>)</td></tr><tr><td><code>CREATE INDEX</code> / <code>CREATE UNIQUE INDEX … WHERE</code></td><td>FK indexes, GIN full-text and trigram indexes, partial unique indexes against double booking</td></tr><tr><td><code>CREATE VIEW</code>, <code>CREATE FUNCTION</code>, <code>CREATE PROCEDURE</code>, <code>CREATE TRIGGER</code></td><td>Sections 5 and 6</td></tr><tr><td><code>CREATE ROLE</code>, <code>GRANT</code>, <code>REVOKE</code>, <code>CREATE POLICY</code>, <code>ENABLE ROW LEVEL SECURITY</code></td><td>Section 5.5 (migration 008)</td></tr><tr><td><code>COMMENT ON TABLE / COLUMN</code></td><td>the data dictionary: every description in this document comes from these comments</td></tr></tbody></table>
+<h3 id="4-1-every-table-43">4.1 Every table</h3>
+<p>For each table: why it exists, its exact <code>CREATE TABLE</code> statement as it is installed now (reconstructed from the catalog, including constraints added later by ALTER), the columns explained, its indexes and triggers, who may access it, and the DML the application performs on it.</p>
+<h3 id="users-and-security-45">Users and security</h3>
+<p>Who can sign in, with which role, and how sign-in is protected.</p>
+<h4 id="roles-47">roles</h4>
+<p><strong>Purpose:</strong> Application roles (ADMIN, RELIEF_COORDINATOR, FIELD_OFFICER, DRIVER).</p>
+<p><strong>Why it exists:</strong> Lists the four application roles. Every user points to exactly one role, so permissions can be decided from a single join.</p>
+<p>Created in <code>001_schema.sql</code>.</p>
+<pre class="lang-sql"><code>CREATE TABLE roles (
+  role_id bigint GENERATED ALWAYS AS IDENTITY,
+  role_name character varying(40) NOT NULL,
+  description text,
+  CONSTRAINT roles_pkey PRIMARY KEY (role_id),
+  CONSTRAINT roles_role_name_key UNIQUE (role_name)
+);</code></pre>
+<table><thead><tr><th>Column</th><th>Type</th><th>Key</th><th>Null</th><th>Meaning</th></tr></thead><tbody><tr><td><code>role_id</code></td><td>bigint (identity)</td><td>PK</td><td>NOT NULL</td><td>Surrogate primary key.</td></tr><tr><td><code>role_name</code></td><td>character varying(40)</td><td>UQ</td><td>NOT NULL</td><td>Unique role code used for authorisation.</td></tr><tr><td><code>description</code></td><td>text</td><td></td><td>nullable</td><td>Human-readable description of the role.</td></tr></tbody></table>
+<p><strong>Indexes:</strong></p>
+<ul><li><code>roles_pkey</code> (B-tree, unique) — created automatically by a PRIMARY KEY / UNIQUE constraint: <code>ON roles USING btree (role_id)</code></li><li><code>roles_role_name_key</code> (B-tree, unique) — created automatically by a PRIMARY KEY / UNIQUE constraint: <code>ON roles USING btree (role_name)</code></li></ul>
+<p><strong>Database access (GRANTs):</strong></p>
+<ul><li><code>rf_admin</code>: DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE</li><li><code>rf_coordinator</code>: SELECT</li><li><code>rf_driver</code>: SELECT</li><li><code>rf_field_officer</code>: SELECT</li></ul>
+<p><strong>DML performed on this table:</strong></p>
+<ul><li>INSERT: the four rows are created once by the seed script (002_seed.sql).</li><li>SELECT: joined to app_users on every request to know the signed-in user's role.</li><li>No UPDATE or DELETE: roles are fixed; deleting one is blocked by the FK from app_users (RESTRICT).</li></ul>
+<h4 id="app-users-59">app_users</h4>
+<p><strong>Purpose:</strong> People who can sign in. Passwords are stored only as bcrypt hashes.</p>
+<p><strong>Why it exists:</strong> Everyone who can sign in. The password is never stored, only a bcrypt hash. Users are deactivated, never deleted, so the history of who did what stays intact.</p>
+<p>Created in <code>001_schema.sql</code>.</p>
+<pre class="lang-sql"><code>CREATE TABLE app_users (
+  user_id bigint GENERATED ALWAYS AS IDENTITY,
+  role_id bigint NOT NULL,
+  full_name character varying(120) NOT NULL,
+  email character varying(254) NOT NULL,
+  password_hash text NOT NULL,
+  phone character varying(25),
+  is_active boolean DEFAULT true NOT NULL,
+  created_at timestamp with time zone DEFAULT now() NOT NULL,
+  CONSTRAINT app_users_pkey PRIMARY KEY (user_id),
+  CONSTRAINT app_users_email_key UNIQUE (email),
+  CONSTRAINT app_users_phone_key UNIQUE (phone),
+  CONSTRAINT app_users_role_id_fkey FOREIGN KEY (role_id) REFERENCES roles(role_id) ON UPDATE CASCADE ON DELETE RESTRICT,
+  CONSTRAINT app_users_email_format CHECK (((email)::text ~* '^[^@\s]+@[^@\s]+\.[^@\s]+$'::text)) NOT VALID
+);</code></pre>
+<table><thead><tr><th>Column</th><th>Type</th><th>Key</th><th>Null</th><th>Meaning</th></tr></thead><tbody><tr><td><code>user_id</code></td><td>bigint (identity)</td><td>PK</td><td>NOT NULL</td><td>Surrogate primary key.</td></tr><tr><td><code>role_id</code></td><td>bigint</td><td>FK</td><td>NOT NULL</td><td>FK to roles: the user's single role.</td></tr><tr><td><code>full_name</code></td><td>character varying(120)</td><td></td><td>NOT NULL</td><td>Display name.</td></tr><tr><td><code>email</code></td><td>character varying(254)</td><td>UQ</td><td>NOT NULL</td><td>Login e-mail (alternate key, format-checked).</td></tr><tr><td><code>password_hash</code></td><td>text</td><td></td><td>NOT NULL</td><td>bcrypt hash (cost 12); readable only by rf_admin.</td></tr><tr><td><code>phone</code></td><td>character varying(25)</td><td>UQ</td><td>nullable</td><td>Optional unique phone number.</td></tr><tr><td><code>is_active</code></td><td>boolean</td><td></td><td>NOT NULL</td><td>FALSE blocks sign-in and invalidates sessions.</td></tr><tr><td><code>created_at</code></td><td>timestamp with time zone</td><td></td><td>NOT NULL</td><td>When the account was created.</td></tr></tbody></table>
+<p><strong>CHECK constraints</strong> (rules the database itself enforces):</p>
+<ul><li><code>app_users_email_format</code>: <code>CHECK (((email)::text ~* '^[^@\s]+@[^@\s]+\.[^@\s]+$'::text)) NOT VALID</code></li></ul>
+<p><strong>Indexes:</strong></p>
+<ul><li><code>app_users_email_key</code> (B-tree, unique) — created automatically by a PRIMARY KEY / UNIQUE constraint: <code>ON app_users USING btree (email)</code></li><li><code>app_users_phone_key</code> (B-tree, unique) — created automatically by a PRIMARY KEY / UNIQUE constraint: <code>ON app_users USING btree (phone)</code></li><li><code>app_users_pkey</code> (B-tree, unique) — created automatically by a PRIMARY KEY / UNIQUE constraint: <code>ON app_users USING btree (user_id)</code></li></ul>
+<p><strong>Triggers on this table:</strong></p>
+<ul><li><code>row_change_log</code> → function <code>log_row_change()</code>: Generic field-level audit trigger attached to eight tables. (<code>AFTER INSERT OR DELETE OR UPDATE FOR EACH ROW</code>)</li></ul>
+<p><strong>Database access (GRANTs):</strong></p>
+<ul><li><code>rf_admin</code>: DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE</li><li><code>rf_coordinator</code>: SELECT only on columns (created_at, full_name, is_active, role_id, user_id)</li><li><code>rf_driver</code>: SELECT only on columns (created_at, full_name, is_active, role_id, user_id)</li><li><code>rf_field_officer</code>: SELECT only on columns (created_at, full_name, is_active, role_id, user_id)</li><li>Column privilege: only rf_admin may read password_hash; other database roles can read only user_id, role_id, full_name, is_active, created_at.</li></ul>
+<p><strong>DML performed on this table:</strong></p>
+<ul><li>INSERT: an administrator creates a user (Administration → Users).</li><li>UPDATE: change role, deactivate/reactivate, reset password. Each of these also DELETEs that user's sessions so the change takes effect immediately.</li><li>No DELETE in the application (deactivate instead); RESTRICT FKs from requests, allocations, deliveries and logs would block it anyway.</li><li>Trigger row_change_log records every change (without the password hash) in data_change_log.</li></ul>
+<h4 id="sessions-75">sessions</h4>
+<p><strong>Purpose:</strong> Server-side sessions. Only the SHA-256 hash of the cookie token is stored.</p>
+<p><strong>Why it exists:</strong> Server-side sessions. The browser cookie holds a random 256-bit token; the table holds only its SHA-256 hash, so a stolen database copy cannot be used to log in.</p>
+<p>Created in <code>005_integrity_security.sql</code>.</p>
+<pre class="lang-sql"><code>CREATE TABLE sessions (
+  token_hash text NOT NULL,
+  user_id bigint NOT NULL,
+  expires_at timestamp with time zone NOT NULL,
+  CONSTRAINT sessions_pkey PRIMARY KEY (token_hash),
+  CONSTRAINT sessions_user_id_fkey FOREIGN KEY (user_id) REFERENCES app_users(user_id) ON DELETE CASCADE
+);</code></pre>
+<table><thead><tr><th>Column</th><th>Type</th><th>Key</th><th>Null</th><th>Meaning</th></tr></thead><tbody><tr><td><code>token_hash</code></td><td>text</td><td>PK</td><td>NOT NULL</td><td>SHA-256 of the random session token (primary key).</td></tr><tr><td><code>user_id</code></td><td>bigint</td><td>FK</td><td>NOT NULL</td><td>FK to app_users (cascade delete).</td></tr><tr><td><code>expires_at</code></td><td>timestamp with time zone</td><td></td><td>NOT NULL</td><td>Absolute expiry (8 hours after sign-in).</td></tr></tbody></table>
+<p><strong>Indexes:</strong></p>
+<ul><li><code>idx_sessions_expiry</code> (B-tree): <code>ON sessions USING btree (expires_at)</code></li><li><code>idx_sessions_user</code> (B-tree): <code>ON sessions USING btree (user_id)</code></li><li><code>sessions_pkey</code> (B-tree, unique) — created automatically by a PRIMARY KEY / UNIQUE constraint: <code>ON sessions USING btree (token_hash)</code></li></ul>
+<p><strong>Database access (GRANTs):</strong></p>
+<ul><li><code>rf_admin</code>: DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE</li></ul>
+<p><strong>DML performed on this table:</strong></p>
+<ul><li>INSERT: on successful sign-in (expires_at = now() + 8 hours).</li><li>DELETE: on sign-out, on role change, deactivation and password reset (all of the user's sessions), and expired sessions are cleaned up at sign-in.</li><li>SELECT: on every API call to authenticate the cookie (sessions ⋈ app_users ⋈ roles).</li></ul>
+<h4 id="login-attempts-87">login_attempts</h4>
+<p><strong>Purpose:</strong> Login throttling window per e-mail.</p>
+<p><strong>Why it exists:</strong> Brute-force protection: counts failed sign-ins per e-mail inside a 15-minute window.</p>
+<p>Created in <code>005_integrity_security.sql</code>.</p>
+<pre class="lang-sql"><code>CREATE TABLE login_attempts (
+  email text NOT NULL,
+  attempts integer DEFAULT 0 NOT NULL,
+  window_start timestamp with time zone DEFAULT now() NOT NULL,
+  CONSTRAINT login_attempts_pkey PRIMARY KEY (email)
+);</code></pre>
+<table><thead><tr><th>Column</th><th>Type</th><th>Key</th><th>Null</th><th>Meaning</th></tr></thead><tbody><tr><td><code>email</code></td><td>text</td><td>PK</td><td>NOT NULL</td><td>Normalised e-mail being attempted (primary key).</td></tr><tr><td><code>attempts</code></td><td>integer</td><td></td><td>NOT NULL</td><td>Failed attempts in the current window.</td></tr><tr><td><code>window_start</code></td><td>timestamp with time zone</td><td></td><td>NOT NULL</td><td>Start of the 15-minute window.</td></tr></tbody></table>
+<p><strong>Indexes:</strong></p>
+<ul><li><code>login_attempts_pkey</code> (B-tree, unique) — created automatically by a PRIMARY KEY / UNIQUE constraint: <code>ON login_attempts USING btree (email)</code></li></ul>
+<p><strong>Database access (GRANTs):</strong></p>
+<ul><li><code>rf_admin</code>: DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE</li></ul>
+<p><strong>DML performed on this table:</strong></p>
+<ul><li>INSERT … ON CONFLICT DO NOTHING: creates the counter row for an e-mail.</li><li>SELECT … FOR UPDATE: locks the counter so parallel guesses are counted correctly.</li><li>UPDATE: attempts = attempts + 1 on failure, or reset when the window has expired.</li><li>DELETE: on successful sign-in.</li></ul>
+<h3 id="disasters-and-places-99">Disasters and places</h3>
+<p>The events being responded to and the places they affect.</p>
+<h4 id="locations-101">locations</h4>
+<p><strong>Purpose:</strong> Places: districts, camp areas, depots. Coordinates drive the map and distances.</p>
+<p><strong>Why it exists:</strong> Every place in the system (districts, camp sites, depots) with optional coordinates. Camps, warehouses, disasters, deliveries and vehicles all point here, so a place is stored once.</p>
+<p>Created in <code>001_schema.sql</code>.</p>
+<pre class="lang-sql"><code>CREATE TABLE locations (
+  location_id bigint GENERATED ALWAYS AS IDENTITY,
+  location_name character varying(160) NOT NULL,
+  location_type character varying(40) NOT NULL,
+  address text NOT NULL,
+  latitude numeric(9,6),
+  longitude numeric(9,6),
+  CONSTRAINT locations_pkey PRIMARY KEY (location_id),
+  CONSTRAINT locations_latitude_check CHECK (((latitude &gt;= ('-90'::integer)::numeric) AND (latitude &lt;= (90)::numeric))),
+  CONSTRAINT locations_longitude_check CHECK (((longitude &gt;= ('-180'::integer)::numeric) AND (longitude &lt;= (180)::numeric))),
+  CONSTRAINT locations_nonblank CHECK ((length(btrim((location_name)::text)) &gt;= 2)) NOT VALID
+);</code></pre>
+<table><thead><tr><th>Column</th><th>Type</th><th>Key</th><th>Null</th><th>Meaning</th></tr></thead><tbody><tr><td><code>location_id</code></td><td>bigint (identity)</td><td>PK</td><td>NOT NULL</td><td>Surrogate primary key.</td></tr><tr><td><code>location_name</code></td><td>character varying(160)</td><td></td><td>NOT NULL</td><td>Name of the place.</td></tr><tr><td><code>location_type</code></td><td>character varying(40)</td><td></td><td>NOT NULL</td><td>DISTRICT, CAMP_AREA, DEPOT, WARD, ...</td></tr><tr><td><code>address</code></td><td>text</td><td></td><td>NOT NULL</td><td>Postal/landmark address.</td></tr><tr><td><code>latitude</code></td><td>numeric(9,6)</td><td></td><td>nullable</td><td>WGS-84 latitude (-90..90).</td></tr><tr><td><code>longitude</code></td><td>numeric(9,6)</td><td></td><td>nullable</td><td>WGS-84 longitude (-180..180).</td></tr></tbody></table>
+<p><strong>CHECK constraints</strong> (rules the database itself enforces):</p>
+<ul><li><code>locations_latitude_check</code>: <code>CHECK (((latitude &gt;= ('-90'::integer)::numeric) AND (latitude &lt;= (90)::numeric)))</code></li><li><code>locations_longitude_check</code>: <code>CHECK (((longitude &gt;= ('-180'::integer)::numeric) AND (longitude &lt;= (180)::numeric)))</code></li><li><code>locations_nonblank</code>: <code>CHECK ((length(btrim((location_name)::text)) &gt;= 2)) NOT VALID</code></li></ul>
+<p><strong>Indexes:</strong></p>
+<ul><li><code>idx_locations_name_trgm</code> (GIN): <code>ON locations USING gin (location_name gin_trgm_ops)</code></li><li><code>locations_pkey</code> (B-tree, unique) — created automatically by a PRIMARY KEY / UNIQUE constraint: <code>ON locations USING btree (location_id)</code></li></ul>
+<p><strong>Database access (GRANTs):</strong></p>
+<ul><li><code>rf_admin</code>: DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE</li><li><code>rf_coordinator</code>: DELETE, INSERT, SELECT, UPDATE</li><li><code>rf_driver</code>: SELECT</li><li><code>rf_field_officer</code>: SELECT</li></ul>
+<p><strong>DML performed on this table:</strong></p>
+<ul><li>INSERT / UPDATE: management screen (Locations).</li><li>DELETE: allowed only while nothing refers to the location — every FK to locations is RESTRICT or SET NULL.</li></ul>
+<h4 id="disasters-115">disasters</h4>
+<p><strong>Purpose:</strong> Disaster events being responded to.</p>
+<p><strong>Why it exists:</strong> The events being responded to. Severity and status drive the dashboard; search_vector is a generated full-text column for searching.</p>
+<p>Created in <code>001_schema.sql</code>.</p>
+<pre class="lang-sql"><code>CREATE TABLE disasters (
+  disaster_id bigint GENERATED ALWAYS AS IDENTITY,
+  disaster_name character varying(160) NOT NULL,
+  disaster_type character varying(50) NOT NULL,
+  severity character varying(20) NOT NULL,
+  started_at timestamp with time zone NOT NULL,
+  ended_at timestamp with time zone,
+  status character varying(20) DEFAULT 'ACTIVE'::character varying NOT NULL,
+  description text,
+  created_by bigint NOT NULL,
+  created_at timestamp with time zone DEFAULT now() NOT NULL,
+  event_location_id bigint,
+  search_vector tsvector GENERATED ALWAYS AS (((setweight(to_tsvector('english'::regconfig, (COALESCE(disaster_name, ''::character varying))::text), 'A'::"char") || setweight(to_tsvector('english'::regconfig, (COALESCE(disaster_type, ''::character varying))::text), 'B'::"char")) || setweight(to_tsvector('english'::regconfig, COALESCE(description, ''::text)), 'C'::"char"))) STORED,
+  CONSTRAINT disasters_pkey PRIMARY KEY (disaster_id),
+  CONSTRAINT disasters_created_by_fkey FOREIGN KEY (created_by) REFERENCES app_users(user_id) ON DELETE RESTRICT,
+  CONSTRAINT disasters_event_location_id_fkey FOREIGN KEY (event_location_id) REFERENCES locations(location_id),
+  CONSTRAINT disaster_nonblank CHECK ((length(btrim((disaster_name)::text)) &gt;= 2)) NOT VALID,
+  CONSTRAINT disasters_check CHECK (((ended_at IS NULL) OR (ended_at &gt;= started_at))),
+  CONSTRAINT disasters_severity_check CHECK (((severity)::text = ANY ((ARRAY['LOW'::character varying, 'MODERATE'::character varying, 'HIGH'::character varying, 'CRITICAL'::character varying])::text[]))),
+  CONSTRAINT disasters_status_check CHECK (((status)::text = ANY ((ARRAY['ACTIVE'::character varying, 'CONTAINED'::character varying, 'CLOSED'::character varying])::text[])))
+);</code></pre>
+<table><thead><tr><th>Column</th><th>Type</th><th>Key</th><th>Null</th><th>Meaning</th></tr></thead><tbody><tr><td><code>disaster_id</code></td><td>bigint (identity)</td><td>PK</td><td>NOT NULL</td><td>Surrogate primary key.</td></tr><tr><td><code>disaster_name</code></td><td>character varying(160)</td><td></td><td>NOT NULL</td><td>Event name (duplicate events rejected by trigger).</td></tr><tr><td><code>disaster_type</code></td><td>character varying(50)</td><td></td><td>NOT NULL</td><td>FLOOD, CYCLONE, EARTHQUAKE, ...</td></tr><tr><td><code>severity</code></td><td>character varying(20)</td><td></td><td>NOT NULL</td><td>LOW, MODERATE, HIGH or CRITICAL.</td></tr><tr><td><code>started_at</code></td><td>timestamp with time zone</td><td></td><td>NOT NULL</td><td>When the event started.</td></tr><tr><td><code>ended_at</code></td><td>timestamp with time zone</td><td></td><td>nullable</td><td>When it was closed (must be after started_at).</td></tr><tr><td><code>status</code></td><td>character varying(20)</td><td></td><td>NOT NULL</td><td>ACTIVE, CONTAINED or CLOSED.</td></tr><tr><td><code>description</code></td><td>text</td><td></td><td>nullable</td><td>Free-text situation summary.</td></tr><tr><td><code>created_by</code></td><td>bigint</td><td>FK</td><td>NOT NULL</td><td>FK to the coordinator who registered it.</td></tr><tr><td><code>created_at</code></td><td>timestamp with time zone</td><td></td><td>NOT NULL</td><td>Registration time.</td></tr><tr><td><code>event_location_id</code></td><td>bigint</td><td>FK</td><td>nullable</td><td>FK to the main event location.</td></tr><tr><td><code>search_vector</code></td><td>tsvector (generated)</td><td></td><td>nullable</td><td>Generated tsvector for full-text search (GIN indexed).</td></tr></tbody></table>
+<p><strong>CHECK constraints</strong> (rules the database itself enforces):</p>
+<ul><li><code>disaster_nonblank</code>: <code>CHECK ((length(btrim((disaster_name)::text)) &gt;= 2)) NOT VALID</code></li><li><code>disasters_check</code>: <code>CHECK (((ended_at IS NULL) OR (ended_at &gt;= started_at)))</code></li><li><code>disasters_severity_check</code>: <code>CHECK (((severity)::text = ANY ((ARRAY['LOW'::character varying, 'MODERATE'::character varying, 'HIGH'::character varying, 'CRITICAL'::character varying])::text[])))</code></li><li><code>disasters_status_check</code>: <code>CHECK (((status)::text = ANY ((ARRAY['ACTIVE'::character varying, 'CONTAINED'::character varying, 'CLOSED'::character varying])::text[])))</code></li></ul>
+<p><strong>Indexes:</strong></p>
+<ul><li><code>disasters_pkey</code> (B-tree, unique) — created automatically by a PRIMARY KEY / UNIQUE constraint: <code>ON disasters USING btree (disaster_id)</code></li><li><code>idx_disasters_fts</code> (GIN): <code>ON disasters USING gin (search_vector)</code></li><li><code>idx_disasters_status_severity</code> (B-tree): <code>ON disasters USING btree (status, severity)</code></li></ul>
+<p><strong>Triggers on this table:</strong></p>
+<ul><li><code>operational_duplicate</code> → function <code>prevent_operational_duplicate()</code>: Stops the same disaster or warehouse being entered twice with slightly different spelling. (<code>BEFORE INSERT OR UPDATE OF disaster_name, disaster_type, started_at, event_location_id FOR EACH ROW</code>)</li><li><code>row_change_log</code> → function <code>log_row_change()</code>: Generic field-level audit trigger attached to eight tables. (<code>AFTER INSERT OR DELETE OR UPDATE FOR EACH ROW</code>)</li></ul>
+<p><strong>Database access (GRANTs):</strong></p>
+<ul><li><code>rf_admin</code>: DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE</li><li><code>rf_coordinator</code>: DELETE, INSERT, SELECT, UPDATE</li><li><code>rf_driver</code>: SELECT</li><li><code>rf_field_officer</code>: SELECT</li></ul>
+<p><strong>DML performed on this table:</strong></p>
+<ul><li>INSERT: Disasters → New, in the same transaction as its disaster_locations rows.</li><li>UPDATE: edit details or close the disaster (with optimistic locking on xmin).</li><li>No DELETE: requests and incident reports refer to disasters (RESTRICT).</li><li>Triggers: operational_duplicate rejects the same event entered twice; row_change_log keeps field-level history.</li></ul>
+<h4 id="disaster-locations-131">disaster_locations</h4>
+<p><strong>Purpose:</strong> M:N: which locations a disaster affects, with impact attributes.</p>
+<p><strong>Why it exists:</strong> Resolves the many-to-many relationship Disaster AFFECTS Location. The relationship has its own attributes (impact level, affected population, reported time), which is why it is a table.</p>
+<p>Created in <code>001_schema.sql</code>.</p>
+<pre class="lang-sql"><code>CREATE TABLE disaster_locations (
+  disaster_id bigint NOT NULL,
+  location_id bigint NOT NULL,
+  impact_level character varying(20) NOT NULL,
+  affected_population integer DEFAULT 0 NOT NULL,
+  reported_at timestamp with time zone DEFAULT now() NOT NULL,
+  CONSTRAINT disaster_locations_pkey PRIMARY KEY (disaster_id, location_id),
+  CONSTRAINT disaster_locations_disaster_id_fkey FOREIGN KEY (disaster_id) REFERENCES disasters(disaster_id) ON DELETE CASCADE,
+  CONSTRAINT disaster_locations_location_id_fkey FOREIGN KEY (location_id) REFERENCES locations(location_id) ON DELETE RESTRICT,
+  CONSTRAINT disaster_locations_affected_population_check CHECK ((affected_population &gt;= 0)),
+  CONSTRAINT disaster_locations_impact_level_check CHECK (((impact_level)::text = ANY ((ARRAY['LOW'::character varying, 'MODERATE'::character varying, 'HIGH'::character varying, 'SEVERE'::character varying])::text[])))
+);</code></pre>
+<table><thead><tr><th>Column</th><th>Type</th><th>Key</th><th>Null</th><th>Meaning</th></tr></thead><tbody><tr><td><code>disaster_id</code></td><td>bigint</td><td>PK, FK</td><td>NOT NULL</td><td>PK part / FK to disasters.</td></tr><tr><td><code>location_id</code></td><td>bigint</td><td>PK, FK</td><td>NOT NULL</td><td>PK part / FK to locations.</td></tr><tr><td><code>impact_level</code></td><td>character varying(20)</td><td></td><td>NOT NULL</td><td>LOW, MODERATE, HIGH or SEVERE.</td></tr><tr><td><code>affected_population</code></td><td>integer</td><td></td><td>NOT NULL</td><td>People affected at this location (&gt;= 0).</td></tr><tr><td><code>reported_at</code></td><td>timestamp with time zone</td><td></td><td>NOT NULL</td><td>When the impact was reported.</td></tr></tbody></table>
+<p><strong>CHECK constraints</strong> (rules the database itself enforces):</p>
+<ul><li><code>disaster_locations_affected_population_check</code>: <code>CHECK ((affected_population &gt;= 0))</code></li><li><code>disaster_locations_impact_level_check</code>: <code>CHECK (((impact_level)::text = ANY ((ARRAY['LOW'::character varying, 'MODERATE'::character varying, 'HIGH'::character varying, 'SEVERE'::character varying])::text[])))</code></li></ul>
+<p><strong>Indexes:</strong></p>
+<ul><li><code>disaster_locations_pkey</code> (B-tree, unique) — created automatically by a PRIMARY KEY / UNIQUE constraint: <code>ON disaster_locations USING btree (disaster_id, location_id)</code></li><li><code>idx_disaster_locations_location</code> (B-tree): <code>ON disaster_locations USING btree (location_id)</code></li></ul>
+<p><strong>Database access (GRANTs):</strong></p>
+<ul><li><code>rf_admin</code>: DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE</li><li><code>rf_coordinator</code>: DELETE, INSERT, SELECT, UPDATE</li><li><code>rf_driver</code>: SELECT</li><li><code>rf_field_officer</code>: SELECT</li></ul>
+<p><strong>DML performed on this table:</strong></p>
+<ul><li>INSERT: when a disaster is created, and later via 'add affected location'.</li><li>Deleted automatically with its disaster (ON DELETE CASCADE).</li></ul>
+<h3 id="shelters-145">Shelters</h3>
+<p>Relief camps that house affected people and raise requests.</p>
+<h4 id="relief-camps-147">relief_camps</h4>
+<p><strong>Purpose:</strong> Shelters with capacity and current occupancy.</p>
+<p><strong>Why it exists:</strong> Shelters. CHECK constraints keep occupancy between 0 and capacity and keep status consistent with occupancy (FULL only when full, CLOSED only when empty).</p>
+<p>Created in <code>001_schema.sql</code>.</p>
+<pre class="lang-sql"><code>CREATE TABLE relief_camps (
+  camp_id bigint GENERATED ALWAYS AS IDENTITY,
+  location_id bigint NOT NULL,
+  camp_name character varying(160) NOT NULL,
+  capacity integer NOT NULL,
+  current_population integer DEFAULT 0 NOT NULL,
+  manager_id bigint,
+  status character varying(20) DEFAULT 'OPEN'::character varying NOT NULL,
+  established_at date DEFAULT CURRENT_DATE NOT NULL,
+  CONSTRAINT relief_camps_pkey PRIMARY KEY (camp_id),
+  CONSTRAINT relief_camps_location_id_fkey FOREIGN KEY (location_id) REFERENCES locations(location_id) ON DELETE RESTRICT,
+  CONSTRAINT relief_camps_manager_id_fkey FOREIGN KEY (manager_id) REFERENCES app_users(user_id) ON DELETE SET NULL,
+  CONSTRAINT camp_status_occupancy CHECK (((((status)::text = 'CLOSED'::text) AND (current_population = 0)) OR (((status)::text = 'FULL'::text) AND (current_population = capacity)) OR (((status)::text = 'OPEN'::text) AND (current_population &lt; capacity)))) NOT VALID,
+  CONSTRAINT relief_camps_capacity_check CHECK ((capacity &gt; 0)),
+  CONSTRAINT relief_camps_check CHECK (((current_population &gt;= 0) AND (current_population &lt;= capacity))),
+  CONSTRAINT relief_camps_status_check CHECK (((status)::text = ANY ((ARRAY['OPEN'::character varying, 'FULL'::character varying, 'CLOSED'::character varying])::text[])))
+);</code></pre>
+<table><thead><tr><th>Column</th><th>Type</th><th>Key</th><th>Null</th><th>Meaning</th></tr></thead><tbody><tr><td><code>camp_id</code></td><td>bigint (identity)</td><td>PK</td><td>NOT NULL</td><td>Surrogate primary key.</td></tr><tr><td><code>location_id</code></td><td>bigint</td><td>FK</td><td>NOT NULL</td><td>FK to the camp location.</td></tr><tr><td><code>camp_name</code></td><td>character varying(160)</td><td></td><td>NOT NULL</td><td>Camp name.</td></tr><tr><td><code>capacity</code></td><td>integer</td><td></td><td>NOT NULL</td><td>Maximum people (&gt; 0).</td></tr><tr><td><code>current_population</code></td><td>integer</td><td></td><td>NOT NULL</td><td>People sheltered now (0..capacity).</td></tr><tr><td><code>manager_id</code></td><td>bigint</td><td>FK</td><td>nullable</td><td>Optional FK to the managing user.</td></tr><tr><td><code>status</code></td><td>character varying(20)</td><td></td><td>NOT NULL</td><td>OPEN, FULL (= at capacity) or CLOSED (= empty).</td></tr><tr><td><code>established_at</code></td><td>date</td><td></td><td>NOT NULL</td><td>Opening date.</td></tr></tbody></table>
+<p><strong>CHECK constraints</strong> (rules the database itself enforces):</p>
+<ul><li><code>camp_status_occupancy</code>: <code>CHECK (((((status)::text = 'CLOSED'::text) AND (current_population = 0)) OR (((status)::text = 'FULL'::text) AND (current_population = capacity)) OR (((status)::text = 'OPEN'::text) AND (current_population &lt; capacity)))) NOT VALID</code></li><li><code>relief_camps_capacity_check</code>: <code>CHECK ((capacity &gt; 0))</code></li><li><code>relief_camps_check</code>: <code>CHECK (((current_population &gt;= 0) AND (current_population &lt;= capacity)))</code></li><li><code>relief_camps_status_check</code>: <code>CHECK (((status)::text = ANY ((ARRAY['OPEN'::character varying, 'FULL'::character varying, 'CLOSED'::character varying])::text[])))</code></li></ul>
+<p><strong>Indexes:</strong></p>
+<ul><li><code>idx_relief_camps_location</code> (B-tree): <code>ON relief_camps USING btree (location_id)</code></li><li><code>relief_camps_pkey</code> (B-tree, unique) — created automatically by a PRIMARY KEY / UNIQUE constraint: <code>ON relief_camps USING btree (camp_id)</code></li></ul>
+<p><strong>Triggers on this table:</strong></p>
+<ul><li><code>row_change_log</code> → function <code>log_row_change()</code>: Generic field-level audit trigger attached to eight tables. (<code>AFTER INSERT OR DELETE OR UPDATE FOR EACH ROW</code>)</li></ul>
+<p><strong>Database access (GRANTs):</strong></p>
+<ul><li><code>rf_admin</code>: DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE</li><li><code>rf_coordinator</code>: DELETE, INSERT, SELECT, UPDATE</li><li><code>rf_driver</code>: SELECT</li><li><code>rf_field_officer</code>: SELECT</li><li><code>rf_field_officer</code>: UPDATE only on columns (current_population, status)</li><li>Column privilege: a field officer (rf_field_officer) may UPDATE only current_population and status.</li></ul>
+<p><strong>DML performed on this table:</strong></p>
+<ul><li>INSERT / UPDATE: management screen (with xmin optimistic locking).</li><li>UPDATE (admit / discharge): an atomic relative update — SET current_population = current_population + $n, status recomputed in the same statement — so 12 simultaneous admissions are all counted.</li><li>No DELETE: camps are closed (status = CLOSED); requests refer to them (RESTRICT).</li><li>Trigger row_change_log records changes.</li></ul>
+<h3 id="stock-163">Stock</h3>
+<p>What relief items exist, where they are stored and how much is left.</p>
+<h4 id="resource-categories-165">resource_categories</h4>
+<p><strong>Purpose:</strong> Groups of resources (FOOD, WATER, MEDICAL, ...).</p>
+<p><strong>Why it exists:</strong> Groups resources (FOOD, WATER, MEDICAL, SHELTER, HYGIENE, ENERGY) for filtering and analytics.</p>
+<p>Created in <code>001_schema.sql</code>.</p>
+<pre class="lang-sql"><code>CREATE TABLE resource_categories (
+  category_id bigint GENERATED ALWAYS AS IDENTITY,
+  category_name character varying(80) NOT NULL,
+  description text,
+  CONSTRAINT resource_categories_pkey PRIMARY KEY (category_id),
+  CONSTRAINT resource_categories_category_name_key UNIQUE (category_name)
+);</code></pre>
+<table><thead><tr><th>Column</th><th>Type</th><th>Key</th><th>Null</th><th>Meaning</th></tr></thead><tbody><tr><td><code>category_id</code></td><td>bigint (identity)</td><td>PK</td><td>NOT NULL</td><td>Surrogate primary key.</td></tr><tr><td><code>category_name</code></td><td>character varying(80)</td><td>UQ</td><td>NOT NULL</td><td>Unique category code.</td></tr><tr><td><code>description</code></td><td>text</td><td></td><td>nullable</td><td>Description.</td></tr></tbody></table>
+<p><strong>Indexes:</strong></p>
+<ul><li><code>resource_categories_category_name_key</code> (B-tree, unique) — created automatically by a PRIMARY KEY / UNIQUE constraint: <code>ON resource_categories USING btree (category_name)</code></li><li><code>resource_categories_pkey</code> (B-tree, unique) — created automatically by a PRIMARY KEY / UNIQUE constraint: <code>ON resource_categories USING btree (category_id)</code></li></ul>
+<p><strong>Database access (GRANTs):</strong></p>
+<ul><li><code>rf_admin</code>: DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE</li><li><code>rf_coordinator</code>: DELETE, INSERT, SELECT, UPDATE</li><li><code>rf_driver</code>: SELECT</li><li><code>rf_field_officer</code>: SELECT</li></ul>
+<p><strong>DML performed on this table:</strong></p>
+<ul><li>INSERT / UPDATE / DELETE: management screen. DELETE is refused while resources use the category (RESTRICT).</li></ul>
+<h4 id="resources-177">resources</h4>
+<p><strong>Purpose:</strong> Catalogue of relief items, each with a unit of measure.</p>
+<p><strong>Why it exists:</strong> The catalogue of relief items, each with a unit of measure (litre, packet, kit…). A resource exists once; stock of it lives in inventory.</p>
+<p>Created in <code>001_schema.sql</code>.</p>
+<pre class="lang-sql"><code>CREATE TABLE resources (
+  resource_id bigint GENERATED ALWAYS AS IDENTITY,
+  category_id bigint NOT NULL,
+  resource_name character varying(120) NOT NULL,
+  unit character varying(30) NOT NULL,
+  description text,
+  is_perishable boolean DEFAULT false NOT NULL,
+  CONSTRAINT resources_pkey PRIMARY KEY (resource_id),
+  CONSTRAINT resources_category_id_resource_name_key UNIQUE (category_id, resource_name),
+  CONSTRAINT resources_category_id_fkey FOREIGN KEY (category_id) REFERENCES resource_categories(category_id) ON DELETE RESTRICT,
+  CONSTRAINT resources_nonblank CHECK (((length(btrim((resource_name)::text)) &gt;= 2) AND (length(btrim((unit)::text)) &gt;= 1))) NOT VALID
+);</code></pre>
+<table><thead><tr><th>Column</th><th>Type</th><th>Key</th><th>Null</th><th>Meaning</th></tr></thead><tbody><tr><td><code>resource_id</code></td><td>bigint (identity)</td><td>PK</td><td>NOT NULL</td><td>Surrogate primary key.</td></tr><tr><td><code>category_id</code></td><td>bigint</td><td>FK</td><td>NOT NULL</td><td>FK to resource_categories.</td></tr><tr><td><code>resource_name</code></td><td>character varying(120)</td><td></td><td>NOT NULL</td><td>Item name (unique within its category).</td></tr><tr><td><code>unit</code></td><td>character varying(30)</td><td></td><td>NOT NULL</td><td>Unit of measure: kg, litre, kit, piece ...</td></tr><tr><td><code>description</code></td><td>text</td><td></td><td>nullable</td><td>Optional notes.</td></tr><tr><td><code>is_perishable</code></td><td>boolean</td><td></td><td>NOT NULL</td><td>TRUE for items with limited shelf life.</td></tr></tbody></table>
+<p><strong>CHECK constraints</strong> (rules the database itself enforces):</p>
+<ul><li><code>resources_nonblank</code>: <code>CHECK (((length(btrim((resource_name)::text)) &gt;= 2) AND (length(btrim((unit)::text)) &gt;= 1))) NOT VALID</code></li></ul>
+<p><strong>Indexes:</strong></p>
+<ul><li><code>resources_category_id_resource_name_key</code> (B-tree, unique) — created automatically by a PRIMARY KEY / UNIQUE constraint: <code>ON resources USING btree (category_id, resource_name)</code></li><li><code>resources_pkey</code> (B-tree, unique) — created automatically by a PRIMARY KEY / UNIQUE constraint: <code>ON resources USING btree (resource_id)</code></li></ul>
+<p><strong>Database access (GRANTs):</strong></p>
+<ul><li><code>rf_admin</code>: DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE</li><li><code>rf_coordinator</code>: DELETE, INSERT, SELECT, UPDATE</li><li><code>rf_driver</code>: SELECT</li><li><code>rf_field_officer</code>: SELECT</li></ul>
+<p><strong>DML performed on this table:</strong></p>
+<ul><li>INSERT / UPDATE / DELETE: management screen. DELETE is refused once the resource is stocked or requested (RESTRICT).</li></ul>
+<h4 id="warehouses-191">warehouses</h4>
+<p><strong>Purpose:</strong> Storage sites holding stock.</p>
+<p><strong>Why it exists:</strong> Storage sites. A warehouse must be ACTIVE to supply stock (checked by the allocation trigger).</p>
+<p>Created in <code>001_schema.sql</code>.</p>
+<pre class="lang-sql"><code>CREATE TABLE warehouses (
+  warehouse_id bigint GENERATED ALWAYS AS IDENTITY,
+  location_id bigint NOT NULL,
+  warehouse_name character varying(160) NOT NULL,
+  manager_id bigint,
+  capacity numeric(14,2) NOT NULL,
+  status character varying(20) DEFAULT 'ACTIVE'::character varying NOT NULL,
+  CONSTRAINT warehouses_pkey PRIMARY KEY (warehouse_id),
+  CONSTRAINT warehouses_location_id_fkey FOREIGN KEY (location_id) REFERENCES locations(location_id) ON DELETE RESTRICT,
+  CONSTRAINT warehouses_manager_id_fkey FOREIGN KEY (manager_id) REFERENCES app_users(user_id) ON DELETE SET NULL,
+  CONSTRAINT warehouse_nonblank CHECK ((length(btrim((warehouse_name)::text)) &gt;= 2)) NOT VALID,
+  CONSTRAINT warehouses_capacity_check CHECK ((capacity &gt; (0)::numeric)),
+  CONSTRAINT warehouses_status_check CHECK (((status)::text = ANY ((ARRAY['ACTIVE'::character varying, 'INACTIVE'::character varying, 'MAINTENANCE'::character varying])::text[])))
+);</code></pre>
+<table><thead><tr><th>Column</th><th>Type</th><th>Key</th><th>Null</th><th>Meaning</th></tr></thead><tbody><tr><td><code>warehouse_id</code></td><td>bigint (identity)</td><td>PK</td><td>NOT NULL</td><td>Surrogate primary key.</td></tr><tr><td><code>location_id</code></td><td>bigint</td><td>FK</td><td>NOT NULL</td><td>FK to the warehouse location.</td></tr><tr><td><code>warehouse_name</code></td><td>character varying(160)</td><td></td><td>NOT NULL</td><td>Name (unique per location via trigger).</td></tr><tr><td><code>manager_id</code></td><td>bigint</td><td>FK</td><td>nullable</td><td>Optional FK to the managing user.</td></tr><tr><td><code>capacity</code></td><td>numeric(14,2)</td><td></td><td>NOT NULL</td><td>Storage capacity (&gt; 0).</td></tr><tr><td><code>status</code></td><td>character varying(20)</td><td></td><td>NOT NULL</td><td>ACTIVE, INACTIVE or MAINTENANCE; only ACTIVE supplies stock.</td></tr></tbody></table>
+<p><strong>CHECK constraints</strong> (rules the database itself enforces):</p>
+<ul><li><code>warehouse_nonblank</code>: <code>CHECK ((length(btrim((warehouse_name)::text)) &gt;= 2)) NOT VALID</code></li><li><code>warehouses_capacity_check</code>: <code>CHECK ((capacity &gt; (0)::numeric))</code></li><li><code>warehouses_status_check</code>: <code>CHECK (((status)::text = ANY ((ARRAY['ACTIVE'::character varying, 'INACTIVE'::character varying, 'MAINTENANCE'::character varying])::text[])))</code></li></ul>
+<p><strong>Indexes:</strong></p>
+<ul><li><code>idx_warehouses_location</code> (B-tree): <code>ON warehouses USING btree (location_id)</code></li><li><code>warehouses_pkey</code> (B-tree, unique) — created automatically by a PRIMARY KEY / UNIQUE constraint: <code>ON warehouses USING btree (warehouse_id)</code></li></ul>
+<p><strong>Triggers on this table:</strong></p>
+<ul><li><code>operational_duplicate</code> → function <code>prevent_operational_duplicate()</code>: Stops the same disaster or warehouse being entered twice with slightly different spelling. (<code>BEFORE INSERT OR UPDATE OF warehouse_name, location_id FOR EACH ROW</code>)</li><li><code>row_change_log</code> → function <code>log_row_change()</code>: Generic field-level audit trigger attached to eight tables. (<code>AFTER INSERT OR DELETE OR UPDATE FOR EACH ROW</code>)</li></ul>
+<p><strong>Database access (GRANTs):</strong></p>
+<ul><li><code>rf_admin</code>: DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE</li><li><code>rf_coordinator</code>: DELETE, INSERT, SELECT, UPDATE</li><li><code>rf_driver</code>: SELECT</li><li><code>rf_field_officer</code>: SELECT</li></ul>
+<p><strong>DML performed on this table:</strong></p>
+<ul><li>INSERT / UPDATE: management screen; status INACTIVE instead of delete.</li><li>Triggers: operational_duplicate (same name at the same location → rejected), row_change_log.</li></ul>
+<h4 id="inventory-207">inventory</h4>
+<p><strong>Purpose:</strong> Stock line: quantity of one resource in one warehouse (weak entity).</p>
+<p><strong>Why it exists:</strong> A stock line: how much of one resource one warehouse holds. It is a weak entity — identified by (warehouse_id, resource_id) — and the quantity can never go negative (CHECK).</p>
+<p>Created in <code>001_schema.sql</code>.</p>
+<pre class="lang-sql"><code>CREATE TABLE inventory (
+  warehouse_id bigint NOT NULL,
+  resource_id bigint NOT NULL,
+  quantity_available numeric(14,3) DEFAULT 0 NOT NULL,
+  minimum_threshold numeric(14,3) DEFAULT 0 NOT NULL,
+  last_updated timestamp with time zone DEFAULT now() NOT NULL,
+  CONSTRAINT inventory_pkey PRIMARY KEY (warehouse_id, resource_id),
+  CONSTRAINT inventory_resource_id_fkey FOREIGN KEY (resource_id) REFERENCES resources(resource_id) ON DELETE RESTRICT,
+  CONSTRAINT inventory_warehouse_id_fkey FOREIGN KEY (warehouse_id) REFERENCES warehouses(warehouse_id) ON DELETE RESTRICT,
+  CONSTRAINT inventory_minimum_threshold_check CHECK ((minimum_threshold &gt;= (0)::numeric)),
+  CONSTRAINT inventory_quantity_available_check CHECK ((quantity_available &gt;= (0)::numeric))
+);</code></pre>
+<table><thead><tr><th>Column</th><th>Type</th><th>Key</th><th>Null</th><th>Meaning</th></tr></thead><tbody><tr><td><code>warehouse_id</code></td><td>bigint</td><td>PK, FK</td><td>NOT NULL</td><td>PK part / FK to warehouses.</td></tr><tr><td><code>resource_id</code></td><td>bigint</td><td>PK, FK</td><td>NOT NULL</td><td>PK part / FK to resources.</td></tr><tr><td><code>quantity_available</code></td><td>numeric(14,3)</td><td></td><td>NOT NULL</td><td>Units on hand (CHECK &gt;= 0).</td></tr><tr><td><code>minimum_threshold</code></td><td>numeric(14,3)</td><td></td><td>NOT NULL</td><td>Low-stock alert level.</td></tr><tr><td><code>last_updated</code></td><td>timestamp with time zone</td><td></td><td>NOT NULL</td><td>Time of the last stock change.</td></tr></tbody></table>
+<p><strong>CHECK constraints</strong> (rules the database itself enforces):</p>
+<ul><li><code>inventory_minimum_threshold_check</code>: <code>CHECK ((minimum_threshold &gt;= (0)::numeric))</code></li><li><code>inventory_quantity_available_check</code>: <code>CHECK ((quantity_available &gt;= (0)::numeric))</code></li></ul>
+<p><strong>Indexes:</strong></p>
+<ul><li><code>idx_inventory_resource</code> (B-tree): <code>ON inventory USING btree (resource_id)</code></li><li><code>inventory_pkey</code> (B-tree, unique) — created automatically by a PRIMARY KEY / UNIQUE constraint: <code>ON inventory USING btree (warehouse_id, resource_id)</code></li></ul>
+<p><strong>Triggers on this table:</strong></p>
+<ul><li><code>inventory_history</code> → function <code>record_inventory_movement()</code>: Writes the stock ledger: every change of inventory.quantity_available becomes a row in inventory_movements. (<code>AFTER INSERT OR UPDATE OF quantity_available FOR EACH ROW</code>)</li></ul>
+<p><strong>Database access (GRANTs):</strong></p>
+<ul><li><code>rf_admin</code>: DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE</li><li><code>rf_coordinator</code>: DELETE, INSERT, SELECT, UPDATE</li><li><code>rf_driver</code>: SELECT</li><li><code>rf_field_officer</code>: SELECT</li></ul>
+<p><strong>DML performed on this table:</strong></p>
+<ul><li>INSERT … ON CONFLICT DO NOTHING: creates the stock line the first time a resource is stocked in a warehouse.</li><li>UPDATE (adjust stock): locks the line FOR UPDATE, checks the expected quantity (optimistic concurrency), sets the new quantity with a reason.</li><li>UPDATE by triggers: allocation lines deduct stock (trg_adjust_inventory); a cancelled allocation restores it (allocation_status_guard).</li><li>Trigger inventory_history writes every change to inventory_movements.</li></ul>
+<h4 id="inventory-movements-223">inventory_movements</h4>
+<p><strong>Purpose:</strong> Every stock change with its reason (written by trigger).</p>
+<p><strong>Why it exists:</strong> Every stock change with its delta and reason — the full stock ledger.</p>
+<p>Created in <code>005_integrity_security.sql</code>.</p>
+<pre class="lang-sql"><code>CREATE TABLE inventory_movements (
+  movement_id bigint GENERATED ALWAYS AS IDENTITY,
+  warehouse_id bigint NOT NULL,
+  resource_id bigint NOT NULL,
+  delta numeric(14,3) NOT NULL,
+  reason text NOT NULL,
+  created_at timestamp with time zone DEFAULT now() NOT NULL,
+  CONSTRAINT inventory_movements_pkey PRIMARY KEY (movement_id),
+  CONSTRAINT inventory_movements_warehouse_id_resource_id_fkey FOREIGN KEY (warehouse_id, resource_id) REFERENCES inventory(warehouse_id, resource_id)
+);</code></pre>
+<table><thead><tr><th>Column</th><th>Type</th><th>Key</th><th>Null</th><th>Meaning</th></tr></thead><tbody><tr><td><code>movement_id</code></td><td>bigint (identity)</td><td>PK</td><td>NOT NULL</td><td>Surrogate primary key.</td></tr><tr><td><code>warehouse_id</code></td><td>bigint</td><td>FK</td><td>NOT NULL</td><td>Composite FK part to inventory.</td></tr><tr><td><code>resource_id</code></td><td>bigint</td><td>FK</td><td>NOT NULL</td><td>Composite FK part to inventory.</td></tr><tr><td><code>delta</code></td><td>numeric(14,3)</td><td></td><td>NOT NULL</td><td>Signed change (+ received, - dispatched).</td></tr><tr><td><code>reason</code></td><td>text</td><td></td><td>NOT NULL</td><td>Why stock changed.</td></tr><tr><td><code>created_at</code></td><td>timestamp with time zone</td><td></td><td>NOT NULL</td><td>When it changed.</td></tr></tbody></table>
+<p><strong>Indexes:</strong></p>
+<ul><li><code>idx_inventory_movements_created</code> (B-tree): <code>ON inventory_movements USING btree (created_at)</code></li><li><code>idx_inventory_movements_stock</code> (B-tree): <code>ON inventory_movements USING btree (warehouse_id, resource_id, created_at DESC)</code></li><li><code>inventory_movements_pkey</code> (B-tree, unique) — created automatically by a PRIMARY KEY / UNIQUE constraint: <code>ON inventory_movements USING btree (movement_id)</code></li></ul>
+<p><strong>Database access (GRANTs):</strong></p>
+<ul><li><code>rf_admin</code>: DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE</li><li><code>rf_coordinator</code>: SELECT</li></ul>
+<p><strong>DML performed on this table:</strong></p>
+<ul><li>INSERT: only by the trigger record_inventory_movement. No database role may write it directly (no INSERT grant), so the ledger cannot be forged.</li><li>SELECT: Stock movements screen and analytics.</li></ul>
+<h3 id="requests-235">Requests</h3>
+<p>What a camp asks for: one header row and one line per resource.</p>
+<h4 id="resource-requests-237">resource_requests</h4>
+<p><strong>Purpose:</strong> A camp's request for resources (header).</p>
+<p><strong>Why it exists:</strong> The header of a camp's request: who raised it, when it is needed, priority and status. Status follows a state machine and is recomputed by the procedure refresh_request_status.</p>
+<p>Created in <code>001_schema.sql</code>.</p>
+<pre class="lang-sql"><code>CREATE TABLE resource_requests (
+  request_id bigint GENERATED ALWAYS AS IDENTITY,
+  camp_id bigint NOT NULL,
+  disaster_id bigint NOT NULL,
+  requested_by bigint NOT NULL,
+  requested_at timestamp with time zone DEFAULT now() NOT NULL,
+  need_by timestamp with time zone NOT NULL,
+  priority_score numeric(5,2) DEFAULT 0 NOT NULL,
+  priority_level character varying(20) DEFAULT 'MEDIUM'::character varying NOT NULL,
+  status character varying(20) DEFAULT 'PENDING'::character varying NOT NULL,
+  medical_emergency boolean DEFAULT false NOT NULL,
+  remarks text,
+  search_vector tsvector GENERATED ALWAYS AS (to_tsvector('english'::regconfig, COALESCE(remarks, ''::text))) STORED,
+  CONSTRAINT resource_requests_pkey PRIMARY KEY (request_id),
+  CONSTRAINT resource_requests_camp_id_fkey FOREIGN KEY (camp_id) REFERENCES relief_camps(camp_id) ON DELETE RESTRICT,
+  CONSTRAINT resource_requests_disaster_id_fkey FOREIGN KEY (disaster_id) REFERENCES disasters(disaster_id) ON DELETE RESTRICT,
+  CONSTRAINT resource_requests_requested_by_fkey FOREIGN KEY (requested_by) REFERENCES app_users(user_id) ON DELETE RESTRICT,
+  CONSTRAINT resource_requests_check CHECK ((need_by &gt;= requested_at)),
+  CONSTRAINT resource_requests_priority_consistency CHECK ((NOT (((priority_level)::text = 'CRITICAL'::text) AND (priority_score &lt; (50)::numeric)))) NOT VALID,
+  CONSTRAINT resource_requests_priority_level_check CHECK (((priority_level)::text = ANY ((ARRAY['LOW'::character varying, 'MEDIUM'::character varying, 'HIGH'::character varying, 'CRITICAL'::character varying])::text[]))),
+  CONSTRAINT resource_requests_priority_score_check CHECK (((priority_score &gt;= (0)::numeric) AND (priority_score &lt;= (100)::numeric))),
+  CONSTRAINT resource_requests_status_check CHECK (((status)::text = ANY ((ARRAY['PENDING'::character varying, 'APPROVED'::character varying, 'PARTIALLY_FULFILLED'::character varying, 'FULFILLED'::character varying, 'ALLOCATED'::character varying, 'IN_TRANSIT'::character varying, 'DELIVERED'::character varying, 'REJECTED'::character varying, 'CANCELLED'::character varying])::text[])))
+);</code></pre>
+<table><thead><tr><th>Column</th><th>Type</th><th>Key</th><th>Null</th><th>Meaning</th></tr></thead><tbody><tr><td><code>request_id</code></td><td>bigint (identity)</td><td>PK</td><td>NOT NULL</td><td>Surrogate primary key.</td></tr><tr><td><code>camp_id</code></td><td>bigint</td><td>FK</td><td>NOT NULL</td><td>FK to the requesting camp.</td></tr><tr><td><code>disaster_id</code></td><td>bigint</td><td>FK</td><td>NOT NULL</td><td>FK to the disaster it relates to.</td></tr><tr><td><code>requested_by</code></td><td>bigint</td><td>FK</td><td>NOT NULL</td><td>FK to the field officer who raised it (taken from the session).</td></tr><tr><td><code>requested_at</code></td><td>timestamp with time zone</td><td></td><td>NOT NULL</td><td>When it was raised.</td></tr><tr><td><code>need_by</code></td><td>timestamp with time zone</td><td></td><td>NOT NULL</td><td>Deadline (must be after requested_at).</td></tr><tr><td><code>priority_score</code></td><td>numeric(5,2)</td><td></td><td>NOT NULL</td><td>Priority 0..100.</td></tr><tr><td><code>priority_level</code></td><td>character varying(20)</td><td></td><td>NOT NULL</td><td>LOW, MEDIUM, HIGH or CRITICAL.</td></tr><tr><td><code>status</code></td><td>character varying(20)</td><td></td><td>NOT NULL</td><td>PENDING → APPROVED → PARTIALLY_FULFILLED/ALLOCATED → IN_TRANSIT → DELIVERED, or REJECTED/CANCELLED.</td></tr><tr><td><code>medical_emergency</code></td><td>boolean</td><td></td><td>NOT NULL</td><td>Flag that moves the request to the top.</td></tr><tr><td><code>remarks</code></td><td>text</td><td></td><td>nullable</td><td>Situation notes.</td></tr><tr><td><code>search_vector</code></td><td>tsvector (generated)</td><td></td><td>nullable</td><td>Generated tsvector over remarks (GIN indexed).</td></tr></tbody></table>
+<p><strong>CHECK constraints</strong> (rules the database itself enforces):</p>
+<ul><li><code>resource_requests_check</code>: <code>CHECK ((need_by &gt;= requested_at))</code></li><li><code>resource_requests_priority_consistency</code>: <code>CHECK ((NOT (((priority_level)::text = 'CRITICAL'::text) AND (priority_score &lt; (50)::numeric)))) NOT VALID</code></li><li><code>resource_requests_priority_level_check</code>: <code>CHECK (((priority_level)::text = ANY ((ARRAY['LOW'::character varying, 'MEDIUM'::character varying, 'HIGH'::character varying, 'CRITICAL'::character varying])::text[])))</code></li><li><code>resource_requests_priority_score_check</code>: <code>CHECK (((priority_score &gt;= (0)::numeric) AND (priority_score &lt;= (100)::numeric)))</code></li><li><code>resource_requests_status_check</code>: <code>CHECK (((status)::text = ANY ((ARRAY['PENDING'::character varying, 'APPROVED'::character varying, 'PARTIALLY_FULFILLED'::character varying, 'FULFILLED'::character varying, 'ALLOCATED'::character varying, 'IN_TRANSIT'::character varying, 'DELIVERED'::character varying, 'REJECTED'::character varying, 'CANCELLED'::character varying])::text[])))</code></li></ul>
+<p><strong>Indexes:</strong></p>
+<ul><li><code>idx_requests_camp</code> (B-tree): <code>ON resource_requests USING btree (camp_id)</code></li><li><code>idx_requests_disaster</code> (B-tree): <code>ON resource_requests USING btree (disaster_id)</code></li><li><code>idx_requests_fts</code> (GIN): <code>ON resource_requests USING gin (search_vector)</code></li><li><code>idx_requests_status_priority</code> (B-tree): <code>ON resource_requests USING btree (status, priority_level, need_by)</code></li><li><code>resource_requests_pkey</code> (B-tree, unique) — created automatically by a PRIMARY KEY / UNIQUE constraint: <code>ON resource_requests USING btree (request_id)</code></li></ul>
+<p><strong>Triggers on this table:</strong></p>
+<ul><li><code>row_change_log</code> → function <code>log_row_change()</code>: Generic field-level audit trigger attached to eight tables. (<code>AFTER INSERT OR DELETE OR UPDATE FOR EACH ROW</code>)</li></ul>
+<p><strong>Database access (GRANTs):</strong></p>
+<ul><li><code>rf_admin</code>: DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE</li><li><code>rf_coordinator</code>: DELETE, INSERT, SELECT, UPDATE</li><li><code>rf_driver</code>: SELECT</li><li><code>rf_field_officer</code>: INSERT, SELECT</li><li><code>rf_driver</code>: UPDATE only on columns (status)</li></ul>
+<p><strong>DML performed on this table:</strong></p>
+<ul><li>INSERT: New request (with its request_items in the same transaction). Before inserting, lock_request_parents() checks with FOR SHARE that the camp is open and the disaster active.</li><li>UPDATE: approve / reject / cancel (only legal transitions), and CALL refresh_request_status() after allocations and deliveries.</li><li>No DELETE (cancel instead).</li><li>Trigger row_change_log records changes.</li></ul>
+<h4 id="request-items-253">request_items</h4>
+<p><strong>Purpose:</strong> Lines of a request: resource and quantity (weak entity).</p>
+<p><strong>Why it exists:</strong> The lines of a request (weak entity): which resource and how much. PK (request_id, resource_id) means a resource can appear only once per request.</p>
+<p>Created in <code>001_schema.sql</code>.</p>
+<pre class="lang-sql"><code>CREATE TABLE request_items (
+  request_id bigint NOT NULL,
+  resource_id bigint NOT NULL,
+  quantity_requested numeric(14,3) NOT NULL,
+  CONSTRAINT request_items_pkey PRIMARY KEY (request_id, resource_id),
+  CONSTRAINT request_items_request_id_fkey FOREIGN KEY (request_id) REFERENCES resource_requests(request_id) ON DELETE CASCADE,
+  CONSTRAINT request_items_resource_id_fkey FOREIGN KEY (resource_id) REFERENCES resources(resource_id) ON DELETE RESTRICT,
+  CONSTRAINT request_items_quantity_requested_check CHECK ((quantity_requested &gt; (0)::numeric))
+);</code></pre>
+<table><thead><tr><th>Column</th><th>Type</th><th>Key</th><th>Null</th><th>Meaning</th></tr></thead><tbody><tr><td><code>request_id</code></td><td>bigint</td><td>PK, FK</td><td>NOT NULL</td><td>PK part / FK to resource_requests (cascade).</td></tr><tr><td><code>resource_id</code></td><td>bigint</td><td>PK, FK</td><td>NOT NULL</td><td>PK part / FK to resources.</td></tr><tr><td><code>quantity_requested</code></td><td>numeric(14,3)</td><td></td><td>NOT NULL</td><td>Quantity asked for (&gt; 0).</td></tr></tbody></table>
+<p><strong>CHECK constraints</strong> (rules the database itself enforces):</p>
+<ul><li><code>request_items_quantity_requested_check</code>: <code>CHECK ((quantity_requested &gt; (0)::numeric))</code></li></ul>
+<p><strong>Indexes:</strong></p>
+<ul><li><code>idx_request_items_resource</code> (B-tree): <code>ON request_items USING btree (resource_id)</code></li><li><code>request_items_pkey</code> (B-tree, unique) — created automatically by a PRIMARY KEY / UNIQUE constraint: <code>ON request_items USING btree (request_id, resource_id)</code></li></ul>
+<p><strong>Database access (GRANTs):</strong></p>
+<ul><li><code>rf_admin</code>: DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE</li><li><code>rf_coordinator</code>: DELETE, INSERT, SELECT, UPDATE</li><li><code>rf_driver</code>: SELECT</li><li><code>rf_field_officer</code>: INSERT, SELECT</li></ul>
+<p><strong>DML performed on this table:</strong></p>
+<ul><li>INSERT: together with the request header, via INSERT … SELECT FROM unnest($ids, $quantities).</li><li>Deleted automatically with the request (ON DELETE CASCADE).</li></ul>
+<h3 id="allocation-267">Allocation</h3>
+<p>Stock committed from warehouses to a request.</p>
+<h4 id="allocations-269">allocations</h4>
+<p><strong>Purpose:</strong> Commitment of stock to a request.</p>
+<p><strong>Why it exists:</strong> A commitment of stock to a request. Status: ALLOCATED → IN_TRANSIT → DELIVERED, or ALLOCATED → CANCELLED.</p>
+<p>Created in <code>001_schema.sql</code>.</p>
+<pre class="lang-sql"><code>CREATE TABLE allocations (
+  allocation_id bigint GENERATED ALWAYS AS IDENTITY,
+  request_id bigint NOT NULL,
+  allocated_by bigint NOT NULL,
+  allocated_at timestamp with time zone DEFAULT now() NOT NULL,
+  status character varying(20) DEFAULT 'ALLOCATED'::character varying NOT NULL,
+  remarks text,
+  CONSTRAINT allocations_pkey PRIMARY KEY (allocation_id),
+  CONSTRAINT allocations_allocation_id_request_id_key UNIQUE (allocation_id, request_id),
+  CONSTRAINT allocations_allocated_by_fkey FOREIGN KEY (allocated_by) REFERENCES app_users(user_id) ON DELETE RESTRICT,
+  CONSTRAINT allocations_request_id_fkey FOREIGN KEY (request_id) REFERENCES resource_requests(request_id) ON DELETE RESTRICT,
+  CONSTRAINT allocations_status_check CHECK (((status)::text = ANY ((ARRAY['ALLOCATED'::character varying, 'IN_TRANSIT'::character varying, 'DELIVERED'::character varying, 'CANCELLED'::character varying])::text[])))
+);</code></pre>
+<table><thead><tr><th>Column</th><th>Type</th><th>Key</th><th>Null</th><th>Meaning</th></tr></thead><tbody><tr><td><code>allocation_id</code></td><td>bigint (identity)</td><td>PK</td><td>NOT NULL</td><td>Surrogate primary key.</td></tr><tr><td><code>request_id</code></td><td>bigint</td><td>FK</td><td>NOT NULL</td><td>FK to the request being fulfilled.</td></tr><tr><td><code>allocated_by</code></td><td>bigint</td><td>FK</td><td>NOT NULL</td><td>FK to the coordinator who allocated.</td></tr><tr><td><code>allocated_at</code></td><td>timestamp with time zone</td><td></td><td>NOT NULL</td><td>When stock was committed.</td></tr><tr><td><code>status</code></td><td>character varying(20)</td><td></td><td>NOT NULL</td><td>ALLOCATED → IN_TRANSIT → DELIVERED, or ALLOCATED → CANCELLED (stock restored).</td></tr><tr><td><code>remarks</code></td><td>text</td><td></td><td>nullable</td><td>Optional notes.</td></tr></tbody></table>
+<p><strong>CHECK constraints</strong> (rules the database itself enforces):</p>
+<ul><li><code>allocations_status_check</code>: <code>CHECK (((status)::text = ANY ((ARRAY['ALLOCATED'::character varying, 'IN_TRANSIT'::character varying, 'DELIVERED'::character varying, 'CANCELLED'::character varying])::text[])))</code></li></ul>
+<p><strong>Indexes:</strong></p>
+<ul><li><code>allocations_allocation_id_request_id_key</code> (B-tree, unique) — created automatically by a PRIMARY KEY / UNIQUE constraint: <code>ON allocations USING btree (allocation_id, request_id)</code></li><li><code>allocations_pkey</code> (B-tree, unique) — created automatically by a PRIMARY KEY / UNIQUE constraint: <code>ON allocations USING btree (allocation_id)</code></li><li><code>idx_allocations_request</code> (B-tree): <code>ON allocations USING btree (request_id)</code></li></ul>
+<p><strong>Triggers on this table:</strong></p>
+<ul><li><code>allocation_status_guard</code> → function <code>allocation_status_guard()</code>: State machine for allocations, and exact-once stock restoration on cancellation. (<code>BEFORE UPDATE FOR EACH ROW</code>)</li></ul>
+<p><strong>Database access (GRANTs):</strong></p>
+<ul><li><code>rf_admin</code>: DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE</li><li><code>rf_coordinator</code>: DELETE, INSERT, SELECT, UPDATE</li><li><code>rf_driver</code>: SELECT</li><li><code>rf_field_officer</code>: SELECT</li><li><code>rf_driver</code>: UPDATE only on columns (status)</li></ul>
+<p><strong>DML performed on this table:</strong></p>
+<ul><li>INSERT: Plan allocation (with its allocation_items in the same transaction).</li><li>UPDATE status: by the delivery flow (IN_TRANSIT, DELIVERED) or a cancellation (CANCELLED). The trigger allocation_status_guard enforces the state machine and restores stock on cancellation.</li><li>No DELETE: the FK from allocation_items and the immutability rules keep allocation history.</li></ul>
+<h4 id="allocation-items-285">allocation_items</h4>
+<p><strong>Purpose:</strong> Allocation lines: how much of which resource from which warehouse (immutable).</p>
+<p><strong>Why it exists:</strong> The lines of an allocation: how much of which resource from which warehouse. Three composite foreign keys guarantee that you can only allocate a resource the request asked for, from a warehouse that stocks it.</p>
+<p>Created in <code>001_schema.sql</code>.</p>
+<pre class="lang-sql"><code>CREATE TABLE allocation_items (
+  allocation_item_id bigint GENERATED ALWAYS AS IDENTITY,
+  allocation_id bigint NOT NULL,
+  request_id bigint NOT NULL,
+  resource_id bigint NOT NULL,
+  warehouse_id bigint NOT NULL,
+  quantity_allocated numeric(14,3) NOT NULL,
+  CONSTRAINT allocation_items_pkey PRIMARY KEY (allocation_item_id),
+  CONSTRAINT allocation_items_allocation_id_request_id_fkey FOREIGN KEY (allocation_id, request_id) REFERENCES allocations(allocation_id, request_id) ON DELETE CASCADE,
+  CONSTRAINT allocation_items_request_id_resource_id_fkey FOREIGN KEY (request_id, resource_id) REFERENCES request_items(request_id, resource_id) ON DELETE RESTRICT,
+  CONSTRAINT allocation_items_warehouse_id_resource_id_fkey FOREIGN KEY (warehouse_id, resource_id) REFERENCES inventory(warehouse_id, resource_id) ON DELETE RESTRICT,
+  CONSTRAINT allocation_items_quantity_allocated_check CHECK ((quantity_allocated &gt; (0)::numeric))
+);</code></pre>
+<table><thead><tr><th>Column</th><th>Type</th><th>Key</th><th>Null</th><th>Meaning</th></tr></thead><tbody><tr><td><code>allocation_item_id</code></td><td>bigint (identity)</td><td>PK</td><td>NOT NULL</td><td>Surrogate primary key.</td></tr><tr><td><code>allocation_id</code></td><td>bigint</td><td>FK</td><td>NOT NULL</td><td>Composite FK (allocation_id, request_id) to allocations.</td></tr><tr><td><code>request_id</code></td><td>bigint</td><td>FK</td><td>NOT NULL</td><td>Shared by two composite FKs: ties the line to its request line.</td></tr><tr><td><code>resource_id</code></td><td>bigint</td><td>FK</td><td>NOT NULL</td><td>Composite FK part to request_items and inventory.</td></tr><tr><td><code>warehouse_id</code></td><td>bigint</td><td>FK</td><td>NOT NULL</td><td>Composite FK part to inventory (the stock drawn from).</td></tr><tr><td><code>quantity_allocated</code></td><td>numeric(14,3)</td><td></td><td>NOT NULL</td><td>Quantity committed (&gt; 0, &lt;= stock and outstanding demand).</td></tr></tbody></table>
+<p><strong>CHECK constraints</strong> (rules the database itself enforces):</p>
+<ul><li><code>allocation_items_quantity_allocated_check</code>: <code>CHECK ((quantity_allocated &gt; (0)::numeric))</code></li></ul>
+<p><strong>Indexes:</strong></p>
+<ul><li><code>allocation_items_pkey</code> (B-tree, unique) — created automatically by a PRIMARY KEY / UNIQUE constraint: <code>ON allocation_items USING btree (allocation_item_id)</code></li><li><code>idx_allocation_items_allocation</code> (B-tree): <code>ON allocation_items USING btree (allocation_id)</code></li><li><code>idx_allocation_items_request</code> (B-tree): <code>ON allocation_items USING btree (request_id, resource_id)</code></li><li><code>idx_allocation_items_stock</code> (B-tree): <code>ON allocation_items USING btree (warehouse_id, resource_id)</code></li></ul>
+<p><strong>Triggers on this table:</strong></p>
+<ul><li><code>trg_adjust_inventory</code> → function <code>adjust_inventory_for_allocation()</code>: Keeps stock in step with allocation lines automatically, in the same transaction. (<code>AFTER INSERT OR DELETE OR UPDATE FOR EACH ROW</code>)</li><li><code>trg_validate_allocation_item</code> → function <code>validate_allocation_item()</code>: Guards every allocation line before it is written: the request must be approved, the allocation active, the warehouse active, and the quantity must not exceed the stock or the outstanding demand. (<code>BEFORE INSERT OR DELETE OR UPDATE FOR EACH ROW</code>)</li></ul>
+<p><strong>Database access (GRANTs):</strong></p>
+<ul><li><code>rf_admin</code>: DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE</li><li><code>rf_coordinator</code>: DELETE, INSERT, SELECT, UPDATE</li><li><code>rf_driver</code>: SELECT</li><li><code>rf_field_officer</code>: SELECT</li></ul>
+<p><strong>DML performed on this table:</strong></p>
+<ul><li>INSERT only. The BEFORE trigger validate_allocation_item checks stock and outstanding demand; the AFTER trigger trg_adjust_inventory deducts the stock.</li><li>No UPDATE or DELETE: both are rejected by the trigger ('Allocation lines are immutable'), so allocation history cannot be rewritten.</li></ul>
+<h3 id="logistics-301">Logistics</h3>
+<p>Getting allocated stock to the camp: vehicles, drivers, volunteer crews.</p>
+<h4 id="vehicles-303">vehicles</h4>
+<p><strong>Purpose:</strong> Fleet used for deliveries.</p>
+<p><strong>Why it exists:</strong> The fleet. A vehicle has one current status and an optional last known location.</p>
+<p>Created in <code>001_schema.sql</code>.</p>
+<pre class="lang-sql"><code>CREATE TABLE vehicles (
+  vehicle_id bigint GENERATED ALWAYS AS IDENTITY,
+  vehicle_number character varying(30) NOT NULL,
+  vehicle_type character varying(50) NOT NULL,
+  capacity numeric(14,2) NOT NULL,
+  status character varying(20) DEFAULT 'AVAILABLE'::character varying NOT NULL,
+  current_location_id bigint,
+  CONSTRAINT vehicles_pkey PRIMARY KEY (vehicle_id),
+  CONSTRAINT vehicles_vehicle_number_key UNIQUE (vehicle_number),
+  CONSTRAINT vehicles_current_location_id_fkey FOREIGN KEY (current_location_id) REFERENCES locations(location_id) ON DELETE SET NULL,
+  CONSTRAINT vehicles_capacity_check CHECK ((capacity &gt; (0)::numeric)),
+  CONSTRAINT vehicles_status_check CHECK (((status)::text = ANY ((ARRAY['AVAILABLE'::character varying, 'IN_USE'::character varying, 'MAINTENANCE'::character varying])::text[])))
+);</code></pre>
+<table><thead><tr><th>Column</th><th>Type</th><th>Key</th><th>Null</th><th>Meaning</th></tr></thead><tbody><tr><td><code>vehicle_id</code></td><td>bigint (identity)</td><td>PK</td><td>NOT NULL</td><td>Surrogate primary key.</td></tr><tr><td><code>vehicle_number</code></td><td>character varying(30)</td><td>UQ</td><td>NOT NULL</td><td>Registration number (alternate key).</td></tr><tr><td><code>vehicle_type</code></td><td>character varying(50)</td><td></td><td>NOT NULL</td><td>TRUCK, VAN, BOAT, ...</td></tr><tr><td><code>capacity</code></td><td>numeric(14,2)</td><td></td><td>NOT NULL</td><td>Load capacity (&gt; 0).</td></tr><tr><td><code>status</code></td><td>character varying(20)</td><td></td><td>NOT NULL</td><td>AVAILABLE, IN_USE or MAINTENANCE.</td></tr><tr><td><code>current_location_id</code></td><td>bigint</td><td>FK</td><td>nullable</td><td>Optional FK to the last known location.</td></tr></tbody></table>
+<p><strong>CHECK constraints</strong> (rules the database itself enforces):</p>
+<ul><li><code>vehicles_capacity_check</code>: <code>CHECK ((capacity &gt; (0)::numeric))</code></li><li><code>vehicles_status_check</code>: <code>CHECK (((status)::text = ANY ((ARRAY['AVAILABLE'::character varying, 'IN_USE'::character varying, 'MAINTENANCE'::character varying])::text[])))</code></li></ul>
+<p><strong>Indexes:</strong></p>
+<ul><li><code>vehicles_pkey</code> (B-tree, unique) — created automatically by a PRIMARY KEY / UNIQUE constraint: <code>ON vehicles USING btree (vehicle_id)</code></li><li><code>vehicles_vehicle_number_key</code> (B-tree, unique) — created automatically by a PRIMARY KEY / UNIQUE constraint: <code>ON vehicles USING btree (vehicle_number)</code></li></ul>
+<p><strong>Triggers on this table:</strong></p>
+<ul><li><code>row_change_log</code> → function <code>log_row_change()</code>: Generic field-level audit trigger attached to eight tables. (<code>AFTER INSERT OR DELETE OR UPDATE FOR EACH ROW</code>)</li></ul>
+<p><strong>Database access (GRANTs):</strong></p>
+<ul><li><code>rf_admin</code>: DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE</li><li><code>rf_coordinator</code>: DELETE, INSERT, SELECT, UPDATE</li><li><code>rf_driver</code>: SELECT</li><li><code>rf_field_officer</code>: SELECT</li><li><code>rf_driver</code>: UPDATE only on columns (current_location_id, status)</li><li>Column privilege: a driver may UPDATE only status and current_location_id.</li></ul>
+<p><strong>DML performed on this table:</strong></p>
+<ul><li>INSERT / UPDATE / DELETE: management screen (DELETE refused once used in a delivery).</li><li>UPDATE status: set to IN_USE when a delivery is planned, back to AVAILABLE when it is delivered or cancelled.</li><li>Trigger row_change_log records changes.</li></ul>
+<h4 id="volunteers-319">volunteers</h4>
+<p><strong>Purpose:</strong> Volunteers who can crew deliveries.</p>
+<p><strong>Why it exists:</strong> People who can crew deliveries. availability_status prevents assigning the same volunteer twice.</p>
+<p>Created in <code>001_schema.sql</code>.</p>
+<pre class="lang-sql"><code>CREATE TABLE volunteers (
+  volunteer_id bigint GENERATED ALWAYS AS IDENTITY,
+  full_name character varying(120) NOT NULL,
+  phone character varying(25) NOT NULL,
+  email character varying(254),
+  skills text,
+  availability_status character varying(20) DEFAULT 'AVAILABLE'::character varying NOT NULL,
+  registered_at timestamp with time zone DEFAULT now() NOT NULL,
+  CONSTRAINT volunteers_pkey PRIMARY KEY (volunteer_id),
+  CONSTRAINT volunteers_email_key UNIQUE (email),
+  CONSTRAINT volunteers_phone_key UNIQUE (phone),
+  CONSTRAINT volunteers_availability_status_check CHECK (((availability_status)::text = ANY ((ARRAY['AVAILABLE'::character varying, 'ASSIGNED'::character varying, 'UNAVAILABLE'::character varying])::text[]))),
+  CONSTRAINT volunteers_email_format CHECK (((email IS NULL) OR ((email)::text ~* '^[^@\s]+@[^@\s]+\.[^@\s]+$'::text))) NOT VALID,
+  CONSTRAINT volunteers_phone_format CHECK (((phone)::text ~ '^\+?[0-9 -]{7,25}$'::text)) NOT VALID
+);</code></pre>
+<table><thead><tr><th>Column</th><th>Type</th><th>Key</th><th>Null</th><th>Meaning</th></tr></thead><tbody><tr><td><code>volunteer_id</code></td><td>bigint (identity)</td><td>PK</td><td>NOT NULL</td><td>Surrogate primary key.</td></tr><tr><td><code>full_name</code></td><td>character varying(120)</td><td></td><td>NOT NULL</td><td>Name.</td></tr><tr><td><code>phone</code></td><td>character varying(25)</td><td>UQ</td><td>NOT NULL</td><td>Unique phone (format-checked).</td></tr><tr><td><code>email</code></td><td>character varying(254)</td><td>UQ</td><td>nullable</td><td>Optional unique e-mail (format-checked).</td></tr><tr><td><code>skills</code></td><td>text</td><td></td><td>nullable</td><td>Free-text skills.</td></tr><tr><td><code>availability_status</code></td><td>character varying(20)</td><td></td><td>NOT NULL</td><td>AVAILABLE, ASSIGNED or UNAVAILABLE.</td></tr><tr><td><code>registered_at</code></td><td>timestamp with time zone</td><td></td><td>NOT NULL</td><td>Registration time.</td></tr></tbody></table>
+<p><strong>CHECK constraints</strong> (rules the database itself enforces):</p>
+<ul><li><code>volunteers_availability_status_check</code>: <code>CHECK (((availability_status)::text = ANY ((ARRAY['AVAILABLE'::character varying, 'ASSIGNED'::character varying, 'UNAVAILABLE'::character varying])::text[])))</code></li><li><code>volunteers_email_format</code>: <code>CHECK (((email IS NULL) OR ((email)::text ~* '^[^@\s]+@[^@\s]+\.[^@\s]+$'::text))) NOT VALID</code></li><li><code>volunteers_phone_format</code>: <code>CHECK (((phone)::text ~ '^\+?[0-9 -]{7,25}$'::text)) NOT VALID</code></li></ul>
+<p><strong>Indexes:</strong></p>
+<ul><li><code>volunteers_email_key</code> (B-tree, unique) — created automatically by a PRIMARY KEY / UNIQUE constraint: <code>ON volunteers USING btree (email)</code></li><li><code>volunteers_phone_key</code> (B-tree, unique) — created automatically by a PRIMARY KEY / UNIQUE constraint: <code>ON volunteers USING btree (phone)</code></li><li><code>volunteers_pkey</code> (B-tree, unique) — created automatically by a PRIMARY KEY / UNIQUE constraint: <code>ON volunteers USING btree (volunteer_id)</code></li></ul>
+<p><strong>Triggers on this table:</strong></p>
+<ul><li><code>row_change_log</code> → function <code>log_row_change()</code>: Generic field-level audit trigger attached to eight tables. (<code>AFTER INSERT OR DELETE OR UPDATE FOR EACH ROW</code>)</li></ul>
+<p><strong>Database access (GRANTs):</strong></p>
+<ul><li><code>rf_admin</code>: DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE</li><li><code>rf_coordinator</code>: DELETE, INSERT, SELECT, UPDATE</li><li><code>rf_driver</code>: SELECT</li><li><code>rf_field_officer</code>: SELECT</li><li><code>rf_driver</code>: UPDATE only on columns (availability_status)</li></ul>
+<p><strong>DML performed on this table:</strong></p>
+<ul><li>INSERT / UPDATE / DELETE: management screen.</li><li>UPDATE availability: ASSIGNED when added to a delivery (only if currently AVAILABLE — a conditional UPDATE), AVAILABLE again when the delivery ends.</li><li>Trigger row_change_log records changes.</li></ul>
+<h4 id="deliveries-335">deliveries</h4>
+<p><strong>Purpose:</strong> Transport of one allocation (row-level security: drivers see only their own).</p>
+<p><strong>Why it exists:</strong> The transport of one allocation with a vehicle, a driver and a crew. Partial unique indexes allow only one active delivery per vehicle, per driver and per allocation. Row-level security lets a driver see only their own deliveries.</p>
+<p>Created in <code>001_schema.sql</code>.</p>
+<pre class="lang-sql"><code>CREATE TABLE deliveries (
+  delivery_id bigint GENERATED ALWAYS AS IDENTITY,
+  allocation_id bigint NOT NULL,
+  vehicle_id bigint NOT NULL,
+  driver_id bigint NOT NULL,
+  source_location_id bigint NOT NULL,
+  destination_location_id bigint NOT NULL,
+  departure_time timestamp with time zone,
+  expected_arrival timestamp with time zone,
+  actual_arrival timestamp with time zone,
+  status character varying(20) DEFAULT 'PLANNED'::character varying NOT NULL,
+  CONSTRAINT deliveries_pkey PRIMARY KEY (delivery_id),
+  CONSTRAINT deliveries_allocation_id_fkey FOREIGN KEY (allocation_id) REFERENCES allocations(allocation_id) ON DELETE RESTRICT,
+  CONSTRAINT deliveries_destination_location_id_fkey FOREIGN KEY (destination_location_id) REFERENCES locations(location_id) ON DELETE RESTRICT,
+  CONSTRAINT deliveries_driver_id_fkey FOREIGN KEY (driver_id) REFERENCES app_users(user_id) ON DELETE RESTRICT,
+  CONSTRAINT deliveries_source_location_id_fkey FOREIGN KEY (source_location_id) REFERENCES locations(location_id) ON DELETE RESTRICT,
+  CONSTRAINT deliveries_vehicle_id_fkey FOREIGN KEY (vehicle_id) REFERENCES vehicles(vehicle_id) ON DELETE RESTRICT,
+  CONSTRAINT deliveries_check CHECK (((expected_arrival IS NULL) OR (departure_time IS NULL) OR (expected_arrival &gt;= departure_time))),
+  CONSTRAINT deliveries_check1 CHECK (((actual_arrival IS NULL) OR (departure_time IS NULL) OR (actual_arrival &gt;= departure_time))),
+  CONSTRAINT deliveries_status_check CHECK (((status)::text = ANY ((ARRAY['PLANNED'::character varying, 'IN_TRANSIT'::character varying, 'DELIVERED'::character varying, 'DELAYED'::character varying, 'CANCELLED'::character varying])::text[])))
+);</code></pre>
+<table><thead><tr><th>Column</th><th>Type</th><th>Key</th><th>Null</th><th>Meaning</th></tr></thead><tbody><tr><td><code>delivery_id</code></td><td>bigint (identity)</td><td>PK</td><td>NOT NULL</td><td>Surrogate primary key.</td></tr><tr><td><code>allocation_id</code></td><td>bigint</td><td>FK</td><td>NOT NULL</td><td>FK to the allocation transported (one active delivery each).</td></tr><tr><td><code>vehicle_id</code></td><td>bigint</td><td>FK</td><td>NOT NULL</td><td>FK to the vehicle (one active delivery each).</td></tr><tr><td><code>driver_id</code></td><td>bigint</td><td>FK</td><td>NOT NULL</td><td>FK to the driver (one active delivery each).</td></tr><tr><td><code>source_location_id</code></td><td>bigint</td><td>FK</td><td>NOT NULL</td><td>FK: pickup location (warehouse).</td></tr><tr><td><code>destination_location_id</code></td><td>bigint</td><td>FK</td><td>NOT NULL</td><td>FK: drop location (camp).</td></tr><tr><td><code>departure_time</code></td><td>timestamp with time zone</td><td></td><td>nullable</td><td>Set when dispatched.</td></tr><tr><td><code>expected_arrival</code></td><td>timestamp with time zone</td><td></td><td>nullable</td><td>Planned arrival.</td></tr><tr><td><code>actual_arrival</code></td><td>timestamp with time zone</td><td></td><td>nullable</td><td>Set when delivered.</td></tr><tr><td><code>status</code></td><td>character varying(20)</td><td></td><td>NOT NULL</td><td>PLANNED → IN_TRANSIT ↔ DELAYED → DELIVERED, or PLANNED → CANCELLED (trigger-enforced).</td></tr></tbody></table>
+<p><strong>CHECK constraints</strong> (rules the database itself enforces):</p>
+<ul><li><code>deliveries_check</code>: <code>CHECK (((expected_arrival IS NULL) OR (departure_time IS NULL) OR (expected_arrival &gt;= departure_time)))</code></li><li><code>deliveries_check1</code>: <code>CHECK (((actual_arrival IS NULL) OR (departure_time IS NULL) OR (actual_arrival &gt;= departure_time)))</code></li><li><code>deliveries_status_check</code>: <code>CHECK (((status)::text = ANY ((ARRAY['PLANNED'::character varying, 'IN_TRANSIT'::character varying, 'DELIVERED'::character varying, 'DELAYED'::character varying, 'CANCELLED'::character varying])::text[])))</code></li></ul>
+<p><strong>Indexes:</strong></p>
+<ul><li><code>deliveries_pkey</code> (B-tree, unique) — created automatically by a PRIMARY KEY / UNIQUE constraint: <code>ON deliveries USING btree (delivery_id)</code></li><li><code>idx_deliveries_allocation</code> (B-tree): <code>ON deliveries USING btree (allocation_id)</code></li><li><code>idx_deliveries_driver</code> (B-tree): <code>ON deliveries USING btree (driver_id)</code></li><li><code>idx_deliveries_status_eta</code> (B-tree): <code>ON deliveries USING btree (status, expected_arrival)</code></li><li><code>idx_deliveries_vehicle</code> (B-tree): <code>ON deliveries USING btree (vehicle_id)</code></li><li><code>uq_active_delivery_allocation</code> (B-tree, unique) — partial index (only rows matching the WHERE): <code>ON deliveries USING btree (allocation_id) WHERE ((status)::text &lt;&gt; 'CANCELLED'::text)</code></li><li><code>uq_active_delivery_driver</code> (B-tree, unique) — partial index (only rows matching the WHERE): <code>ON deliveries USING btree (driver_id) WHERE ((status)::text = ANY ((ARRAY['PLANNED'::character varying, 'IN_TRANSIT'::character varying, 'DELAYED'::character varying])::text[]))</code></li><li><code>uq_active_delivery_vehicle</code> (B-tree, unique) — partial index (only rows matching the WHERE): <code>ON deliveries USING btree (vehicle_id) WHERE ((status)::text = ANY ((ARRAY['PLANNED'::character varying, 'IN_TRANSIT'::character varying, 'DELAYED'::character varying])::text[]))</code></li></ul>
+<p><strong>Triggers on this table:</strong></p>
+<ul><li><code>delivery_status_guard</code> → function <code>delivery_status_guard()</code>: State machine for deliveries. (<code>BEFORE UPDATE OF status FOR EACH ROW</code>)</li><li><code>delivery_vehicle_guard</code> → function <code>delivery_vehicle_guard()</code>: Refuses to plan a delivery with a vehicle that is under maintenance. (<code>BEFORE INSERT FOR EACH ROW</code>)</li><li><code>row_change_log</code> → function <code>log_row_change()</code>: Generic field-level audit trigger attached to eight tables. (<code>AFTER INSERT OR DELETE OR UPDATE FOR EACH ROW</code>)</li></ul>
+<p><strong>Database access (GRANTs):</strong></p>
+<ul><li><code>rf_admin</code>: DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE</li><li><code>rf_coordinator</code>: DELETE, INSERT, SELECT, UPDATE</li><li><code>rf_driver</code>: SELECT</li><li><code>rf_field_officer</code>: SELECT</li><li><code>rf_driver</code>: UPDATE only on columns (actual_arrival, departure_time, status)</li><li>Row-level security: policies deliveries_driver_own / deliveries_driver_update_own (driver_id = current user), deliveries_officer_read, deliveries_staff_all.</li></ul>
+<p><strong>DML performed on this table:</strong></p>
+<ul><li>INSERT: Plan delivery (with delivery_volunteers). Trigger delivery_vehicle_guard refuses a vehicle under maintenance.</li><li>UPDATE status / departure_time / actual_arrival: dispatch, delay, deliver, cancel. Trigger delivery_status_guard allows only legal transitions.</li><li>Trigger row_change_log records changes.</li></ul>
+<h4 id="delivery-volunteers-351">delivery_volunteers</h4>
+<p><strong>Purpose:</strong> M:N: volunteers crewing a delivery.</p>
+<p><strong>Why it exists:</strong> Resolves the many-to-many relationship Delivery CREWED BY Volunteer, with the volunteer's role on that trip.</p>
+<p>Created in <code>001_schema.sql</code>.</p>
+<pre class="lang-sql"><code>CREATE TABLE delivery_volunteers (
+  delivery_id bigint NOT NULL,
+  volunteer_id bigint NOT NULL,
+  assigned_role character varying(60) NOT NULL,
+  CONSTRAINT delivery_volunteers_pkey PRIMARY KEY (delivery_id, volunteer_id),
+  CONSTRAINT delivery_volunteers_delivery_id_fkey FOREIGN KEY (delivery_id) REFERENCES deliveries(delivery_id) ON DELETE CASCADE,
+  CONSTRAINT fk_delivery_volunteer_volunteer FOREIGN KEY (volunteer_id) REFERENCES volunteers(volunteer_id) ON DELETE CASCADE
+);</code></pre>
+<table><thead><tr><th>Column</th><th>Type</th><th>Key</th><th>Null</th><th>Meaning</th></tr></thead><tbody><tr><td><code>delivery_id</code></td><td>bigint</td><td>PK, FK</td><td>NOT NULL</td><td>PK part / FK to deliveries (cascade).</td></tr><tr><td><code>volunteer_id</code></td><td>bigint</td><td>PK, FK</td><td>NOT NULL</td><td>PK part / FK to volunteers (cascade).</td></tr><tr><td><code>assigned_role</code></td><td>character varying(60)</td><td></td><td>NOT NULL</td><td>Role on the delivery, e.g. LOADING_SUPPORT.</td></tr></tbody></table>
+<p><strong>Indexes:</strong></p>
+<ul><li><code>delivery_volunteers_pkey</code> (B-tree, unique) — created automatically by a PRIMARY KEY / UNIQUE constraint: <code>ON delivery_volunteers USING btree (delivery_id, volunteer_id)</code></li><li><code>idx_delivery_volunteers_volunteer</code> (B-tree): <code>ON delivery_volunteers USING btree (volunteer_id)</code></li></ul>
+<p><strong>Database access (GRANTs):</strong></p>
+<ul><li><code>rf_admin</code>: DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE</li><li><code>rf_coordinator</code>: DELETE, INSERT, SELECT, UPDATE</li><li><code>rf_driver</code>: SELECT</li><li><code>rf_field_officer</code>: SELECT</li></ul>
+<p><strong>DML performed on this table:</strong></p>
+<ul><li>INSERT: when a delivery is planned.</li><li>Deleted with the delivery or the volunteer (ON DELETE CASCADE).</li></ul>
+<h3 id="history-and-system-363">History and system</h3>
+<p>Audit trails and bookkeeping tables.</p>
+<h4 id="audit-logs-365">audit_logs</h4>
+<p><strong>Purpose:</strong> Application audit trail, written in the same transaction as each change.</p>
+<p><strong>Why it exists:</strong> Business-level audit trail: who performed which action (approve, allocate, reset password…) with details as JSON, written in the same transaction as the change itself.</p>
+<p>Created in <code>005_integrity_security.sql</code>.</p>
+<pre class="lang-sql"><code>CREATE TABLE audit_logs (
+  audit_id bigint GENERATED ALWAYS AS IDENTITY,
+  user_id bigint,
+  action text NOT NULL,
+  details jsonb NOT NULL,
+  created_at timestamp with time zone DEFAULT now() NOT NULL,
+  CONSTRAINT audit_logs_pkey PRIMARY KEY (audit_id),
+  CONSTRAINT audit_logs_user_id_fkey FOREIGN KEY (user_id) REFERENCES app_users(user_id) ON DELETE RESTRICT
+);</code></pre>
+<table><thead><tr><th>Column</th><th>Type</th><th>Key</th><th>Null</th><th>Meaning</th></tr></thead><tbody><tr><td><code>audit_id</code></td><td>bigint (identity)</td><td>PK</td><td>NOT NULL</td><td>Surrogate primary key.</td></tr><tr><td><code>user_id</code></td><td>bigint</td><td>FK</td><td>nullable</td><td>FK to the acting user.</td></tr><tr><td><code>action</code></td><td>text</td><td></td><td>NOT NULL</td><td>Operation code, e.g. ALLOCATIONS, DELIVERY_STATUS.</td></tr><tr><td><code>details</code></td><td>jsonb</td><td></td><td>NOT NULL</td><td>JSON input and result of the operation (passwords removed).</td></tr><tr><td><code>created_at</code></td><td>timestamp with time zone</td><td></td><td>NOT NULL</td><td>When the action happened.</td></tr></tbody></table>
+<p><strong>Indexes:</strong></p>
+<ul><li><code>audit_logs_pkey</code> (B-tree, unique) — created automatically by a PRIMARY KEY / UNIQUE constraint: <code>ON audit_logs USING btree (audit_id)</code></li><li><code>idx_audit_logs_created</code> (B-tree): <code>ON audit_logs USING btree (created_at DESC)</code></li></ul>
+<p><strong>Database access (GRANTs):</strong></p>
+<ul><li><code>rf_admin</code>: DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE</li><li><code>rf_coordinator</code>: INSERT, SELECT</li><li><code>rf_driver</code>: INSERT</li><li><code>rf_field_officer</code>: INSERT</li></ul>
+<p><strong>DML performed on this table:</strong></p>
+<ul><li>INSERT: by the API in the same transaction as each change. Never updated or deleted.</li></ul>
+<h4 id="data-change-log-377">data_change_log</h4>
+<p><strong>Purpose:</strong> Row-level change history written by the log_row_change() trigger.</p>
+<p><strong>Why it exists:</strong> Field-level change history (old → new value of every changed column), written automatically by the trigger log_row_change on eight operational tables.</p>
+<p>Created in <code>007_dbms_engineering.sql</code>.</p>
+<pre class="lang-sql"><code>CREATE TABLE data_change_log (
+  change_id bigint GENERATED ALWAYS AS IDENTITY,
+  table_name text NOT NULL,
+  operation text NOT NULL,
+  row_data jsonb,
+  changed_fields jsonb,
+  changed_by bigint,
+  txid bigint DEFAULT txid_current() NOT NULL,
+  changed_at timestamp with time zone DEFAULT now() NOT NULL,
+  CONSTRAINT data_change_log_pkey PRIMARY KEY (change_id),
+  CONSTRAINT data_change_log_operation_check CHECK ((operation = ANY (ARRAY['INSERT'::text, 'UPDATE'::text, 'DELETE'::text])))
+);</code></pre>
+<table><thead><tr><th>Column</th><th>Type</th><th>Key</th><th>Null</th><th>Meaning</th></tr></thead><tbody><tr><td><code>change_id</code></td><td>bigint (identity)</td><td>PK</td><td>NOT NULL</td><td>Surrogate primary key.</td></tr><tr><td><code>table_name</code></td><td>text</td><td></td><td>NOT NULL</td><td>Table that changed.</td></tr><tr><td><code>operation</code></td><td>text</td><td></td><td>NOT NULL</td><td>INSERT, UPDATE or DELETE.</td></tr><tr><td><code>row_data</code></td><td>jsonb</td><td></td><td>nullable</td><td>Row after (or before, for DELETE) the change, without secrets.</td></tr><tr><td><code>changed_fields</code></td><td>jsonb</td><td></td><td>nullable</td><td>JSON diff {field: {from, to}} for UPDATEs.</td></tr><tr><td><code>changed_by</code></td><td>bigint</td><td></td><td>nullable</td><td>Acting user id taken from the reliefflow.user_id session setting.</td></tr><tr><td><code>txid</code></td><td>bigint</td><td></td><td>NOT NULL</td><td>Transaction id, groups changes made together.</td></tr><tr><td><code>changed_at</code></td><td>timestamp with time zone</td><td></td><td>NOT NULL</td><td>When the change happened.</td></tr></tbody></table>
+<p><strong>CHECK constraints</strong> (rules the database itself enforces):</p>
+<ul><li><code>data_change_log_operation_check</code>: <code>CHECK ((operation = ANY (ARRAY['INSERT'::text, 'UPDATE'::text, 'DELETE'::text])))</code></li></ul>
+<p><strong>Indexes:</strong></p>
+<ul><li><code>data_change_log_pkey</code> (B-tree, unique) — created automatically by a PRIMARY KEY / UNIQUE constraint: <code>ON data_change_log USING btree (change_id)</code></li><li><code>idx_data_change_log_table</code> (B-tree): <code>ON data_change_log USING btree (table_name, changed_at DESC)</code></li></ul>
+<p><strong>Database access (GRANTs):</strong></p>
+<ul><li><code>rf_admin</code>: DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE</li><li><code>rf_coordinator</code>: SELECT</li></ul>
+<p><strong>DML performed on this table:</strong></p>
+<ul><li>INSERT: only by the SECURITY DEFINER trigger log_row_change. No role may insert directly, so history cannot be forged.</li><li>SELECT: Change history screen.</li></ul>
+<h4 id="integration-sync-runs-391">integration_sync_runs</h4>
+<p><strong>Purpose:</strong> One row per Neo4j / vector synchronisation run.</p>
+<p><strong>Why it exists:</strong> One row per synchronisation run to Neo4j or the vector database: status, attempts, records synced, error detail.</p>
+<p>Created in <code>007_dbms_engineering.sql</code>.</p>
+<pre class="lang-sql"><code>CREATE TABLE integration_sync_runs (
+  run_id bigint GENERATED ALWAYS AS IDENTITY,
+  target text NOT NULL,
+  status text NOT NULL,
+  attempts integer DEFAULT 1 NOT NULL,
+  records_synced integer DEFAULT 0 NOT NULL,
+  detail text,
+  triggered_by bigint,
+  started_at timestamp with time zone DEFAULT now() NOT NULL,
+  finished_at timestamp with time zone,
+  CONSTRAINT integration_sync_runs_pkey PRIMARY KEY (run_id),
+  CONSTRAINT integration_sync_runs_triggered_by_fkey FOREIGN KEY (triggered_by) REFERENCES app_users(user_id) ON DELETE SET NULL,
+  CONSTRAINT integration_sync_runs_attempts_check CHECK ((attempts &gt;= 1)),
+  CONSTRAINT integration_sync_runs_check CHECK (((finished_at IS NULL) OR (finished_at &gt;= started_at))),
+  CONSTRAINT integration_sync_runs_records_synced_check CHECK ((records_synced &gt;= 0)),
+  CONSTRAINT integration_sync_runs_status_check CHECK ((status = ANY (ARRAY['RUNNING'::text, 'SUCCEEDED'::text, 'FAILED'::text]))),
+  CONSTRAINT integration_sync_runs_target_check CHECK ((target = ANY (ARRAY['neo4j'::text, 'vector'::text])))
+);</code></pre>
+<table><thead><tr><th>Column</th><th>Type</th><th>Key</th><th>Null</th><th>Meaning</th></tr></thead><tbody><tr><td><code>run_id</code></td><td>bigint (identity)</td><td>PK</td><td>NOT NULL</td><td>Surrogate primary key.</td></tr><tr><td><code>target</code></td><td>text</td><td></td><td>NOT NULL</td><td>neo4j or vector.</td></tr><tr><td><code>status</code></td><td>text</td><td></td><td>NOT NULL</td><td>RUNNING, SUCCEEDED or FAILED.</td></tr><tr><td><code>attempts</code></td><td>integer</td><td></td><td>NOT NULL</td><td>Attempts used (max 3).</td></tr><tr><td><code>records_synced</code></td><td>integer</td><td></td><td>NOT NULL</td><td>Records written to the target.</td></tr><tr><td><code>detail</code></td><td>text</td><td></td><td>nullable</td><td>Summary or failure reason.</td></tr><tr><td><code>triggered_by</code></td><td>bigint</td><td>FK</td><td>nullable</td><td>FK to the user who started the sync.</td></tr><tr><td><code>started_at</code></td><td>timestamp with time zone</td><td></td><td>NOT NULL</td><td>Start time.</td></tr><tr><td><code>finished_at</code></td><td>timestamp with time zone</td><td></td><td>nullable</td><td>End time (NULL while running).</td></tr></tbody></table>
+<p><strong>CHECK constraints</strong> (rules the database itself enforces):</p>
+<ul><li><code>integration_sync_runs_attempts_check</code>: <code>CHECK ((attempts &gt;= 1))</code></li><li><code>integration_sync_runs_check</code>: <code>CHECK (((finished_at IS NULL) OR (finished_at &gt;= started_at)))</code></li><li><code>integration_sync_runs_records_synced_check</code>: <code>CHECK ((records_synced &gt;= 0))</code></li><li><code>integration_sync_runs_status_check</code>: <code>CHECK ((status = ANY (ARRAY['RUNNING'::text, 'SUCCEEDED'::text, 'FAILED'::text])))</code></li><li><code>integration_sync_runs_target_check</code>: <code>CHECK ((target = ANY (ARRAY['neo4j'::text, 'vector'::text])))</code></li></ul>
+<p><strong>Indexes:</strong></p>
+<ul><li><code>idx_sync_runs_target</code> (B-tree): <code>ON integration_sync_runs USING btree (target, started_at DESC)</code></li><li><code>integration_sync_runs_pkey</code> (B-tree, unique) — created automatically by a PRIMARY KEY / UNIQUE constraint: <code>ON integration_sync_runs USING btree (run_id)</code></li></ul>
+<p><strong>Database access (GRANTs):</strong></p>
+<ul><li><code>rf_admin</code>: DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE</li><li><code>rf_coordinator</code>: SELECT</li></ul>
+<p><strong>DML performed on this table:</strong></p>
+<ul><li>INSERT when a run starts; UPDATE when it succeeds or fails (with retry count).</li></ul>
+<h4 id="schema-migrations-405">schema_migrations</h4>
+<p><strong>Purpose:</strong> Applied migration files (each runs once).</p>
+<p><strong>Why it exists:</strong> Which migration files have been applied, so each runs exactly once and existing data is never re-processed.</p>
+<p>Created in <code>007_dbms_engineering.sql</code>.</p>
+<pre class="lang-sql"><code>CREATE TABLE schema_migrations (
+  filename text NOT NULL,
+  applied_at timestamp with time zone DEFAULT now() NOT NULL,
+  CONSTRAINT schema_migrations_pkey PRIMARY KEY (filename)
+);</code></pre>
+<table><thead><tr><th>Column</th><th>Type</th><th>Key</th><th>Null</th><th>Meaning</th></tr></thead><tbody><tr><td><code>filename</code></td><td>text</td><td>PK</td><td>NOT NULL</td><td>Migration file name (primary key).</td></tr><tr><td><code>applied_at</code></td><td>timestamp with time zone</td><td></td><td>NOT NULL</td><td>When it was applied.</td></tr></tbody></table>
+<p><strong>Indexes:</strong></p>
+<ul><li><code>schema_migrations_pkey</code> (B-tree, unique) — created automatically by a PRIMARY KEY / UNIQUE constraint: <code>ON schema_migrations USING btree (filename)</code></li></ul>
+<p><strong>Database access (GRANTs):</strong></p>
+<ul><li><code>rf_admin</code>: DELETE, INSERT, REFERENCES, SELECT, TRIGGER, TRUNCATE, UPDATE</li></ul>
+<p><strong>DML performed on this table:</strong></p>
+<ul><li>INSERT: by scripts/migrate.ts after a file has run successfully.</li></ul>
+<div class="pagebreak"></div>
+<h2 id="5-views-functions-procedure-indexes-and-security-418">5. Views, functions, procedure, indexes and security</h2>
+<h3 id="5-1-views-419">5.1 Views</h3>
+<p>A view is a stored SELECT with a name. It stores no data; every time it is queried, PostgreSQL runs the query on the current rows. Views hide join complexity and give the application a stable interface.</p>
+<h4 id="v-disaster-response-summary-421">v_disaster_response_summary</h4>
+<p>One row per disaster with correlated subqueries: affected locations and population, total and open requests, units allocated.</p>
+<pre class="lang-sql"><code>CREATE VIEW v_disaster_response_summary AS
+ SELECT disaster_id,
+    disaster_name,
+    disaster_type,
+    severity,
+    status,
+    started_at,
+    ( SELECT count(*) AS count
+           FROM disaster_locations dl
+          WHERE (dl.disaster_id = d.disaster_id)) AS affected_locations,
+    ( SELECT COALESCE(sum(dl.affected_population), (0)::bigint) AS "coalesce"
+           FROM disaster_locations dl
+          WHERE (dl.disaster_id = d.disaster_id)) AS affected_population,
+    ( SELECT count(*) AS count
+           FROM resource_requests rr
+          WHERE (rr.disaster_id = d.disaster_id)) AS total_requests,
+    ( SELECT count(*) AS count
+           FROM resource_requests rr
+          WHERE ((rr.disaster_id = d.disaster_id) AND ((rr.status)::text = ANY ((ARRAY['PENDING'::character varying, 'APPROVED'::character varying, 'PARTIALLY_FULFILLED'::character varying])::text[])))) AS open_requests,
+    ( SELECT COALESCE(sum(ai.quantity_allocated), (0)::numeric) AS "coalesce"
+           FROM ((allocation_items ai
+             JOIN allocations a USING (allocation_id))
+             JOIN resource_requests rr ON ((rr.request_id = a.request_id)))
+          WHERE ((rr.disaster_id = d.disaster_id) AND ((a.status)::text &lt;&gt; 'CANCELLED'::text))) AS units_allocated
+   FROM disasters d;</code></pre>
+<h4 id="v-low-stock-424">v_low_stock</h4>
+<p>Stock lines at or below their minimum threshold, with warehouse and resource names. Drives low-stock alerts.</p>
+<pre class="lang-sql"><code>CREATE VIEW v_low_stock AS
+ SELECT w.warehouse_id,
+    w.warehouse_name,
+    r.resource_id,
+    r.resource_name,
+    i.quantity_available,
+    i.minimum_threshold,
+    r.unit
+   FROM ((inventory i
+     JOIN warehouses w ON ((w.warehouse_id = i.warehouse_id)))
+     JOIN resources r ON ((r.resource_id = i.resource_id)))
+  WHERE (i.quantity_available &lt;= i.minimum_threshold);</code></pre>
+<h4 id="v-request-fulfillment-427">v_request_fulfillment</h4>
+<p>For every request line: requested, allocated (ignoring cancelled allocations) and remaining quantity. The basis of fulfilment progress and of the procedure refresh_request_status.</p>
+<pre class="lang-sql"><code>CREATE VIEW v_request_fulfillment AS
+ SELECT ri.request_id,
+    ri.resource_id,
+    r.resource_name,
+    ri.quantity_requested,
+    COALESCE(sum(
+        CASE
+            WHEN ((a.status)::text &lt;&gt; 'CANCELLED'::text) THEN ai.quantity_allocated
+            ELSE (0)::numeric
+        END), (0)::numeric) AS quantity_allocated,
+    GREATEST((ri.quantity_requested - COALESCE(sum(
+        CASE
+            WHEN ((a.status)::text &lt;&gt; 'CANCELLED'::text) THEN ai.quantity_allocated
+            ELSE (0)::numeric
+        END), (0)::numeric)), (0)::numeric) AS quantity_remaining
+   FROM (((request_items ri
+     JOIN resources r ON ((r.resource_id = ri.resource_id)))
+     LEFT JOIN allocation_items ai ON (((ai.request_id = ri.request_id) AND (ai.resource_id = ri.resource_id))))
+     LEFT JOIN allocations a ON ((a.allocation_id = ai.allocation_id)))
+  GROUP BY ri.request_id, ri.resource_id, r.resource_name, ri.quantity_requested;</code></pre>
+<h4 id="v-resource-demand-430">v_resource_demand</h4>
+<p>Outstanding demand vs available stock per resource, using two CTEs (demand, supply). net_position &lt; 0 means a shortage.</p>
+<pre class="lang-sql"><code>CREATE VIEW v_resource_demand AS
+ WITH demand AS (
+         SELECT f.resource_id,
+            sum(f.quantity_remaining) AS outstanding
+           FROM (v_request_fulfillment f
+             JOIN resource_requests rr ON ((rr.request_id = f.request_id)))
+          WHERE ((rr.status)::text = ANY ((ARRAY['PENDING'::character varying, 'APPROVED'::character varying, 'PARTIALLY_FULFILLED'::character varying])::text[]))
+          GROUP BY f.resource_id
+        ), supply AS (
+         SELECT i.resource_id,
+            sum(i.quantity_available) AS available
+           FROM (inventory i
+             JOIN warehouses w USING (warehouse_id))
+          WHERE ((w.status)::text = 'ACTIVE'::text)
+          GROUP BY i.resource_id
+        )
+ SELECT r.resource_id,
+    r.resource_name,
+    r.unit,
+    c.category_name,
+    COALESCE(d.outstanding, (0)::numeric) AS outstanding_demand,
+    COALESCE(s.available, (0)::numeric) AS available_stock,
+    (COALESCE(s.available, (0)::numeric) - COALESCE(d.outstanding, (0)::numeric)) AS net_position
+   FROM (((resources r
+     JOIN resource_categories c USING (category_id))
+     LEFT JOIN demand d USING (resource_id))
+     LEFT JOIN supply s USING (resource_id));</code></pre>
+<h4 id="v-warehouse-inventory-summary-433">v_warehouse_inventory_summary</h4>
+<p>One row per warehouse: number of stock lines, units available, low-stock lines and last stock change (LEFT JOIN so empty warehouses appear too).</p>
+<pre class="lang-sql"><code>CREATE VIEW v_warehouse_inventory_summary AS
+ SELECT w.warehouse_id,
+    w.warehouse_name,
+    w.status,
+    l.location_name,
+    count(i.resource_id) AS resource_lines,
+    COALESCE(sum(i.quantity_available), (0)::numeric) AS units_available,
+    count(*) FILTER (WHERE (i.quantity_available &lt;= i.minimum_threshold)) AS low_stock_lines,
+    max(i.last_updated) AS last_stock_change
+   FROM ((warehouses w
+     JOIN locations l ON ((l.location_id = w.location_id)))
+     LEFT JOIN inventory i ON ((i.warehouse_id = w.warehouse_id)))
+  GROUP BY w.warehouse_id, w.warehouse_name, w.status, l.location_name;</code></pre>
+<h3 id="5-2-functions-and-the-stored-procedure-436">5.2 Functions and the stored procedure</h3>
+<ul><li>A <strong>function</strong> returns a value and is used inside SQL (<code>SELECT resource_availability(5)</code>).</li><li>A <strong>procedure</strong> is executed with <code>CALL</code> and performs an action (<code>CALL refresh_request_status(12)</code>).</li><li><code>STABLE</code> means the function does not modify data and returns the same result within one statement, so the planner can optimise calls.</li><li><code>SECURITY DEFINER</code> means the function runs with the rights of its owner rather than the caller — used where a restricted role must perform one specific, controlled action.</li></ul>
+<h4 id="refresh-request-status-procedure-438">refresh_request_status (procedure)</h4>
+<p>PROCEDURE (called with CALL). The single source of truth for a request's status: recomputes APPROVED / PARTIALLY_FULFILLED / ALLOCATED / IN_TRANSIT / DELIVERED from its allocations and v_request_fulfillment, and updates the row only if the status changed. Called by the API after every allocation, cancellation and delivery update.</p>
+<pre class="lang-sql"><code>CREATE OR REPLACE PROCEDURE public.refresh_request_status(IN p_request_id bigint)
+ LANGUAGE plpgsql
+AS $procedure$
+DECLARE cur TEXT; nxt TEXT;
+BEGIN
+  SELECT status INTO cur FROM resource_requests WHERE request_id = p_request_id FOR UPDATE;
+  IF cur IS NULL OR cur IN ('PENDING','REJECTED','CANCELLED') THEN RETURN; END IF;
+  IF NOT EXISTS (SELECT 1 FROM allocations WHERE request_id = p_request_id AND status &lt;&gt; 'CANCELLED') THEN
+    nxt := 'APPROVED';
+  ELSIF EXISTS (SELECT 1 FROM v_request_fulfillment WHERE request_id = p_request_id AND quantity_remaining &gt; 0) THEN
+    nxt := 'PARTIALLY_FULFILLED';
+  ELSIF NOT EXISTS (SELECT 1 FROM allocations WHERE request_id = p_request_id AND status NOT IN ('DELIVERED','CANCELLED')) THEN
+    nxt := 'DELIVERED';
+  ELSIF EXISTS (SELECT 1 FROM allocations WHERE request_id = p_request_id AND status = 'IN_TRANSIT') THEN
+    nxt := 'IN_TRANSIT';
+  ELSE
+    nxt := 'ALLOCATED';
+  END IF;
+  IF nxt IS DISTINCT FROM cur THEN
+    UPDATE resource_requests SET status = nxt WHERE request_id = p_request_id;
+  END IF;
+END $procedure$</code></pre>
+<h4 id="resource-availability-441">resource_availability</h4>
+<p>Total stock of one resource across ACTIVE warehouses.</p>
+<pre class="lang-sql"><code>CREATE OR REPLACE FUNCTION public.resource_availability(p_resource_id bigint)
+ RETURNS numeric
+ LANGUAGE sql
+ STABLE
+AS $function$
+  SELECT COALESCE(SUM(i.quantity_available), 0)
+  FROM inventory i JOIN warehouses w USING (warehouse_id)
+  WHERE i.resource_id = p_resource_id AND w.status = 'ACTIVE';
+$function$</code></pre>
+<h4 id="remaining-request-quantity-444">remaining_request_quantity</h4>
+<p>Outstanding quantity of one resource on one request (requested − allocated, never below 0).</p>
+<pre class="lang-sql"><code>CREATE OR REPLACE FUNCTION public.remaining_request_quantity(p_request_id bigint, p_resource_id bigint)
+ RETURNS numeric
+ LANGUAGE sql
+ STABLE
+AS $function$
+  SELECT GREATEST(ri.quantity_requested - COALESCE(SUM(CASE WHEN a.status &lt;&gt; 'CANCELLED' THEN ai.quantity_allocated ELSE 0 END),0),0)
+  FROM request_items ri
+  LEFT JOIN allocation_items ai ON ai.request_id = ri.request_id AND ai.resource_id = ri.resource_id
+  LEFT JOIN allocations a ON a.allocation_id = ai.allocation_id
+  WHERE ri.request_id = p_request_id AND ri.resource_id = p_resource_id
+  GROUP BY ri.quantity_requested;
+$function$</code></pre>
+<h4 id="request-fulfillment-pct-447">request_fulfillment_pct</h4>
+<p>Percentage of a request's total quantity that has been allocated.</p>
+<pre class="lang-sql"><code>CREATE OR REPLACE FUNCTION public.request_fulfillment_pct(p_request_id bigint)
+ RETURNS numeric
+ LANGUAGE sql
+ STABLE
+AS $function$
+  SELECT CASE WHEN SUM(quantity_requested) = 0 THEN 0
+              ELSE ROUND(100 * SUM(quantity_allocated) / SUM(quantity_requested), 1) END
+  FROM v_request_fulfillment WHERE request_id = p_request_id;
+$function$</code></pre>
+<h4 id="operational-summary-450">operational_summary</h4>
+<p>Set-returning function: the dashboard KPIs (active disasters, affected population, open camps, open requests, low-stock lines, active deliveries) in one call.</p>
+<pre class="lang-sql"><code>CREATE OR REPLACE FUNCTION public.operational_summary()
+ RETURNS TABLE(metric text, value numeric)
+ LANGUAGE sql
+ STABLE
+AS $function$
+  SELECT 'active_disasters', COUNT(*)::NUMERIC FROM disasters WHERE status = 'ACTIVE'
+  UNION ALL SELECT 'affected_population', COALESCE(SUM(dl.affected_population),0)
+            FROM disaster_locations dl JOIN disasters d USING (disaster_id) WHERE d.status &lt;&gt; 'CLOSED'
+  UNION ALL SELECT 'open_camps', COUNT(*) FROM relief_camps WHERE status &lt;&gt; 'CLOSED'
+  UNION ALL SELECT 'open_requests', COUNT(*) FROM resource_requests WHERE status IN ('PENDING','APPROVED','PARTIALLY_FULFILLED')
+  UNION ALL SELECT 'low_stock_lines', COUNT(*) FROM v_low_stock
+  UNION ALL SELECT 'active_deliveries', COUNT(*) FROM deliveries WHERE status IN ('PLANNED','IN_TRANSIT','DELAYED');
+$function$</code></pre>
+<h4 id="lock-request-parents-453">lock_request_parents</h4>
+<p>SECURITY DEFINER. Locks the camp and disaster rows with FOR SHARE while a request is created and returns their status, so a camp cannot be closed (or a disaster closed) halfway through creating a request — even though a field officer has no UPDATE right on those tables.</p>
+<pre class="lang-sql"><code>CREATE OR REPLACE FUNCTION public.lock_request_parents(p_camp bigint, p_disaster bigint)
+ RETURNS TABLE(camp_status text, disaster_status text)
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO 'public'
+AS $function$
+BEGIN
+  RETURN QUERY
+  SELECT (SELECT c.status::TEXT FROM relief_camps c WHERE c.camp_id = p_camp FOR SHARE),
+         (SELECT d.status::TEXT FROM disasters d WHERE d.disaster_id = p_disaster FOR SHARE);
+END $function$</code></pre>
+<h3 id="5-3-indexes-456">5.3 Indexes</h3>
+<p>There are 65 indexes (34 created automatically by PRIMARY KEY / UNIQUE constraints). Each table's indexes are listed in Section 4.</p>
+<table><thead><tr><th>Kind</th><th>Count</th><th>Used for</th></tr></thead><tbody><tr><td>B-tree</td><td>62</td><td>equality and range search, ORDER BY, joins on foreign keys</td></tr><tr><td>GIN</td><td>3</td><td>full-text search on tsvector columns, fuzzy name search (pg_trgm)</td></tr><tr><td>Partial (WHERE …)</td><td>3</td><td>e.g. only <em>active</em> deliveries must be unique per vehicle / driver / allocation — finished deliveries are ignored</td></tr></tbody></table>
+<p>Why every foreign key has an index: joins use it, and when a parent row is deleted PostgreSQL must find child rows — without an index that is a full scan of the child table.</p>
+<h3 id="5-4-constraint-summary-460">5.4 Constraint summary</h3>
+<table><thead><tr><th>Constraint</th><th>Count</th><th>Example</th></tr></thead><tbody><tr><td>PRIMARY KEY</td><td>25</td><td><code>PRIMARY KEY (warehouse_id, resource_id)</code> on inventory</td></tr><tr><td>FOREIGN KEY</td><td>34</td><td><code>FOREIGN KEY (request_id, resource_id) REFERENCES request_items</code></td></tr><tr><td>UNIQUE</td><td>9</td><td><code>UNIQUE (email)</code> on app_users</td></tr><tr><td>CHECK</td><td>42</td><td><code>CHECK (quantity_available &gt;= 0)</code> on inventory</td></tr><tr><td>NOT NULL</td><td>123 columns</td><td>every mandatory attribute</td></tr></tbody></table>
+<h3 id="5-5-database-roles-grants-and-row-level-security-462">5.5 Database roles, GRANTs and row-level security</h3>
+<p>Authorisation is enforced by PostgreSQL itself, not only by the application:</p>
+<ol><li>The application authenticates the user and knows their role.</li><li>Every API transaction starts with <code>SET LOCAL ROLE rf_&lt;role&gt;</code> and <code>set_config('reliefflow.user_id', &lt;id&gt;, true)</code>.</li><li>From then on PostgreSQL checks every statement against that role's GRANTs and the row-level-security policies.</li></ol>
+<table><thead><tr><th>Database role</th><th>Application role</th><th>In short</th></tr></thead><tbody><tr><td><code>rf_admin</code></td><td>ADMIN</td><td>everything, including password hashes and user management</td></tr><tr><td><code>rf_coordinator</code></td><td>RELIEF_COORDINATOR</td><td>read and change all operational data; read history</td></tr><tr><td><code>rf_field_officer</code></td><td>FIELD_OFFICER</td><td>read operations, raise requests, update camp occupancy only</td></tr><tr><td><code>rf_driver</code></td><td>DRIVER</td><td>read operations; progress only their own deliveries</td></tr></tbody></table>
+<p>Row-level security policies (a policy is a WHERE condition PostgreSQL adds to every query on the table for the given roles):</p>
+<table><thead><tr><th>Table</th><th>Policy</th><th>Command</th><th>Roles</th><th>Condition</th></tr></thead><tbody><tr><td>deliveries</td><td><code>deliveries_driver_own</code></td><td>SELECT</td><td>rf_driver</td><td><code>(driver_id = (NULLIF(current_setting('reliefflow.user_id'::text, true), ''::text))::bigint)</code></td></tr><tr><td>deliveries</td><td><code>deliveries_driver_update_own</code></td><td>UPDATE</td><td>rf_driver</td><td><code>(driver_id = (NULLIF(current_setting('reliefflow.user_id'::text, true), ''::text))::bigint)</code></td></tr><tr><td>deliveries</td><td><code>deliveries_officer_read</code></td><td>SELECT</td><td>rf_field_officer</td><td><code>true</code></td></tr><tr><td>deliveries</td><td><code>deliveries_staff_all</code></td><td>ALL</td><td>rf_admin, rf_coordinator</td><td><code>true</code></td></tr></tbody></table>
+<p>Effect: the same <code>SELECT * FROM deliveries</code> returns all rows for a coordinator but only the driver's own rows for a driver, and an <code>UPDATE</code> of another driver's delivery affects 0 rows.</p>
+<pre class="lang-sql"><code>BEGIN;
+SELECT set_config('reliefflow.user_id', '11', true);
+SET LOCAL ROLE rf_driver;
+SELECT count(*) FROM deliveries;              -- only driver 11's deliveries
+SELECT password_hash FROM app_users;          -- ERROR: permission denied for table app_users
+UPDATE inventory SET quantity_available = 0;  -- ERROR: permission denied for table inventory
+ROLLBACK;</code></pre>
+<div class="pagebreak"></div>
+<h2 id="6-triggers-every-one-explained-471">6. Triggers — every one explained</h2>
+<p>A trigger makes PostgreSQL run a function automatically when rows are inserted, updated or deleted. ReliefFlow uses triggers for rules that must hold <strong>no matter which program changes the data</strong>.</p>
+<ul><li><strong>BEFORE</strong> triggers run before the row is written and can reject it (<code>RAISE EXCEPTION</code> → the whole transaction rolls back).</li><li><strong>AFTER</strong> triggers run once the row is written and are used for side effects (deduct stock, write history).</li><li><strong>FOR EACH ROW</strong> means the function runs once per affected row, with <code>OLD</code> (row before) and <code>NEW</code> (row after) available. <code>TG_OP</code> tells it whether this is INSERT, UPDATE or DELETE.</li><li>A trigger runs <strong>inside the same transaction</strong> as the statement that fired it: if anything fails, the change and all its side effects are undone together.</li></ul>
+<table><thead><tr><th>Trigger</th><th>Table</th><th>Timing</th><th>Events</th><th>Function</th></tr></thead><tbody><tr><td><code>trg_adjust_inventory</code></td><td>allocation_items</td><td>AFTER</td><td>INSERT OR DELETE OR UPDATE</td><td><code>adjust_inventory_for_allocation()</code></td></tr><tr><td><code>trg_validate_allocation_item</code></td><td>allocation_items</td><td>BEFORE</td><td>INSERT OR DELETE OR UPDATE</td><td><code>validate_allocation_item()</code></td></tr><tr><td><code>allocation_status_guard</code></td><td>allocations</td><td>BEFORE</td><td>UPDATE</td><td><code>allocation_status_guard()</code></td></tr><tr><td><code>row_change_log</code></td><td>app_users</td><td>AFTER</td><td>INSERT OR DELETE OR UPDATE</td><td><code>log_row_change()</code></td></tr><tr><td><code>delivery_status_guard</code></td><td>deliveries</td><td>BEFORE</td><td>UPDATE OF status</td><td><code>delivery_status_guard()</code></td></tr><tr><td><code>delivery_vehicle_guard</code></td><td>deliveries</td><td>BEFORE</td><td>INSERT</td><td><code>delivery_vehicle_guard()</code></td></tr><tr><td><code>row_change_log</code></td><td>deliveries</td><td>AFTER</td><td>INSERT OR DELETE OR UPDATE</td><td><code>log_row_change()</code></td></tr><tr><td><code>operational_duplicate</code></td><td>disasters</td><td>BEFORE</td><td>INSERT OR UPDATE OF disaster_name, disaster_type, started_at, event_location_id</td><td><code>prevent_operational_duplicate()</code></td></tr><tr><td><code>row_change_log</code></td><td>disasters</td><td>AFTER</td><td>INSERT OR DELETE OR UPDATE</td><td><code>log_row_change()</code></td></tr><tr><td><code>inventory_history</code></td><td>inventory</td><td>AFTER</td><td>INSERT OR UPDATE OF quantity_available</td><td><code>record_inventory_movement()</code></td></tr><tr><td><code>row_change_log</code></td><td>relief_camps</td><td>AFTER</td><td>INSERT OR DELETE OR UPDATE</td><td><code>log_row_change()</code></td></tr><tr><td><code>row_change_log</code></td><td>resource_requests</td><td>AFTER</td><td>INSERT OR DELETE OR UPDATE</td><td><code>log_row_change()</code></td></tr><tr><td><code>row_change_log</code></td><td>vehicles</td><td>AFTER</td><td>INSERT OR DELETE OR UPDATE</td><td><code>log_row_change()</code></td></tr><tr><td><code>row_change_log</code></td><td>volunteers</td><td>AFTER</td><td>INSERT OR DELETE OR UPDATE</td><td><code>log_row_change()</code></td></tr><tr><td><code>operational_duplicate</code></td><td>warehouses</td><td>BEFORE</td><td>INSERT OR UPDATE OF warehouse_name, location_id</td><td><code>prevent_operational_duplicate()</code></td></tr><tr><td><code>row_change_log</code></td><td>warehouses</td><td>AFTER</td><td>INSERT OR DELETE OR UPDATE</td><td><code>log_row_change()</code></td></tr></tbody></table>
+<h3 id="validate-allocation-item-475">validate_allocation_item()</h3>
+<p><strong>Purpose:</strong> Guards every allocation line before it is written: the request must be approved, the allocation active, the warehouse active, and the quantity must not exceed the stock or the outstanding demand.</p>
+<p><strong>Attached to:</strong> <code>allocation_items</code></p>
+<p><strong>What it does, step by step:</strong></p>
+<ol><li>If the operation is UPDATE or DELETE → error 'Allocation lines are immutable' (history cannot be rewritten).</li><li>Locks the request row (FOR UPDATE) and checks status is APPROVED or PARTIALLY_FULFILLED.</li><li>Checks the parent allocation is still ALLOCATED.</li><li>Locks the request line and the stock line (FOR UPDATE) — so two coordinators cannot both take the last units.</li><li>Checks the warehouse is ACTIVE.</li><li>Adds up what is already allocated for this request line (ignoring cancelled allocations).</li><li>If quantity &gt; stock, or already allocated + quantity &gt; requested → error 'Insufficient stock or allocation exceeds outstanding quantity'. The whole transaction rolls back.</li></ol>
+<p><strong>Example:</strong> Allocating 500 litres when only 350 are outstanding → 409 Conflict, nothing is written.</p>
+<pre class="lang-sql"><code>CREATE OR REPLACE FUNCTION public.validate_allocation_item()
+ RETURNS trigger
+ LANGUAGE plpgsql
+AS $function$
+DECLARE stock NUMERIC; requested NUMERIC; used NUMERIC; state TEXT;
+BEGIN
+ IF TG_OP&lt;&gt;'INSERT' THEN RAISE EXCEPTION 'Allocation lines are immutable'; END IF;
+ SELECT status INTO state FROM resource_requests WHERE request_id=NEW.request_id FOR UPDATE;
+ IF state NOT IN ('APPROVED','PARTIALLY_FULFILLED') THEN RAISE EXCEPTION 'Request must be approved with outstanding demand'; END IF;
+ IF NOT EXISTS(SELECT 1 FROM allocations WHERE allocation_id=NEW.allocation_id AND status='ALLOCATED') THEN RAISE EXCEPTION 'Allocation is not active'; END IF;
+ SELECT quantity_requested INTO requested FROM request_items WHERE request_id=NEW.request_id AND resource_id=NEW.resource_id FOR UPDATE;
+ SELECT quantity_available INTO stock FROM inventory WHERE warehouse_id=NEW.warehouse_id AND resource_id=NEW.resource_id FOR UPDATE;
+ IF NOT EXISTS(SELECT 1 FROM warehouses WHERE warehouse_id=NEW.warehouse_id AND status='ACTIVE') THEN RAISE EXCEPTION 'Warehouse is not active'; END IF;
+ SELECT COALESCE(sum(ai.quantity_allocated),0) INTO used FROM allocation_items ai JOIN allocations a USING(allocation_id) WHERE ai.request_id=NEW.request_id AND ai.resource_id=NEW.resource_id AND a.status&lt;&gt;'CANCELLED';
+ IF stock IS NULL OR requested IS NULL OR NEW.quantity_allocated&gt;stock OR used+NEW.quantity_allocated&gt;requested THEN RAISE EXCEPTION 'Insufficient stock or allocation exceeds outstanding quantity'; END IF;
+ RETURN NEW;
+END $function$</code></pre>
+<h3 id="adjust-inventory-for-allocation-482">adjust_inventory_for_allocation()</h3>
+<p><strong>Purpose:</strong> Keeps stock in step with allocation lines automatically, in the same transaction.</p>
+<p><strong>Attached to:</strong> <code>allocation_items</code></p>
+<p><strong>What it does, step by step:</strong></p>
+<ol><li>INSERT of a line → inventory.quantity_available − quantity_allocated.</li><li>DELETE → adds the quantity back. UPDATE → adds back the old and deducts the new (in practice lines are immutable).</li><li>Because the stock CHECK (quantity_available &gt;= 0) is evaluated on this UPDATE, stock can never go negative even under concurrency.</li></ol>
+<pre class="lang-sql"><code>CREATE OR REPLACE FUNCTION public.adjust_inventory_for_allocation()
+ RETURNS trigger
+ LANGUAGE plpgsql
+AS $function$
+BEGIN
+  IF TG_OP = 'INSERT' THEN
+    UPDATE inventory SET quantity_available = quantity_available - NEW.quantity_allocated, last_updated = NOW()
+    WHERE warehouse_id = NEW.warehouse_id AND resource_id = NEW.resource_id;
+    RETURN NEW;
+  ELSIF TG_OP = 'DELETE' THEN
+    UPDATE inventory SET quantity_available = quantity_available + OLD.quantity_allocated, last_updated = NOW()
+    WHERE warehouse_id = OLD.warehouse_id AND resource_id = OLD.resource_id;
+    RETURN OLD;
+  ELSE
+    UPDATE inventory SET quantity_available = quantity_available + OLD.quantity_allocated, last_updated = NOW()
+    WHERE warehouse_id = OLD.warehouse_id AND resource_id = OLD.resource_id;
+    UPDATE inventory SET quantity_available = quantity_available - NEW.quantity_allocated, last_updated = NOW()
+    WHERE warehouse_id = NEW.warehouse_id AND resource_id = NEW.resource_id;
+    RETURN NEW;
+  END IF;
+END;
+$function$</code></pre>
+<h3 id="allocation-status-guard-488">allocation_status_guard()</h3>
+<p><strong>Purpose:</strong> State machine for allocations, and exact-once stock restoration on cancellation.</p>
+<p><strong>Attached to:</strong> <code>allocations</code></p>
+<p><strong>What it does, step by step:</strong></p>
+<ol><li>request_id, allocated_by and allocated_at can never change ('Allocation identity is immutable').</li><li>Only ALLOCATED → IN_TRANSIT / CANCELLED and IN_TRANSIT → DELIVERED are allowed.</li><li>On CANCELLED: refuses if a non-cancelled delivery still exists; locks the affected stock lines in a fixed order; adds the allocated quantities back to inventory with the reason 'Allocation cancellation #id'.</li><li>Because the status can change to CANCELLED only once, stock is restored exactly once.</li></ol>
+<pre class="lang-sql"><code>CREATE OR REPLACE FUNCTION public.allocation_status_guard()
+ RETURNS trigger
+ LANGUAGE plpgsql
+AS $function$
+BEGIN
+ IF NEW.request_id&lt;&gt;OLD.request_id OR NEW.allocated_by&lt;&gt;OLD.allocated_by OR NEW.allocated_at&lt;&gt;OLD.allocated_at THEN RAISE EXCEPTION 'Allocation identity is immutable'; END IF;
+ IF NEW.status=OLD.status THEN RETURN NEW; END IF;
+ PERFORM 1 FROM resource_requests WHERE request_id=NEW.request_id FOR UPDATE;
+ IF NOT ((OLD.status='ALLOCATED' AND NEW.status IN ('IN_TRANSIT','CANCELLED')) OR (OLD.status='IN_TRANSIT' AND NEW.status='DELIVERED')) THEN RAISE EXCEPTION 'Invalid allocation transition'; END IF;
+ IF NEW.status='CANCELLED' THEN
+  IF EXISTS(SELECT 1 FROM deliveries WHERE allocation_id=NEW.allocation_id AND status&lt;&gt;'CANCELLED') THEN RAISE EXCEPTION 'Cancel planned deliveries before cancelling allocation'; END IF;
+  PERFORM set_config('reliefflow.reason','Allocation cancellation #'||NEW.allocation_id,true);
+  PERFORM 1 FROM inventory i JOIN allocation_items ai USING(warehouse_id,resource_id) WHERE ai.allocation_id=NEW.allocation_id ORDER BY i.warehouse_id,i.resource_id FOR UPDATE OF i;
+  UPDATE inventory i SET quantity_available=i.quantity_available+x.quantity,last_updated=now() FROM (SELECT warehouse_id,resource_id,sum(quantity_allocated) quantity FROM allocation_items WHERE allocation_id=NEW.allocation_id GROUP BY warehouse_id,resource_id) x WHERE i.warehouse_id=x.warehouse_id AND i.resource_id=x.resource_id;
+ END IF;
+ RETURN NEW;
+END $function$</code></pre>
+<h3 id="delivery-status-guard-494">delivery_status_guard()</h3>
+<p><strong>Purpose:</strong> State machine for deliveries.</p>
+<p><strong>Attached to:</strong> <code>deliveries</code></p>
+<p><strong>What it does, step by step:</strong></p>
+<ol><li>Allowed: PLANNED → IN_TRANSIT / CANCELLED; IN_TRANSIT → DELAYED / DELIVERED; DELAYED → IN_TRANSIT / DELIVERED.</li><li>Anything else (e.g. DELIVERED → PLANNED) → error 'Invalid delivery transition X -&gt; Y'.</li></ol>
+<pre class="lang-sql"><code>CREATE OR REPLACE FUNCTION public.delivery_status_guard()
+ RETURNS trigger
+ LANGUAGE plpgsql
+AS $function$
+BEGIN
+  IF NEW.status = OLD.status THEN RETURN NEW; END IF;
+  IF NOT (
+       (OLD.status = 'PLANNED'    AND NEW.status IN ('IN_TRANSIT','CANCELLED'))
+    OR (OLD.status = 'IN_TRANSIT' AND NEW.status IN ('DELAYED','DELIVERED'))
+    OR (OLD.status = 'DELAYED'    AND NEW.status IN ('IN_TRANSIT','DELIVERED'))
+  ) THEN
+    RAISE EXCEPTION 'Invalid delivery transition % -&gt; %', OLD.status, NEW.status;
+  END IF;
+  RETURN NEW;
+END $function$</code></pre>
+<h3 id="delivery-vehicle-guard-500">delivery_vehicle_guard()</h3>
+<p><strong>Purpose:</strong> Refuses to plan a delivery with a vehicle that is under maintenance.</p>
+<p><strong>Attached to:</strong> <code>deliveries</code></p>
+<p><strong>What it does, step by step:</strong></p>
+<ol><li>Locks the vehicle row (FOR UPDATE) and reads its status.</li><li>If MAINTENANCE → error 'Vehicle is under maintenance'.</li></ol>
+<pre class="lang-sql"><code>CREATE OR REPLACE FUNCTION public.delivery_vehicle_guard()
+ RETURNS trigger
+ LANGUAGE plpgsql
+AS $function$
+DECLARE v_status TEXT;
+BEGIN
+  SELECT status INTO v_status FROM vehicles WHERE vehicle_id = NEW.vehicle_id FOR UPDATE;
+  IF v_status = 'MAINTENANCE' THEN RAISE EXCEPTION 'Vehicle is under maintenance'; END IF;
+  RETURN NEW;
+END $function$</code></pre>
+<h3 id="prevent-operational-duplicate-506">prevent_operational_duplicate()</h3>
+<p><strong>Purpose:</strong> Stops the same disaster or warehouse being entered twice with slightly different spelling.</p>
+<p><strong>Attached to:</strong> <code>disasters</code>, <code>warehouses</code></p>
+<p><strong>What it does, step by step:</strong></p>
+<ol><li>Compares names case-insensitively and ignoring surrounding spaces (lower(btrim(...))).</li><li>Disasters: same name + type + start date + location = duplicate. Warehouses: same name at the same location = duplicate.</li><li>Takes a transaction-level advisory lock first, so two simultaneous inserts of the same event cannot both pass the check.</li></ol>
+<pre class="lang-sql"><code>CREATE OR REPLACE FUNCTION public.prevent_operational_duplicate()
+ RETURNS trigger
+ LANGUAGE plpgsql
+AS $function$
+BEGIN
+ IF TG_TABLE_NAME='warehouses' THEN
+  IF TG_OP='UPDATE' AND lower(btrim(OLD.warehouse_name))=lower(btrim(NEW.warehouse_name)) AND OLD.location_id=NEW.location_id THEN RETURN NEW; END IF;
+  PERFORM pg_advisory_xact_lock(71001);
+  IF EXISTS(SELECT 1 FROM warehouses WHERE lower(btrim(warehouse_name))=lower(btrim(NEW.warehouse_name)) AND location_id=NEW.location_id AND warehouse_id&lt;&gt;NEW.warehouse_id) THEN RAISE EXCEPTION 'Warehouse already exists at this location'; END IF;
+ ELSE
+  IF TG_OP='UPDATE' AND lower(btrim(OLD.disaster_name))=lower(btrim(NEW.disaster_name)) AND lower(btrim(OLD.disaster_type))=lower(btrim(NEW.disaster_type)) AND (OLD.started_at AT TIME ZONE 'UTC')::date=(NEW.started_at AT TIME ZONE 'UTC')::date AND OLD.event_location_id IS NOT DISTINCT FROM NEW.event_location_id THEN RETURN NEW; END IF;
+  PERFORM pg_advisory_xact_lock(71002);
+  IF EXISTS(SELECT 1 FROM disasters WHERE lower(btrim(disaster_name))=lower(btrim(NEW.disaster_name)) AND lower(btrim(disaster_type))=lower(btrim(NEW.disaster_type)) AND (started_at AT TIME ZONE 'UTC')::date=(NEW.started_at AT TIME ZONE 'UTC')::date AND event_location_id IS NOT DISTINCT FROM NEW.event_location_id AND disaster_id&lt;&gt;NEW.disaster_id) THEN RAISE EXCEPTION 'Matching disaster event already exists'; END IF;
+ END IF;
+ RETURN NEW;
+END $function$</code></pre>
+<h3 id="record-inventory-movement-512">record_inventory_movement()</h3>
+<p><strong>Purpose:</strong> Writes the stock ledger: every change of inventory.quantity_available becomes a row in inventory_movements.</p>
+<p><strong>Attached to:</strong> <code>inventory</code> · runs as SECURITY DEFINER</p>
+<p><strong>What it does, step by step:</strong></p>
+<ol><li>delta = new quantity − old quantity (or the full quantity for a new line).</li><li>reason comes from the transaction setting reliefflow.reason (set by the API or by a cancellation), default 'Stock adjustment'.</li><li>SECURITY DEFINER: runs with the owner's rights, because no application role may write the ledger directly.</li></ol>
+<pre class="lang-sql"><code>CREATE OR REPLACE FUNCTION public.record_inventory_movement()
+ RETURNS trigger
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO 'public'
+AS $function$
+BEGIN
+ INSERT INTO inventory_movements(warehouse_id,resource_id,delta,reason) VALUES(NEW.warehouse_id,NEW.resource_id,NEW.quantity_available-CASE WHEN TG_OP='INSERT' THEN 0 ELSE OLD.quantity_available END,COALESCE(NULLIF(current_setting('reliefflow.reason',true),''),'Stock adjustment'));
+ RETURN NEW;
+END $function$</code></pre>
+<h3 id="log-row-change-518">log_row_change()</h3>
+<p><strong>Purpose:</strong> Generic field-level audit trigger attached to eight tables.</p>
+<p><strong>Attached to:</strong> <code>app_users</code>, <code>deliveries</code>, <code>disasters</code>, <code>relief_camps</code>, <code>resource_requests</code>, <code>vehicles</code>, <code>volunteers</code>, <code>warehouses</code> · runs as SECURITY DEFINER</p>
+<p><strong>What it does, step by step:</strong></p>
+<ol><li>Converts the OLD and NEW rows to JSONB (dropping password_hash and search_vector).</li><li>For UPDATE, builds { column: { from, to } } for changed columns only; an UPDATE that changed nothing is not logged.</li><li>Inserts table name, operation, row data, changed fields and the acting user (from reliefflow.user_id, set by the API in each transaction).</li><li>SECURITY DEFINER, so history is written even though no role can write data_change_log directly.</li></ol>
+<pre class="lang-sql"><code>CREATE OR REPLACE FUNCTION public.log_row_change()
+ RETURNS trigger
+ LANGUAGE plpgsql
+ SECURITY DEFINER
+ SET search_path TO 'public'
+AS $function$
+DECLARE
+  old_j JSONB := CASE WHEN TG_OP &lt;&gt; 'INSERT' THEN to_jsonb(OLD) - 'password_hash' - 'search_vector' END;
+  new_j JSONB := CASE WHEN TG_OP &lt;&gt; 'DELETE' THEN to_jsonb(NEW) - 'password_hash' - 'search_vector' END;
+  diff JSONB;
+BEGIN
+  IF TG_OP = 'UPDATE' THEN
+    SELECT jsonb_object_agg(n.key, jsonb_build_object('from', old_j -&gt; n.key, 'to', n.value))
+      INTO diff
+      FROM jsonb_each(new_j) n
+     WHERE old_j -&gt; n.key IS DISTINCT FROM n.value;
+    IF diff IS NULL THEN RETURN NEW; END IF;
+  END IF;
+  INSERT INTO data_change_log(table_name, operation, row_data, changed_fields, changed_by)
+  VALUES (TG_TABLE_NAME, TG_OP, COALESCE(new_j, old_j), diff,
+          NULLIF(current_setting('reliefflow.user_id', true), '')::BIGINT);
+  RETURN COALESCE(NEW, OLD);
+END $function$</code></pre>
+<div class="pagebreak"></div>
+<h2 id="7-dml-how-the-data-is-changed-and-read-525">7. DML — how the data is changed and read</h2>
+<p>DML (Data Manipulation Language) is the part of SQL that works with the rows: <code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code> and <code>SELECT</code>. In ReliefFlow every DML statement:</p>
+<ul><li>is <strong>parameterised</strong> (<code>$1, $2, …</code>) — user input is sent separately from the SQL text, so SQL injection is impossible;</li><li>runs inside a <strong>transaction</strong> (<code>BEGIN … COMMIT</code>, or <code>ROLLBACK</code> on any error) as the user's <strong>database role</strong>;</li><li>is checked by the database's constraints and triggers, in addition to the API's own validation.</li></ul>
+<h3 id="7-1-dml-statement-types-used-528">7.1 DML statement types used</h3>
+<table><thead><tr><th>Statement</th><th>How ReliefFlow uses it</th><th>Example</th></tr></thead><tbody><tr><td><code>INSERT … VALUES … RETURNING</code></td><td>create a row and get its generated id back in one round trip</td><td><code>INSERT INTO resource_requests(…) VALUES ($1, …) RETURNING request_id</code></td></tr><tr><td><code>INSERT … SELECT FROM unnest(…)</code></td><td>insert many request lines in one statement</td><td><code>INSERT INTO request_items(request_id, resource_id, quantity_requested) SELECT $1, x.r, x.q FROM unnest($2::bigint[], $3::numeric[]) x(r, q)</code></td></tr><tr><td><code>INSERT … ON CONFLICT DO NOTHING</code></td><td>create-if-missing (stock line, login counter)</td><td><code>INSERT INTO inventory(warehouse_id, resource_id) VALUES ($1, $2) ON CONFLICT DO NOTHING</code></td></tr><tr><td><code>UPDATE … SET col = col + $n</code></td><td>atomic relative change, no lost updates</td><td>camp admissions</td></tr><tr><td><code>UPDATE … WHERE … AND condition RETURNING</code></td><td>conditional update: succeeds only if the row is still in the expected state</td><td><code>UPDATE volunteers SET availability_status = 'ASSIGNED' WHERE volunteer_id = $1 AND availability_status = 'AVAILABLE'</code></td></tr><tr><td><code>UPDATE … WHERE xmin = $version</code></td><td>optimistic locking: fails (0 rows) if someone else edited the row first</td><td>management edit forms</td></tr><tr><td><code>DELETE … RETURNING</code></td><td>delete reference data; refused by FK RESTRICT if still in use</td><td><code>DELETE FROM resource_categories WHERE category_id = $1</code></td></tr><tr><td><code>SELECT … FOR UPDATE</code> / <code>FOR SHARE</code></td><td>lock rows read inside a transaction</td><td>stock lines before allocating</td></tr><tr><td><code>SELECT</code> with JOIN, GROUP BY, HAVING, subqueries, CTEs, window functions</td><td>every list, dashboard and report</td><td>see the Project Report §11</td></tr><tr><td><code>CALL procedure()</code></td><td>run the status procedure</td><td><code>CALL refresh_request_status($1)</code></td></tr></tbody></table>
+<h3 id="7-2-dml-by-table-530">7.2 DML by table</h3>
+<table><thead><tr><th>Table</th><th>INSERT</th><th>UPDATE</th><th>DELETE</th><th>Fires triggers</th></tr></thead><tbody><tr><td><code>roles</code></td><td>✔</td><td>—</td><td>—</td><td>—</td></tr><tr><td><code>app_users</code></td><td>✔</td><td>✔</td><td>—</td><td><code>row_change_log</code></td></tr><tr><td><code>sessions</code></td><td>✔</td><td>—</td><td>✔</td><td>—</td></tr><tr><td><code>login_attempts</code></td><td>✔</td><td>✔</td><td>✔</td><td>—</td></tr><tr><td><code>locations</code></td><td>✔</td><td>✔</td><td>✔</td><td>—</td></tr><tr><td><code>disasters</code></td><td>✔</td><td>✔</td><td>—</td><td><code>operational_duplicate</code>, <code>row_change_log</code></td></tr><tr><td><code>disaster_locations</code></td><td>✔</td><td>—</td><td>✔</td><td>—</td></tr><tr><td><code>relief_camps</code></td><td>✔</td><td>✔</td><td>—</td><td><code>row_change_log</code></td></tr><tr><td><code>resource_categories</code></td><td>✔</td><td>✔</td><td>✔</td><td>—</td></tr><tr><td><code>resources</code></td><td>✔</td><td>✔</td><td>✔</td><td>—</td></tr><tr><td><code>warehouses</code></td><td>✔</td><td>✔</td><td>—</td><td><code>operational_duplicate</code>, <code>row_change_log</code></td></tr><tr><td><code>inventory</code></td><td>✔</td><td>✔</td><td>—</td><td><code>inventory_history</code></td></tr><tr><td><code>inventory_movements</code></td><td>✔</td><td>—</td><td>—</td><td>—</td></tr><tr><td><code>resource_requests</code></td><td>✔</td><td>✔</td><td>—</td><td><code>row_change_log</code></td></tr><tr><td><code>request_items</code></td><td>✔</td><td>—</td><td>✔</td><td>—</td></tr><tr><td><code>allocations</code></td><td>✔</td><td>✔</td><td>—</td><td><code>allocation_status_guard</code></td></tr><tr><td><code>allocation_items</code></td><td>✔</td><td>—</td><td>—</td><td><code>trg_adjust_inventory</code>, <code>trg_validate_allocation_item</code></td></tr><tr><td><code>vehicles</code></td><td>✔</td><td>✔</td><td>✔</td><td><code>row_change_log</code></td></tr><tr><td><code>volunteers</code></td><td>✔</td><td>✔</td><td>✔</td><td><code>row_change_log</code></td></tr><tr><td><code>deliveries</code></td><td>✔</td><td>✔</td><td>—</td><td><code>delivery_status_guard</code>, <code>delivery_vehicle_guard</code>, <code>row_change_log</code></td></tr><tr><td><code>delivery_volunteers</code></td><td>✔</td><td>—</td><td>✔</td><td>—</td></tr><tr><td><code>audit_logs</code></td><td>✔</td><td>—</td><td>—</td><td>—</td></tr><tr><td><code>data_change_log</code></td><td>✔</td><td>—</td><td>—</td><td>—</td></tr><tr><td><code>integration_sync_runs</code></td><td>✔</td><td>✔</td><td>—</td><td>—</td></tr><tr><td><code>schema_migrations</code></td><td>✔</td><td>—</td><td>—</td><td>—</td></tr></tbody></table>
+<p>(Details for each table are in Section 4 under <em>DML performed on this table</em>.)</p>
+<h3 id="7-3-one-complete-workflow-statement-by-statement-533">7.3 One complete workflow, statement by statement</h3>
+<p>This is what happens in the database when a camp's request goes from creation to delivery. Each step is one API call = one transaction. The statements are the ones in <code>src/app/api/requests/route.ts</code> and <code>src/app/api/operations/route.ts</code>, slightly simplified (column lists shortened, <code>$…</code> are the parameters).</p>
+<h4 id="step-1-a-field-officer-raises-a-request-535">Step 1 — A field officer raises a request</h4>
+<pre class="lang-sql"><code>BEGIN;
+SET LOCAL ROLE rf_field_officer;                       -- database checks this role's GRANTs from now on
+SELECT camp_status, disaster_status FROM lock_request_parents($camp, $disaster);  -- FOR SHARE: camp/disaster cannot close meanwhile
+INSERT INTO resource_requests(camp_id, disaster_id, requested_by, need_by, priority_score, priority_level, medical_emergency, remarks)
+VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING request_id;      -- status defaults to PENDING
+INSERT INTO request_items(request_id, resource_id, quantity_requested)
+SELECT $1, x.r, x.q FROM unnest($2::bigint[], $3::numeric[]) AS x(r, q);   -- PK stops the same resource twice
+INSERT INTO audit_logs(user_id, action, details) VALUES ($user, 'REQUEST_CREATED', $json);
+COMMIT;</code></pre>
+<p>Triggers fired: <code>row_change_log</code> (resource_requests INSERT → data_change_log).</p>
+<h4 id="step-2-a-coordinator-approves-it-538">Step 2 — A coordinator approves it</h4>
+<pre class="lang-sql"><code>BEGIN;  SET LOCAL ROLE rf_coordinator;
+SELECT status FROM resource_requests WHERE request_id = $1 FOR UPDATE;      -- lock, check it is PENDING
+UPDATE resource_requests SET status = 'APPROVED' WHERE request_id = $1;
+INSERT INTO audit_logs(...) VALUES (...);
+COMMIT;</code></pre>
+<p>Triggers fired: <code>row_change_log</code> (records status PENDING → APPROVED).</p>
+<h4 id="step-3-the-coordinator-allocates-stock-541">Step 3 — The coordinator allocates stock</h4>
+<pre class="lang-sql"><code>BEGIN;  SET LOCAL ROLE rf_coordinator;
+SELECT status FROM resource_requests WHERE request_id = $1 FOR UPDATE;      -- lock order: request → lines → stock
+INSERT INTO allocations(request_id, allocated_by, remarks) VALUES ($1, $2, $3) RETURNING allocation_id;
+INSERT INTO allocation_items(allocation_id, request_id, resource_id, warehouse_id, quantity_allocated)
+VALUES ($a, $1, $r, $w, $q);                                               -- one per line
+CALL refresh_request_status($1);                                           -- → PARTIALLY_FULFILLED or ALLOCATED
+COMMIT;</code></pre>
+<p>Triggers fired, in order, for each allocation line:</p>
+<ol><li><code>trg_validate_allocation_item</code> (BEFORE INSERT) — locks the request line and stock line, checks stock and outstanding demand; rejects the whole transaction if either is exceeded.</li><li>The row is inserted.</li><li><code>trg_adjust_inventory</code> (AFTER INSERT) — <code>UPDATE inventory SET quantity_available = quantity_available − q</code>.</li><li>That UPDATE fires <code>inventory_history</code> (AFTER UPDATE on inventory) — inserts the movement into inventory_movements.</li><li><code>CALL refresh_request_status</code> updates the request status, which fires <code>row_change_log</code>.</li></ol>
+<p>If two coordinators allocate the last stock at the same moment, the second one waits on the row lock taken in step 1; when the first commits, the second re-reads the stock, the check fails, and only the first allocation exists.</p>
+<h4 id="step-4-a-delivery-is-planned-546">Step 4 — A delivery is planned</h4>
+<pre class="lang-sql"><code>BEGIN;  SET LOCAL ROLE rf_coordinator;
+SELECT 1 FROM resource_requests WHERE request_id = $r FOR UPDATE;
+SELECT 1 FROM allocations WHERE allocation_id = $a FOR UPDATE;
+SELECT status FROM vehicles WHERE vehicle_id = $v FOR UPDATE;
+INSERT INTO deliveries(allocation_id, vehicle_id, driver_id, source_location_id, destination_location_id, expected_arrival)
+VALUES (...) RETURNING delivery_id;                                -- status PLANNED
+UPDATE volunteers SET availability_status = 'ASSIGNED' WHERE volunteer_id = $1 AND availability_status = 'AVAILABLE' RETURNING volunteer_id;
+INSERT INTO delivery_volunteers(delivery_id, volunteer_id, assigned_role) VALUES (...);
+UPDATE vehicles SET status = 'IN_USE' WHERE vehicle_id = $v;
+COMMIT;</code></pre>
+<p>Triggers fired: <code>delivery_vehicle_guard</code> (BEFORE INSERT — refuses a vehicle in maintenance), <code>row_change_log</code> on deliveries, volunteers and vehicles. The partial unique indexes reject a second active delivery for the same vehicle, driver or allocation.</p>
+<h4 id="step-5-the-driver-dispatches-and-delivers-549">Step 5 — The driver dispatches and delivers</h4>
+<pre class="lang-sql"><code>BEGIN;
+SELECT set_config('reliefflow.user_id', '11', true);  SET LOCAL ROLE rf_driver;   -- RLS: only driver 11's rows are visible
+UPDATE deliveries SET status = 'IN_TRANSIT', departure_time = now() WHERE delivery_id = $1;
+UPDATE allocations SET status = 'IN_TRANSIT' WHERE allocation_id = $a;
+CALL refresh_request_status($r);
+COMMIT;
+-- later: status = 'DELIVERED', actual_arrival = now(); vehicle and volunteers set back to AVAILABLE; request → DELIVERED</code></pre>
+<p>Triggers fired: <code>delivery_status_guard</code> (only legal transitions), <code>allocation_status_guard</code> (allocation state machine), <code>row_change_log</code>.</p>
+<h4 id="alternative-the-allocation-is-cancelled-before-dispatch-552">Alternative — The allocation is cancelled before dispatch</h4>
+<pre class="lang-sql"><code>UPDATE allocations SET status = 'CANCELLED' WHERE allocation_id = $1 RETURNING *;
+CALL refresh_request_status($r);</code></pre>
+<p><code>allocation_status_guard</code> refuses if a delivery is still active, otherwise locks the stock lines and adds the quantities back (firing <code>inventory_history</code> with the reason 'Allocation cancellation #id'). A second cancellation is impossible (CANCELLED → CANCELLED is not a transition), so stock is restored exactly once.</p>
+<h3 id="7-4-important-select-queries-555">7.4 Important SELECT queries</h3>
+<p>The application reads data with joins, aggregates and subqueries. Examples (all from the code or the lab):</p>
+<pre class="lang-sql"><code>-- authentication on every request: 3-table join
+SELECT u.user_id, u.full_name, r.role_name FROM sessions s JOIN app_users u USING (user_id) JOIN roles r USING (role_id)
+ WHERE s.token_hash = $1 AND s.expires_at &gt; now() AND u.is_active;
+
+-- request list: join + aggregate per request + function call
+SELECT rr.request_id, c.camp_name, d.disaster_name, rr.priority_level, rr.status,
+       count(ri.resource_id) AS lines, request_fulfillment_pct(rr.request_id) AS fulfilled_pct
+  FROM resource_requests rr JOIN relief_camps c USING (camp_id) JOIN disasters d USING (disaster_id)
+  JOIN request_items ri USING (request_id)
+ GROUP BY rr.request_id, c.camp_name, d.disaster_name ORDER BY rr.priority_score DESC;
+
+-- shortages: from the view built on two CTEs
+SELECT resource_name, outstanding_demand, available_stock FROM v_resource_demand WHERE net_position &lt; 0;
+
+-- camps with more than one request (GROUP BY + HAVING)
+SELECT c.camp_name, count(*) FROM relief_camps c JOIN resource_requests rr USING (camp_id) GROUP BY c.camp_name HAVING count(*) &gt; 1;
+
+-- full-text search on disasters (GIN index on the generated tsvector column)
+SELECT disaster_name, ts_rank(search_vector, q) FROM disasters, websearch_to_tsquery('english', $1) q
+ WHERE search_vector @@ q ORDER BY 2 DESC;</code></pre>
+<h2 id="8-quick-glossary-558">8. Quick glossary</h2>
+<ul><li><strong>Primary key (PK):</strong> the column(s) that identify a row; unique and not null.</li><li><strong>Foreign key (FK):</strong> a column that must match a primary key in another table.</li><li><strong>Composite key:</strong> a key made of more than one column.</li><li><strong>Weak entity:</strong> a table whose rows are identified through their owner's key.</li><li><strong>CHECK constraint:</strong> a condition every row must satisfy.</li><li><strong>NOT VALID:</strong> a constraint checked for new and changed rows only, so it can be added to a table with old rows.</li><li><strong>Index:</strong> a structure that finds rows quickly without scanning the table (B-tree, GIN, HNSW).</li><li><strong>Partial index:</strong> an index on only the rows matching a WHERE condition.</li><li><strong>View:</strong> a named, stored SELECT.</li><li><strong>Function / procedure:</strong> stored code; a function returns a value, a procedure is CALLed.</li><li><strong>Trigger:</strong> a function run automatically on INSERT / UPDATE / DELETE.</li><li><strong>Transaction:</strong> a group of statements that succeed or fail together (ACID).</li><li><strong>FOR UPDATE / FOR SHARE:</strong> row locks taken by a SELECT inside a transaction.</li><li><strong>xmin:</strong> PostgreSQL's row version, used for optimistic locking.</li><li><strong>GRANT / REVOKE:</strong> give or remove a role's privileges on tables or columns.</li><li><strong>Row-level security (RLS):</strong> policies that filter which rows a role can see or change.</li><li><strong>SECURITY DEFINER:</strong> a function that runs with its owner's privileges.</li></ul></body></html>

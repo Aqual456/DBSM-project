@@ -21,6 +21,7 @@
     "report:assets": "tsx scripts/build-report-assets.ts",
     "report:shots": "tsx scripts/capture-report-screens.ts",
     "report:build": "tsx scripts/build-report.ts",
+    "report:database": "tsx scripts/build-db-explanation.ts && tsx scripts/build-report.ts database",
     "db:reset-password": "tsx scripts/reset-password.ts"
   },
   "dependencies": {

@@ -9,9 +9,10 @@ import { pathToFileURL } from "url";
  * Supports headings, paragraphs, (nested) lists, tables, code, quotes, images, raw HTML blocks and
  * {{PLACEHOLDER}} includes of the generated fragments in docs/report/assets (scripts/build-report-assets.ts).
  */
-const DOCS = {
+const DOCS: Record<string, { src: string; title: string; css?: string }> = {
   report: { src: "docs/report/ReliefFlow-Project-Report.md", title: "ReliefFlow — Project Report" },
   team: { src: "docs/report/ReliefFlow-Team-Explanation.md", title: "ReliefFlow — Team Explanation" },
+  database: { src: "docs/report/ReliefFlow-Database-Explained.md", title: "ReliefFlow — The Database, Explained", css: "th, td { word-break: normal; overflow-wrap: break-word; }" },
 };
 const ASSETS = resolve("docs/report/assets");
 
@@ -195,14 +196,14 @@ const CSS = `
 `;
 
 async function build(key: keyof typeof DOCS) {
-  const { src, title } = DOCS[key];
+  const { src, title, css = "" } = DOCS[key];
   const md = expand(readFileSync(resolve(src), "utf8"));
   const toc: { id: string; text: string }[] = [];
   const body = render(md, toc);
   const tocHtml = `<nav class="toc"><strong>Contents</strong>${toc.map((t) => `<a href="#${t.id}">${esc(t.text)}</a>`).join("")}</nav>`;
   // table of contents goes right after the first <h1> (after the title page)
   const withToc = body.replace(/(<h1[^>]*>.*?<\/h1>)/, `$1\n${tocHtml}`);
-  const page = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><style>${CSS}</style></head><body>${withToc}</body></html>`;
+  const page = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><style>${CSS}${css}</style></head><body>${withToc}</body></html>`;
   const htmlFile = resolve(src.replace(/\.md$/, ".html"));
   writeFileSync(htmlFile, page);
   const { chromium } = await import("@playwright/test");
