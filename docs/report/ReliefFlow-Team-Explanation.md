@@ -4,8 +4,8 @@
 <div class="tp-title">ReliefFlow</div>
 <div class="tp-subtitle">Team Explanation &amp; Presentation Guide<br/>What each member owns, what it is, why it was built this way, how it works, and how to demo and defend it</div>
 <table class="tp-team"><thead><tr><th>Member</th><th>SRN</th><th>Ownership area</th></tr></thead><tbody>
-<tr><td><span class="owner sujal">SUJAL Y</span></td><td>____________________</td><td>Relational database (PostgreSQL), transactions, security, core workflow APIs, SQL lab</td></tr>
-<tr><td><span class="owner sujan">SUJAN H</span></td><td>____________________</td><td>MongoDB, vector search, Redis, Neo4j, Next.js interface, testing, documentation</td></tr>
+<tr><td><span class="owner sujal">SUJAL Y</span></td><td>PES1UG24CS475</td><td>Relational database (PostgreSQL), transactions, security, core workflow APIs, SQL lab</td></tr>
+<tr><td><span class="owner sujan">SUJAN H</span></td><td>PES1UG24CS477</td><td>MongoDB, vector search, Redis, Neo4j, Next.js interface, testing, documentation</td></tr>
 </tbody></table>
 <div class="tp-meta">Read Part 0 together, then each member studies their own part and the other member's summary (Part 4).</div>
 </div>
