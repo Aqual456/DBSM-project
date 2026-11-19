@@ -98,7 +98,7 @@ const entities: Ent[] = [
   // standalone system tables (no relationships)
   E("LOGIN", "login_attempts", "LOGIN ATTEMPT", 3150, 3300, [180, 360], { r: 120 }),
   E("CHANGELOG", "data_change_log", "DATA CHANGE LOG", 3900, 3150, [180, 360], { r: 150 }),
-  E("MIGRATION", "schema_migrations", "SCHEMA MIGRATION", 3900, 2650, [180, 360], { r: 115 }),
+  E("MIGRATION", "schema_migrations", "SCHEMA MIGRATION", 3900, 2650, [-60, 40], { r: 115 }),
 ];
 const R = (id: string, label: string, x: number, y: number, a: End, b: End, extra: Partial<Rel> = {}): Rel => ({ id, label, x, y, a, b, ...extra });
 const one = (e: string, total = false, via?: [number, number][]): End => ({ e, card: "1", total, via });
@@ -113,7 +113,7 @@ const relationships: Rel[] = [
   R("ALLOCATED_BY", "ALLOCATED BY", 2380, 860, many("ALLOCATION", true), one("USER"), { fk: "allocations_allocated_by_fkey" }),
   R("DRIVES", "DRIVES", 2900, 860, many("DELIVERY", true), one("USER"), { fk: "deliveries_driver_id_fkey" }),
   R("MANAGES_CAMP", "MANAGES", 1120, 1700, many("CAMP"), one("USER", false, [[1120, 700]]), { fk: "relief_camps_manager_id_fkey" }),
-  R("MANAGES_DEPOT", "MANAGES", 640, 2850, many("WAREHOUSE"), one("USER", false, [[55, 2850], [55, 620], [1900, 620]]), { fk: "warehouses_manager_id_fkey" }),
+  R("MANAGES_DEPOT", "MANAGES", 380, 2850, many("WAREHOUSE"), one("USER", false, [[55, 2850], [55, 620], [1900, 620]]), { fk: "warehouses_manager_id_fkey" }),
   R("REPORTS_ON", "REPORTS ON", 800, 960, many("INCIDENT", true), one("DISASTER"), { external: true, note: "application-level reference" }),
   R("REPORTED_BY", "REPORTED BY", 520, 760, many("INCIDENT", true), one("USER", false, [[520, 660], [1800, 660]]), { external: true }),
   R("OCCURS_AT", "OCCURS AT", 900, 1650, many("DISASTER"), one("LOCATION", false, [[600, 2050]]), { fk: "disasters_event_location_id_fkey" }),
@@ -152,6 +152,23 @@ const relationships: Rel[] = [
 // associative tables shown as M:N relationships rather than entities
 const relationshipTables: Record<string, string[]> = { disaster_locations: ["disaster_locations_disaster_id_fkey", "disaster_locations_location_id_fkey"], delivery_volunteers: ["delivery_volunteers_delivery_id_fkey", "fk_delivery_volunteer_volunteer"] };
 
+// ---- A3 print sizing. The hand-placed layout above is spread sideways (an A3 sheet is wider than
+// the drawing) and slightly downwards, so every shape and label can be drawn much larger without
+// colliding; attribute ellipses are then pushed apart at their real size by the relaxation below.
+const SX = 1.16, SY = 1.06, ATTR_SPREAD = 1.45;
+for (const e of entities) { e.x = Math.round(e.x * SX); e.y = Math.round(e.y * SY); }
+for (const r of relationships) {
+  r.x = Math.round(r.x * SX);
+  r.y = Math.round(r.y * SY);
+  for (const end of [r.a, r.b]) end.via = end.via?.map(([x, y]): [number, number] => [Math.round(x * SX), Math.round(y * SY)]);
+  for (const a of r.attrs ?? []) { a.dx = Math.round(a.dx * ATTR_SPREAD); a.dy = Math.round(a.dy * ATTR_SPREAD); }
+}
+const ER_W = Math.round(4400 * SX), ER_H = Math.round(3520 * SY);
+const ER = { entFont: 31, relFont: 22, attrFont: 21, attrSmall: 18, cardFont: 32, EH: 76 };
+const entWidth = (e: Ent) => Math.max(190, e.label.length * 19 + 56);
+const relHalf = (r: Rel) => ({ hw: Math.max(105, r.label.length * 12.4 + 52), hh: 52 });
+const attrSize = (a: Attr, small: boolean) => ({ rx: Math.max(54, a.name.length * (small ? 4.7 : 5.4) + 24), ry: small ? 21 : 25 });
+
 function attrsFor(ent: Ent, cols: Col[], pk: Record<string, string[]>, fks: Fk[]): Attr[] {
   if (ent.extraAttrs) return ent.extraAttrs;
   const t = ent.table!;
@@ -179,12 +196,12 @@ function attrsFor(ent: Ent, cols: Col[], pk: Record<string, string[]>, fks: Fk[]
 
 let erAttrs: { key: string; attr: Attr; cx: number; cy: number; rx: number; ry: number; small: boolean; owner?: string; parentKey?: string }[] = [];
 function chenSvg(model: Awaited<ReturnType<typeof catalog>>) {
-  const W = 4400, H = 3520;
+  const W = ER_W, H = ER_H;
   const byId = new Map(entities.map((e) => [e.id, e]));
   const parts: string[] = [];
   const lines: string[] = [];
-  const entW = (e: Ent) => Math.max(150, e.label.length * 10 + 40);
-  const EH = 50;
+  const entW = entWidth;
+  const EH = ER.EH;
   // ---- relationship edges
   const edge = (r: Rel, end: End) => {
     const e = byId.get(end.e)!;
@@ -224,31 +241,31 @@ function chenSvg(model: Awaited<ReturnType<typeof catalog>>) {
   };
   type Item = { a: Attr; cx: number; cy: number; rx: number; ry: number; dx: number; dy: number; ox: number; oy: number; small: boolean; parent?: Item; owner?: string };
   const items: Item[] = [];
-  const size = (a: Attr, small: boolean) => ({ rx: Math.max(38, a.name.length * (small ? 3.6 : 3.9) + 16), ry: small ? 14 : 17 });
+  const size = attrSize;
   for (const e of entities) {
     const attrs = attrsFor(e, model.cols, model.pk, model.fks);
     const [a0, a1] = e.arc;
     const n = attrs.length;
-    const base = e.r ?? 130;
+    const base = (e.r ?? 130) * 1.3;
     attrs.forEach((a, i) => {
       const ang = ((n === 1 ? (a0 + a1) / 2 : a0 + ((a1 - a0) * i) / (n - 1)) * Math.PI) / 180;
       const dx = Math.cos(ang), dy = Math.sin(ang);
       const it: Item = { a, cx: e.x + dx * (base * 0.75 + entW(e) / 4), cy: e.y + dy * base * 0.62, ...size(a, false), dx, dy, ox: e.x, oy: e.y, small: false, owner: e.id };
       items.push(it);
       (a.parts ?? []).forEach((pname, j) => {
-        const off = (j - ((a.parts!.length - 1) / 2)) * 100;
-        items.push({ a: { name: pname }, cx: it.cx + dx * 70 - dy * off, cy: it.cy + dy * 55 + dx * off * 0.5, ...size({ name: pname }, true), dx, dy, ox: 0, oy: 0, small: true, parent: it });
+        const off = (j - ((a.parts!.length - 1) / 2)) * 140;
+        items.push({ a: { name: pname }, cx: it.cx + dx * 100 - dy * off, cy: it.cy + dy * 80 + dx * off * 0.5, ...size({ name: pname }, true), dx, dy, ox: 0, oy: 0, small: true, parent: it });
       });
     });
   }
   // fixed obstacles: entity boxes and relationship diamonds (as boxes)
   const obstacles = [
     ...entities.map((e) => ({ x: e.x, y: e.y, w: entW(e) / 2 + 8, h: EH / 2 + 8 })),
-    ...relationships.map((r) => ({ x: r.x, y: r.y, w: Math.max(70, r.label.length * 7.4 + 34) * 0.75, h: 26 })),
+    ...relationships.map((r) => ({ x: r.x, y: r.y, w: relHalf(r).hw * 0.88, h: relHalf(r).hh * 1.0 })),
   ];
   const hit = (a: { x: number; y: number; w: number; h: number }, b: { x: number; y: number; w: number; h: number }) => Math.abs(a.x - b.x) < a.w + b.w && Math.abs(a.y - b.y) < a.h + b.h;
   const box = (i: Item) => ({ x: i.cx, y: i.cy, w: i.rx + 6, h: i.ry + 5 });
-  for (let iter = 0; iter < 400; iter++) {
+  for (let iter = 0; iter < 700; iter++) {
     let moved = false;
     for (let i = 0; i < items.length; i++) {
       const me = items[i];
@@ -485,50 +502,50 @@ const FONT = "fontFamily=Segoe UI;";
 const TXT = `text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;${FONT}`;
 
 function chenDrawio(model: Awaited<ReturnType<typeof catalog>>) {
-  const W = 4400, H = 3520;
+  const W = ER_W, H = ER_H;
   const g = new Mx();
-  const entW = (e: Ent) => Math.max(160, e.label.length * 12.5 + 44);
-  const EH = 56;
-  g.vertex("title", "ReliefFlow — Entity–Relationship Diagram (entire database)", `${TXT}fontSize=44;fontStyle=1;fontColor=#0f1e3d;`, 40, 30, 1600, 50);
-  g.vertex("sub", `Chen notation · generated from the live PostgreSQL catalog: ${model.tables.length} tables, ${model.fks.length} foreign keys (every relationship checked against a real FK) · plus the MongoDB incident document`, `${TXT}fontSize=21;fontColor=#475569;`, 40, 86, 3200, 34);
-  g.vertex("sysbox", "Stand-alone system tables (no relationships)", `rounded=1;arcSize=2;html=1;dashed=1;dashPattern=6 6;fillColor=none;strokeColor=#cbd5e1;align=left;verticalAlign=top;spacingLeft=20;spacingTop=12;fontStyle=1;fontSize=17;fontColor=#0f1e3d;${FONT}`, 2950, 2980, 1410, 500);
+  const entW = entWidth;
+  const EH = ER.EH;
+  g.vertex("title", "ReliefFlow — Entity–Relationship Diagram (entire database)", `${TXT}fontSize=60;fontStyle=1;fontColor=#0f1e3d;`, 40, 20, 2600, 70);
+  g.vertex("sub", `Chen notation · generated from the live PostgreSQL catalog: ${model.tables.length} tables, ${model.fks.length} foreign keys (every relationship checked against a real FK) · plus the MongoDB incident document`, `${TXT}fontSize=26;fontColor=#475569;`, 40, 94, 4200, 40);
+  g.vertex("sysbox", "Stand-alone system tables (no relationships)", `rounded=1;arcSize=2;html=1;dashed=1;dashPattern=6 6;fillColor=none;strokeColor=#cbd5e1;align=left;verticalAlign=top;spacingLeft=20;spacingTop=12;fontStyle=1;fontSize=24;fontColor=#0f1e3d;${FONT}`, 3380, 3080, 1700, 640);
   // relationships (diamonds)
   const relId = (r: Rel) => `r_${r.id}`;
   for (const r of relationships) {
-    const hw = Math.max(70, r.label.length * 7.4 + 34), hh = 34;
+    const { hw, hh } = relHalf(r);
     const style = r.external
-      ? `rhombus;whiteSpace=wrap;html=1;fillColor=#f8f5ff;strokeColor=#6d4fd8;dashed=1;fontStyle=1;fontSize=14;fontColor=#7c2d12;strokeWidth=2;${FONT}`
-      : `rhombus;whiteSpace=wrap;html=1;fillColor=#fff7e6;strokeColor=#b45309;fontStyle=1;fontSize=14;fontColor=#7c2d12;strokeWidth=2;${FONT}`;
+      ? `rhombus;whiteSpace=wrap;html=1;fillColor=#f8f5ff;strokeColor=#6d4fd8;dashed=1;fontStyle=1;fontSize=${ER.relFont};fontColor=#7c2d12;strokeWidth=2.5;${FONT}`
+      : `rhombus;whiteSpace=wrap;html=1;fillColor=#fff7e6;strokeColor=#b45309;fontStyle=1;fontSize=${ER.relFont};fontColor=#7c2d12;strokeWidth=2.5;${FONT}`;
     g.vertex(relId(r), r.label, style, r.x - hw, r.y - hh, hw * 2, hh * 2);
-    if (r.identifying) g.vertex(g.id("inner"), "", `rhombus;html=1;fillColor=none;strokeColor=#b45309;strokeWidth=1.5;connectable=0;`, r.x - hw + 12, r.y - hh + 7, hw * 2 - 24, hh * 2 - 14);
-    if (r.note) g.vertex(g.id("note"), r.note, `${TXT}align=center;fontSize=11;fontStyle=2;fontColor=#6d4fd8;`, r.x - 120, r.y + hh + 2, 240, 20);
+    if (r.identifying) g.vertex(g.id("inner"), "", `rhombus;html=1;fillColor=none;strokeColor=#b45309;strokeWidth=2;connectable=0;`, r.x - hw + 18, r.y - hh + 10, hw * 2 - 36, hh * 2 - 20);
+    if (r.note) g.vertex(g.id("note"), r.note, `${TXT}align=center;fontSize=16;fontStyle=2;fontColor=#6d4fd8;`, r.x - 170, r.y + hh + 2, 340, 26);
   }
   // entities
   for (const e of entities) {
     const w = entW(e);
-    const base = `whiteSpace=wrap;html=1;fontStyle=1;fontSize=20;fontColor=#0f1e3d;strokeWidth=2;${FONT}`;
+    const base = `whiteSpace=wrap;html=1;fontStyle=1;fontSize=${ER.entFont};fontColor=#0f1e3d;strokeWidth=2.5;${FONT}`;
     const style = e.external
       ? `rounded=0;dashed=1;fillColor=#f3f0ff;strokeColor=#6d4fd8;${base}`
       : e.weak
         ? `shape=ext;double=1;rounded=0;fillColor=#eaf1ff;strokeColor=#1d4ed8;${base}`
         : `rounded=0;fillColor=#eaf1ff;strokeColor=#1d4ed8;${base}`;
     g.vertex(`e_${e.id}`, e.label, style, e.x - w / 2, e.y - EH / 2, w, EH);
-    if (e.external) g.vertex(g.id("note"), "MongoDB document", `${TXT}align=center;fontSize=11;fontStyle=2;fontColor=#6d4fd8;`, e.x - 90, e.y + EH / 2 + 2, 180, 18);
+    if (e.external) g.vertex(g.id("note"), "MongoDB document", `${TXT}align=center;fontSize=16;fontStyle=2;fontColor=#6d4fd8;`, e.x - 130, e.y + EH / 2 + 2, 260, 24);
   }
   // relationship edges with cardinality and participation
   for (const r of relationships) {
     for (const end of [r.a, r.b]) {
       const color = r.external ? "#7c6fcf" : "#334155";
       const style = end.total
-        ? `shape=link;html=1;endArrow=none;startArrow=none;edgeStyle=none;strokeColor=${color};strokeWidth=1.5;width=4;${r.external ? "dashed=1;" : ""}`
-        : `html=1;endArrow=none;startArrow=none;edgeStyle=none;strokeColor=${color};strokeWidth=1.6;${r.external ? "dashed=1;dashPattern=8 5;" : ""}`;
+        ? `shape=link;html=1;endArrow=none;startArrow=none;edgeStyle=none;strokeColor=${color};strokeWidth=2;width=6;${r.external ? "dashed=1;" : ""}`
+        : `html=1;endArrow=none;startArrow=none;edgeStyle=none;strokeColor=${color};strokeWidth=2.2;${r.external ? "dashed=1;dashPattern=8 5;" : ""}`;
       const eid = g.edge(g.id("re"), relId(r), `e_${end.e}`, style, end.via ?? []);
-      g.edgeLabel(eid, end.card, 0.78, `edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=22;fontStyle=1;fontColor=#dc2626;labelBackgroundColor=#ffffff;${FONT}`, [0, -16]);
+      g.edgeLabel(eid, end.card, 0.78, `edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=${ER.cardFont};fontStyle=1;fontColor=#dc2626;labelBackgroundColor=#ffffff;${FONT}`, [0, -22]);
     }
     for (const a of r.attrs ?? []) {
-      const rx = Math.max(44, a.name.length * 4.6 + 18), ry = 19;
-      const aid = g.vertex(g.id("ra"), a.name, `ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#64748b;fontSize=14.5;fontColor=#172033;${FONT}`, r.x + a.dx - rx, r.y + a.dy - ry, rx * 2, ry * 2);
-      g.edge(g.id("rae"), aid, relId(r), `html=1;endArrow=none;edgeStyle=none;strokeColor=#64748b;`);
+      const { rx, ry } = attrSize(a, false);
+      const aid = g.vertex(g.id("ra"), a.name, `ellipse;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#64748b;strokeWidth=1.5;fontSize=${ER.attrFont};fontColor=#172033;${FONT}`, r.x + a.dx - rx, r.y + a.dy - ry, rx * 2, ry * 2);
+      g.edge(g.id("rae"), aid, relId(r), `html=1;endArrow=none;edgeStyle=none;strokeColor=#64748b;strokeWidth=1.5;`);
     }
   }
   // attributes (positions from the collision-relaxed SVG layout)
@@ -536,44 +553,44 @@ function chenDrawio(model: Awaited<ReturnType<typeof catalog>>) {
     const label = a.attr.partial ? `<span style="text-decoration: underline dashed;">${xa(a.attr.name)}</span>` : a.attr.name;
     const style = [
       a.attr.multi ? "shape=doubleEllipse;" : "ellipse;",
-      "whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#64748b;fontColor=#172033;",
+      "whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#64748b;strokeWidth=1.5;fontColor=#172033;",
       a.attr.key ? "fontStyle=4;" : "",
       a.attr.derived ? "dashed=1;dashPattern=5 4;" : "",
-      `fontSize=${a.small ? 12.5 : 14.5};${FONT}`,
+      `fontSize=${a.small ? ER.attrSmall : ER.attrFont};${FONT}`,
     ].join("");
-    const rx = a.rx * 1.15, ry = a.ry * 1.15; // 15% larger than the SVG layout, for print
-    g.vertex(`at_${a.key}`, a.attr.partial ? label : a.attr.name, style, a.cx - rx, a.cy - ry, rx * 2, ry * 2);
+    g.vertex(`at_${a.key}`, a.attr.partial ? label : a.attr.name, style, a.cx - a.rx, a.cy - a.ry, a.rx * 2, a.ry * 2);
   }
   for (const a of erAttrs) {
     const target = a.parentKey ? `at_${a.parentKey}` : `e_${a.owner}`;
-    g.edge(g.id("ae"), `at_${a.key}`, target, `html=1;endArrow=none;edgeStyle=none;strokeColor=#94a3b8;`);
+    g.edge(g.id("ae"), `at_${a.key}`, target, `html=1;endArrow=none;edgeStyle=none;strokeColor=#94a3b8;strokeWidth=1.4;`);
   }
-  // legend
-  const lx = 40, ly = 3080;
-  g.vertex("legend", "Notation (Chen)", `rounded=1;arcSize=3;html=1;fillColor=#f8fafc;strokeColor=#cbd5e1;align=left;verticalAlign=top;spacingLeft=20;spacingTop=12;fontStyle=1;fontSize=17;fontColor=#0f1e3d;${FONT}`, lx, ly, 1080, 400);
+  // legend (sized for print)
+  const L = 1.3, lx = 40, ly = H - Math.round(410 * L) - 10;
+  const at = (v: number) => Math.round(v * L);
+  g.vertex("legend", "Notation (Chen)", `rounded=1;arcSize=3;html=1;fillColor=#f8fafc;strokeColor=#cbd5e1;align=left;verticalAlign=top;spacingLeft=20;spacingTop=12;fontStyle=1;fontSize=24;fontColor=#0f1e3d;${FONT}`, lx, ly, at(1100), at(410));
   const leg: [string, string, number, number, number, number, string][] = [
     ["ENTITY", "rounded=0;fillColor=#eaf1ff;strokeColor=#1d4ed8;fontStyle=1;", 24, 64, 120, 40, "Strong entity (own primary key)"],
     ["WEAK", "shape=ext;double=1;rounded=0;fillColor=#eaf1ff;strokeColor=#1d4ed8;fontStyle=1;", 24, 120, 120, 40, "Weak entity (identified through its owners)"],
     ["REL", "rhombus;fillColor=#fff7e6;strokeColor=#b45309;fontStyle=1;", 24, 172, 120, 52, "Relationship · double diamond = identifying"],
-    ["key", "ellipse;fillColor=#ffffff;strokeColor=#64748b;fontStyle=4;", 26, 240, 116, 34, "Attribute · underlined = key · dashed underline = partial key"],
-    ["derived", "ellipse;dashed=1;fillColor=#ffffff;strokeColor=#64748b;", 26, 288, 116, 34, "Derived attribute · double ellipse = multivalued"],
+    ["key", "ellipse;fillColor=#ffffff;strokeColor=#64748b;fontStyle=4;", 26, 240, 116, 34, "Attribute · underlined = key · dashed = partial key"],
+    ["derived", "ellipse;dashed=1;fillColor=#ffffff;strokeColor=#64748b;", 26, 288, 116, 34, "Derived (dashed) · double ellipse = multivalued"],
   ];
   for (const [v, st, x, y, w, h, text] of leg) {
-    g.vertex(g.id("lg"), v, `${st}whiteSpace=wrap;html=1;fontSize=12;${FONT}`, lx + x, ly + y, w, h);
-    g.vertex(g.id("lt"), text, `${TXT}fontSize=14;fontColor=#334155;`, lx + 160, ly + y, 380, h);
+    g.vertex(g.id("lg"), v, `${st}whiteSpace=wrap;html=1;fontSize=16;${FONT}`, lx + at(x), ly + at(y), at(w), at(h));
+    g.vertex(g.id("lt"), text, `${TXT}fontSize=18;fontColor=#334155;`, lx + at(160), ly + at(y), at(390), at(h));
   }
   const lines: [string, string, number][] = [
-    ["shape=link;html=1;endArrow=none;strokeColor=#334155;width=4;", "Total participation (NOT NULL FK)", 80],
-    ["html=1;endArrow=none;strokeColor=#334155;", "Partial participation (nullable FK)", 128],
-    ["html=1;endArrow=none;strokeColor=#7c6fcf;dashed=1;dashPattern=8 5;", "Cross-database reference (MongoDB → PostgreSQL)", 176],
+    ["shape=link;html=1;endArrow=none;strokeColor=#334155;width=6;strokeWidth=2;", "Total participation (NOT NULL FK)", 80],
+    ["html=1;endArrow=none;strokeColor=#334155;strokeWidth=2.2;", "Partial participation (nullable FK)", 128],
+    ["html=1;endArrow=none;strokeColor=#7c6fcf;strokeWidth=2.2;dashed=1;dashPattern=8 5;", "Cross-database reference (MongoDB → PostgreSQL)", 176],
   ];
   for (const [st, text, y] of lines) {
-    const a = g.vertex(g.id("p"), "", "point;html=1;", lx + 560, ly + y, 1, 1);
-    const b = g.vertex(g.id("p"), "", "point;html=1;", lx + 660, ly + y, 1, 1);
+    const a = g.vertex(g.id("p"), "", "point;html=1;", lx + at(570), ly + at(y), 1, 1);
+    const b = g.vertex(g.id("p"), "", "point;html=1;", lx + at(660), ly + at(y), 1, 1);
     g.edge(g.id("le"), a, b, st);
-    g.vertex(g.id("lt"), text, `${TXT}fontSize=14;fontColor=#334155;`, lx + 680, ly + y - 14, 380, 28);
+    g.vertex(g.id("lt"), text, `${TXT}fontSize=18;fontColor=#334155;`, lx + at(675), ly + at(y) - 18, at(410), 36);
   }
-  g.vertex(g.id("lt"), "1 / N / M = cardinality beside each entity. Foreign-key columns are not drawn as attributes: in Chen notation they are the relationships. AFFECTS and CREWED BY are M:N relationships that become the tables disaster_locations and delivery_volunteers.", `${TXT}fontSize=14;fontColor=#334155;verticalAlign=top;`, lx + 560, ly + 215, 500, 160);
+  g.vertex(g.id("lt"), "1 / N / M = cardinality beside each entity. Foreign-key columns are not drawn as attributes: in Chen notation they are the relationships. AFFECTS and CREWED BY are M:N relationships that become the tables disaster_locations and delivery_volunteers.", `${TXT}fontSize=17;fontColor=#334155;verticalAlign=top;`, lx + at(570), ly + at(212), at(510), at(185));
   return g.file("ER Diagram", W, H);
 }
 
