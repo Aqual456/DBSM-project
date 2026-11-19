@@ -1,7 +1,7 @@
 import { Pool } from "pg";
 import { pool } from "./postgres";
 import { getMongoDb } from "./mongodb";
-import { activeProvider, embed, type Provider } from "./embeddings";
+import { embed, resolveProvider, type Provider } from "./embeddings";
 import { logger } from "./logger";
 
 /**
@@ -107,7 +107,7 @@ async function collectDocuments(): Promise<Doc[]> {
 }
 
 export async function syncVectors(triggeredBy?: string) {
-  const p = activeProvider();
+  const p = await resolveProvider();
   const run = (
     await pool.query(`INSERT INTO integration_sync_runs(target, status, triggered_by) VALUES ('vector', 'RUNNING', $1) RETURNING run_id`, [
       triggeredBy ?? null,
@@ -160,7 +160,7 @@ export async function syncVectors(triggeredBy?: string) {
 }
 
 export async function vectorStats() {
-  const p = activeProvider();
+  const p = await resolveProvider();
   await ensureSchema(p);
   const r = await vpool().query(
     `SELECT source, count(*)::int AS n, max(synced_at) AS synced_at FROM document_vectors WHERE provider = $1 GROUP BY source`,
@@ -171,7 +171,7 @@ export async function vectorStats() {
 }
 
 export async function semanticSearch(query: string, k = 8, source?: string) {
-  const p = activeProvider();
+  const p = await resolveProvider();
   await ensureSchema(p);
   const t0 = performance.now();
   const [q] = await embed([query], "query", p);
@@ -198,7 +198,7 @@ export async function semanticSearch(query: string, k = 8, source?: string) {
 }
 
 export async function explainVectorSearch() {
-  const p = activeProvider();
+  const p = await resolveProvider();
   await ensureSchema(p);
   const c = await vpool().connect();
   try {

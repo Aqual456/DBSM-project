@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { endpoint, actor, staff, managers, body, HttpError } from "@/lib/api";
 import { rateLimit } from "@/lib/cache";
-import { activeProvider } from "@/lib/embeddings";
+import { resolveProvider } from "@/lib/embeddings";
 import { lastSync } from "@/lib/graph";
 import { explainVectorSearch, semanticSearch, syncVectors, vectorConfigured, vectorPing, vectorStats } from "@/lib/vector";
 import { getMongoDb } from "@/lib/mongodb";
@@ -15,7 +15,7 @@ export const GET = endpoint(async (req) => {
     const [stats, runs, plan] = ping.ok
       ? await Promise.all([vectorStats(), lastSync("vector"), explainVectorSearch().catch(() => null)])
       : [null, await lastSync("vector"), null];
-    return { ...ping, configured: vectorConfigured(), provider: activeProvider(), stats, runs, plan };
+    return { ...ping, configured: vectorConfigured(), provider: await resolveProvider(), stats, runs, plan };
   }
   if (!vectorConfigured()) throw new HttpError(503, "Vector store is not configured (set VECTOR_DATABASE_URL)", "SERVICE_DISABLED");
   const limit = await rateLimit(`rf:rl:vector:${u.user_id}`, 30, 60);

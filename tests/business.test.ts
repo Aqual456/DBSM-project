@@ -90,5 +90,8 @@ test("lexical fallback embeddings are unit vectors and rank shared vocabulary hi
   assert.ok(cosine(a, b) > cosine(a, c));
   assert.ok(Math.abs(cosine(a, a) - 1) < 1e-6);
   assert.deepEqual(tokenize("The flooding of the wards"), ["flood", "ward"]);
-  if (!process.env.VOYAGE_API_KEY && !process.env.OPENAI_API_KEY) assert.equal(activeProvider().semantic, false, "never claims semantic without a key");
+  const saved = process.env.EMBEDDING_PROVIDER;
+  process.env.EMBEDDING_PROVIDER = "lexical";
+  if (!process.env.VOYAGE_API_KEY && !process.env.OPENAI_API_KEY) assert.equal(activeProvider().semantic, false, "the lexical fallback is never labelled semantic");
+  process.env.EMBEDDING_PROVIDER = saved;
 });

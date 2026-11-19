@@ -18,9 +18,13 @@
     "test:services": "tsx scripts/services-test.ts",
     "viva:diagrams": "tsx scripts/generate-viva-diagrams.ts",
     "viva:guide": "tsx scripts/build-viva-guide.ts",
+    "report:assets": "tsx scripts/build-report-assets.ts",
+    "report:shots": "tsx scripts/capture-report-screens.ts",
+    "report:build": "tsx scripts/build-report.ts",
     "db:reset-password": "tsx scripts/reset-password.ts"
   },
   "dependencies": {
+    "@huggingface/transformers": "^3.7.5",
     "bcryptjs": "^3.0.3",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.546.0",

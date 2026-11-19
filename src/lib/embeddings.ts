@@ -1,15 +1,51 @@
 /**
- * Embedding providers. A semantic provider is used ONLY when its API key is configured.
- * Otherwise the "lexical-hash" fallback is used and is labelled as such everywhere:
- * it is a genuine vector representation (feature-hashed bag of words + bigrams) and
- * cosine similarity over it is real, but it captures shared vocabulary, not meaning.
+ * Embedding providers, in order of preference:
+ *   1. Voyage AI or OpenAI, only if an API key is configured;
+ *   2. LOCAL semantic model: all-MiniLM-L6-v2 (sentence-transformers) run on this machine
+ *      through Transformers.js / ONNX Runtime: 384-dimensional, mean-pooled, L2-normalised.
+ *      No API key, nothing leaves the machine; ~23 MB of weights cached in .cache/models;
+ *   3. "lexical-hash" fallback when the model cannot load (e.g. offline first run). It is a
+ *      genuine vector (feature-hashed words + bigrams) but matches vocabulary, not meaning,
+ *      and is labelled as such everywhere.
+ * Set EMBEDDING_PROVIDER=lexical to force the fallback.
  */
 export type Provider = { id: string; label: string; semantic: boolean; dims: number; model?: string };
 
+const LOCAL: Provider = { id: "minilm", label: "all-MiniLM-L6-v2 (local, sentence-transformers)", semantic: true, dims: 384, model: "Xenova/all-MiniLM-L6-v2" };
+const LEXICAL: Provider = { id: "lexical-hash", label: "Lexical hashing fallback (not semantic)", semantic: false, dims: 256 };
+
+/** Synchronous best guess (used where we cannot await); resolveProvider() is authoritative. */
 export function activeProvider(): Provider {
   if (process.env.VOYAGE_API_KEY) return { id: "voyage", label: "Voyage AI voyage-3.5-lite", semantic: true, dims: 1024, model: "voyage-3.5-lite" };
   if (process.env.OPENAI_API_KEY) return { id: "openai", label: "OpenAI text-embedding-3-small", semantic: true, dims: 1536, model: "text-embedding-3-small" };
-  return { id: "lexical-hash", label: "Lexical hashing fallback (not semantic)", semantic: false, dims: 256 };
+  if (process.env.EMBEDDING_PROVIDER === "lexical" || localState.failed) return LEXICAL;
+  return LOCAL;
+}
+
+type Extractor = (texts: string[], opts: { pooling: "mean"; normalize: boolean }) => Promise<{ tolist(): number[][] }>;
+const localState: { extractor?: Promise<Extractor>; failed?: boolean } = {};
+async function localExtractor(): Promise<Extractor> {
+  localState.extractor ??= (async () => {
+    const { pipeline, env } = await import("@huggingface/transformers");
+    const { join } = await import("path");
+    env.cacheDir = join(process.cwd(), ".cache", "models");
+    return (await pipeline("feature-extraction", LOCAL.model!, { dtype: "q8" })) as unknown as Extractor;
+  })();
+  return localState.extractor;
+}
+
+/** Decide the provider, loading the local model if needed (falls back to lexical on failure). */
+export async function resolveProvider(): Promise<Provider> {
+  const p = activeProvider();
+  if (p.id !== "minilm") return p;
+  try {
+    await localExtractor();
+    return LOCAL;
+  } catch {
+    localState.failed = true;
+    localState.extractor = undefined;
+    return LEXICAL;
+  }
 }
 
 const STOP = new Set(
@@ -74,6 +110,12 @@ async function remote(p: Provider, inputs: string[], kind: "document" | "query")
 
 export async function embed(inputs: string[], kind: "document" | "query" = "document", p = activeProvider()) {
   if (!p.semantic) return inputs.map((t) => lexicalEmbedding(t, p.dims));
+  if (p.id === "minilm") {
+    const fe = await localExtractor();
+    const out: number[][] = [];
+    for (let i = 0; i < inputs.length; i += 32) out.push(...(await fe(inputs.slice(i, i + 32), { pooling: "mean", normalize: true })).tolist());
+    return out.map((v) => v.map((x) => +x.toFixed(6)));
+  }
   const out: number[][] = [];
   for (let i = 0; i < inputs.length; i += 64) out.push(...(await remote(p, inputs.slice(i, i + 64), kind)));
   return out;
