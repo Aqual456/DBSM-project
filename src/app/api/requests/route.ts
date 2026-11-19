@@ -80,10 +80,10 @@ export const POST = endpoint(async (req) => {
   const d = requestSchema.parse(await body(req));
   return transaction(async (c) => {
     // Lock parents in a fixed order (camp, then disaster) so concurrent closures cannot interleave.
-    const camp = await c.query(`SELECT status FROM relief_camps WHERE camp_id = $1 FOR SHARE`, [d.camp_id]);
-    const disaster = await c.query(`SELECT status FROM disasters WHERE disaster_id = $1 FOR SHARE`, [d.disaster_id]);
-    if (!camp.rowCount || !disaster.rowCount) throw new HttpError(400, "Unknown camp or disaster", "INVALID_REFERENCE");
-    if (camp.rows[0].status === "CLOSED" || disaster.rows[0].status === "CLOSED")
+    // lock_request_parents() is SECURITY DEFINER: field officers get the lock without UPDATE rights.
+    const parents = (await c.query(`SELECT camp_status, disaster_status FROM lock_request_parents($1, $2)`, [d.camp_id, d.disaster_id])).rows[0];
+    if (!parents?.camp_status || !parents?.disaster_status) throw new HttpError(400, "Unknown camp or disaster", "INVALID_REFERENCE");
+    if (parents.camp_status === "CLOSED" || parents.disaster_status === "CLOSED")
       throw new HttpError(409, "Camp or disaster is closed", "BUSINESS_RULE");
     const known = await c.query("SELECT count(*)::int AS n FROM resources WHERE resource_id = ANY($1::bigint[])", [
       d.items.map((i) => i.resource_id),

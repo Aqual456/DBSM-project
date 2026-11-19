@@ -164,13 +164,31 @@ export function endpoint<C = unknown>(fn: Handler<C>) {
   };
 }
 
-/** Run fn in a single PostgreSQL transaction. The acting user is exposed to triggers via reliefflow.user_id. */
+/** Application role → PostgreSQL role (migration 008). PostgreSQL enforces its GRANTs and RLS. */
+export const dbRole: Record<Role, string> = {
+  ADMIN: "rf_admin",
+  RELIEF_COORDINATOR: "rf_coordinator",
+  FIELD_OFFICER: "rf_field_officer",
+  DRIVER: "rf_driver",
+};
+
+/** Make the rest of this transaction run as the user's database role. */
+async function assumeRole(c: PoolClient, user: Actor) {
+  await c.query("SELECT set_config('reliefflow.user_id', $1, true)", [String(user.user_id)]);
+  await c.query(`SET LOCAL ROLE ${dbRole[user.role_name]}`); // value from a fixed map, never user input
+}
+
+/**
+ * Run fn in a single PostgreSQL transaction. With a user, the transaction runs as that user's
+ * database role, so table/column privileges and row-level security are checked by PostgreSQL
+ * (not only by this code). The user id is also exposed to triggers via reliefflow.user_id.
+ */
 export async function transaction<T>(fn: (c: PoolClient) => Promise<T>, user?: Actor) {
   const c = await pool.connect();
   try {
     await c.query("BEGIN");
     await c.query("SET LOCAL lock_timeout = '5s'");
-    if (user) await c.query("SELECT set_config('reliefflow.user_id', $1, true)", [String(user.user_id)]);
+    if (user) await assumeRole(c, user);
     const r = await fn(c);
     await c.query("COMMIT");
     return r;
@@ -178,6 +196,19 @@ export async function transaction<T>(fn: (c: PoolClient) => Promise<T>, user?: A
     await c.query("ROLLBACK").catch(() => undefined);
     throw e;
   } finally {
+    c.release();
+  }
+}
+
+/** Read-only query that runs as the user's database role (row-level security applies). */
+export async function readAs<T>(user: Actor, fn: (c: PoolClient) => Promise<T>) {
+  const c = await pool.connect();
+  try {
+    await c.query("BEGIN READ ONLY");
+    await assumeRole(c, user);
+    return await fn(c);
+  } finally {
+    await c.query("ROLLBACK").catch(() => undefined);
     c.release();
   }
 }

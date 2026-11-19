@@ -17,7 +17,8 @@ async function load() {
     pool.query(`SELECT c.relname AS name, obj_description(c.oid) AS comment FROM pg_class c
                  WHERE c.relnamespace = 'public'::regnamespace AND c.relkind = 'r' ORDER BY 1`),
     pool.query(`SELECT table_name, column_name, data_type, udt_name, is_nullable = 'YES' AS nullable, column_default, is_generated <> 'NEVER' AS generated,
-                       character_maximum_length, numeric_precision, numeric_scale, ordinal_position
+                       character_maximum_length, numeric_precision, numeric_scale, ordinal_position,
+                       col_description(format('public.%I', table_name)::regclass, ordinal_position) AS description
                   FROM information_schema.columns WHERE table_schema = 'public' ORDER BY table_name, ordinal_position`),
     pool.query(`SELECT conrelid::regclass::text AS table_name, contype, conname,
                        array(SELECT attname::text FROM unnest(conkey) k JOIN pg_attribute a ON a.attrelid = conrelid AND a.attnum = k ORDER BY array_position(conkey, k)) AS cols
@@ -42,6 +43,7 @@ async function load() {
       const associative = pk.length >= 2 && tfks.length >= 2 && pk.every((c: string) => fkCols.has(c));
       return {
         name: t.name,
+        description: t.comment ?? null,
         rows: rows.rows.find((r) => r.table_name === t.name)?.rows ?? 0,
         kind: associative ? "associative" : pk.length > 1 ? "composite-key" : "entity",
         primaryKey: pk,
@@ -57,6 +59,7 @@ async function load() {
             unique: uniques.some((u) => u.length === 1 && u[0] === c.column_name),
             generated: c.generated,
             default: c.column_default && !String(c.column_default).startsWith("nextval") ? String(c.column_default).slice(0, 40) : null,
+            description: c.description ?? null,
           })),
         checks: checks.rows.filter((c) => c.table_name === t.name).map((c) => ({ name: c.conname, definition: c.def, validated: c.convalidated })),
       };
@@ -90,5 +93,5 @@ async function load() {
 
 export const GET = endpoint(async (req) => {
   await actor(req, allRoles);
-  return (await cached("rf:cache:er:v1", 300, load)).value;
+  return (await cached("rf:cache:er:v2", 300, load)).value;
 });

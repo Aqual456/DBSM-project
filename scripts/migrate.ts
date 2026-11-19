@@ -10,6 +10,7 @@ const MIGRATIONS = [
   "005_integrity_security.sql",
   "006_allocation_history.sql",
   "007_dbms_engineering.sql",
+  "008_rbac_dictionary.sql",
 ];
 
 async function main() {

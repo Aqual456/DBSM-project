@@ -2,7 +2,7 @@ import type { NextRequest } from "next/server";
 import type { PoolClient } from "pg";
 import type { ZodType } from "zod";
 import { hash } from "bcryptjs";
-import { actor, endpoint, managers, staff, transaction, audit, HttpError, body, type Actor, type Role } from "@/lib/api";
+import { actor, endpoint, managers, staff, transaction, audit, HttpError, body, readAs, type Actor, type Role } from "@/lib/api";
 import { pool } from "@/lib/postgres";
 import {
   id,
@@ -198,9 +198,12 @@ const readers: Record<string, { roles?: Role[]; run: (u: Actor) => Promise<unkno
       ).rows,
   },
   deliveries: {
+    // Runs as the user's database role: for drivers, PostgreSQL row-level security
+    // (policy deliveries_driver_own) returns only their own deliveries.
     run: async (u) =>
-      (
-        await pool.query(
+      readAs(u, async (c) =>
+        (
+          await c.query(
           `SELECT d.delivery_id, d.allocation_id, d.status, d.departure_time, d.expected_arrival, d.actual_arrival,
                   d.vehicle_id, d.driver_id, u.full_name AS driver_name, v.vehicle_number, v.vehicle_type,
                   src.location_name AS source_name, dst.location_name AS destination_name, a.request_id,
@@ -212,11 +215,10 @@ const readers: Record<string, { roles?: Role[]; run: (u: Actor) => Promise<unkno
              JOIN allocations a USING (allocation_id)
              JOIN locations src ON src.location_id = d.source_location_id
              JOIN locations dst ON dst.location_id = d.destination_location_id
-            WHERE ($1::text <> 'DRIVER' OR d.driver_id = $2)
             ORDER BY d.delivery_id DESC LIMIT 500`,
-          [u.role_name, u.user_id],
-        )
-      ).rows,
+          )
+        ).rows,
+      ),
   },
   "disaster-locations": {
     roles: staff,
@@ -434,7 +436,7 @@ const writers: Record<string, Writer> = {
       const vehicle = (await c.query(`SELECT status FROM vehicles WHERE vehicle_id = $1 FOR UPDATE`, [d.vehicle_id])).rows[0];
       if (!vehicle) throw new HttpError(404, "Vehicle not found", "NOT_FOUND");
       if (vehicle.status !== "AVAILABLE") throw new HttpError(409, "Vehicle unavailable", "BUSINESS_RULE");
-      if (!(await c.query(`SELECT 1 FROM app_users u JOIN roles r USING (role_id) WHERE user_id = $1 AND role_name = 'DRIVER' AND is_active FOR UPDATE OF u`, [d.driver_id])).rowCount)
+      if (!(await c.query(`SELECT 1 FROM app_users u JOIN roles r USING (role_id) WHERE user_id = $1 AND role_name = 'DRIVER' AND is_active`, [d.driver_id])).rowCount)
         throw new HttpError(409, "Select an active driver", "BUSINESS_RULE");
       if ((await c.query(`SELECT 1 FROM deliveries WHERE driver_id = $1 AND status IN ('PLANNED','IN_TRANSIT','DELAYED')`, [d.driver_id])).rowCount)
         throw new HttpError(409, "Driver unavailable", "BUSINESS_RULE");

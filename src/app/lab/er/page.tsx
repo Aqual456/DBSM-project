@@ -4,8 +4,8 @@ import { Key, Link2, Hash } from "lucide-react";
 import { useApi } from "@/lib/client";
 import { Badge, Card, ErrorState, PageHeader, Skeleton } from "@/components/ui/primitives";
 
-type Attr = { name: string; type: string; nullable: boolean; pk: boolean; fk: boolean; unique: boolean; generated: boolean; default: string | null };
-type Entity = { name: string; rows: number; kind: string; primaryKey: string[]; candidateKeys: string[][]; attributes: Attr[]; checks: { name: string; definition: string; validated: boolean }[] };
+type Attr = { name: string; type: string; nullable: boolean; pk: boolean; fk: boolean; unique: boolean; generated: boolean; default: string | null; description: string | null };
+type Entity = { name: string; description: string | null; rows: number; kind: string; primaryKey: string[]; candidateKeys: string[][]; attributes: Attr[]; checks: { name: string; definition: string; validated: boolean }[] };
 type Rel = { name: string; from: string; to: string; columns: string[]; references: string[]; cardinality: string; childParticipation: string; onDelete: string };
 type ER = { entities: Entity[]; relationships: Rel[]; manyToMany: { via: string; between: string[] }[]; source: string };
 
@@ -147,7 +147,7 @@ export default function ErExplorer() {
             </Card>
           ) : (
             <>
-              <Card title={entity.name} subtitle={`${entity.kind === "associative" ? "Associative entity (resolves M:N)" : entity.kind === "composite-key" ? "Entity with composite key" : "Entity"} · ${entity.rows} rows`}>
+              <Card title={entity.name} subtitle={`${entity.description ? entity.description + " · " : ""}${entity.kind === "associative" ? "Associative entity (resolves M:N)" : entity.kind === "composite-key" ? "Entity with composite key" : "Entity"} · ${entity.rows} rows`}>
                 <dl className="kv">
                   <dt>Primary key</dt>
                   <dd><code>({entity.primaryKey.join(", ")})</code>{entity.primaryKey.length > 1 && <Badge value="x" color="amber" label="composite" />}</dd>
@@ -163,7 +163,7 @@ export default function ErExplorer() {
                     {entity.attributes.map((a) => (
                       <tr key={a.name}>
                         <td className="cell-main small">{a.pk ? <Key size={11} color="#b45309" /> : a.fk ? <Link2 size={11} color="#2563eb" /> : a.unique ? <Hash size={11} /> : null} {a.name}</td>
-                        <td className="small"><code>{a.type}</code></td>
+                        <td className="small"><code>{a.type}</code>{a.description && <div className="cell-sub">{a.description}</div>}</td>
                         <td className="small muted">{[a.pk && "PK", a.fk && "FK", a.unique && "UNIQUE", !a.nullable && "NOT NULL", a.generated && "GENERATED", a.default && `default ${a.default}`].filter(Boolean).join(" · ")}</td>
                       </tr>
                     ))}

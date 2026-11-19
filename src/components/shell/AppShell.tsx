@@ -56,6 +56,7 @@ const groups: { title: string; items: Item[] }[] = [
     { href: "/lab/optimization", label: "Query Optimisation", icon: <Gauge size={17} /> },
     { href: "/lab/normalization", label: "Normalisation", icon: <Workflow size={17} /> },
     { href: "/lab/transactions", label: "Transactions", icon: <ArrowLeftRight size={17} /> },
+    { href: "/lab/security", label: "Security & RBAC", icon: <Shield size={17} /> },
     { href: "/lab/nosql", label: "MongoDB & NoSQL", icon: <Leaf size={17} /> },
     { href: "/lab/keyvalue", label: "Key-Value (Redis)", icon: <KeyRound size={17} /> },
     { href: "/lab/graph", label: "Graph (Neo4j)", icon: <Share2 size={17} /> },
