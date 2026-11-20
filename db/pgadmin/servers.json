@@ -1,0 +1,22 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "ReliefFlow (PostgreSQL 16)",
+      "Group": "ReliefFlow",
+      "Host": "postgres",
+      "Port": 5432,
+      "MaintenanceDB": "reliefflow",
+      "Username": "postgres",
+      "SSLMode": "prefer"
+    },
+    "2": {
+      "Name": "ReliefFlow vectors (pgvector)",
+      "Group": "ReliefFlow",
+      "Host": "vectordb",
+      "Port": 5432,
+      "MaintenanceDB": "reliefflow_vectors",
+      "Username": "postgres",
+      "SSLMode": "prefer"
+    }
+  }
+}

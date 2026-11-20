@@ -36,6 +36,14 @@ npm.cmd run dev                            # http://localhost:3000
 
 `db:migrate` records applied files in `schema_migrations`; it never drops or rewrites operational data. New constraints that legacy rows violate are added `NOT VALID`.
 
+### pgAdmin (optional)
+
+```powershell
+docker compose --profile optional up -d --no-deps pgadmin   # http://localhost:5050 (bound to this machine only)
+```
+
+Sign in with `PGADMIN_EMAIL` / `PGADMIN_PASSWORD` if you set them, otherwise the local dev defaults in `docker-compose.yml`. The **ReliefFlow** group already lists both databases (registered from `db/pgadmin/servers.json`): the main `reliefflow` database and `reliefflow_vectors`. The first time you open each one, pgAdmin asks for the PostgreSQL password from that service's entry in `docker-compose.yml`; tick *Save password*. pgAdmin keeps its settings in its own `reliefflow_pgadmindata` volume and never changes the database volumes.
+
 ### Standard sample data
 
 ```powershell
